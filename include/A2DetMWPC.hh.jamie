@@ -1,0 +1,128 @@
+#ifndef A2DetMWPC_h
+#define A2DetMWPC_h 1
+
+#include "A2Detector.hh"
+#include "A2SD.hh"
+
+#include "G4Tubs.hh"
+#include "G4Cons.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4UnionSolid.hh"
+#include "G4Polyhedra.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4RotationMatrix.hh"
+#include "globals.hh"
+
+
+class A2DetMWPC : public A2Detector
+{
+public:
+
+  A2DetMWPC();
+  ~A2DetMWPC();
+
+  void MakeDetector();
+  void MakeChambers();
+  void MakeInnerWire();
+  void MakeOuterWire();
+  void MakeElectronics();
+  void MakeSupports();
+
+G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic);
+
+
+
+
+private:
+  G4int fNIWires; 
+  G4int fNOWires;
+  G4double fZ0;
+
+  
+  G4Tubs *fCHF1; //Inner Wire Chamber
+  G4Tubs *fCHF2; //Outer Wire Chamber
+  G4Tubs *fCHA1; //Rohacell cylinder to describe wall around inner chamber
+  G4Tubs *fCHA2;
+  G4LogicalVolume *fCHF1Logic;
+  G4VPhysicalVolume *fCHF1Physi;
+  G4LogicalVolume *fCHF2Logic;
+  G4VPhysicalVolume *fCHF2Physi;
+  G4LogicalVolume *fCHA1Logic;
+  G4VPhysicalVolume *fCHA1Physi;
+  G4LogicalVolume *fCHA2Logic;
+  G4VPhysicalVolume *fCHA2Physi;
+  //Fiberglass supports for wire chambers
+
+  G4LogicalVolume *fWS1ULogic; 
+  G4VPhysicalVolume *fWS1UPhysi;
+  
+  G4LogicalVolume *fWS1DLogic;
+  G4VPhysicalVolume *fWS1DPhysi;  
+  
+  G4LogicalVolume *fSC1ULogic;
+  G4VPhysicalVolume *fSC1UPhysi;
+  
+  G4LogicalVolume *fSC1DLogic;
+  G4VPhysicalVolume *fSC1DPhysi;
+  
+  G4LogicalVolume *fWS2ULogic;
+  G4VPhysicalVolume *fWS2UPhysi; 
+  
+  G4LogicalVolume *fWS2DLogic;
+  G4VPhysicalVolume *fWS2DPhysi;
+  
+  G4LogicalVolume *fALTULogic; //Aluminium Tubelinking MWPC
+  G4VPhysicalVolume *fALTUPhysi;
+ 
+
+ //Electronics - approximated to 1mm thick cardboard cylinders
+
+  G4Tubs *fWE1U;//Wire electronics,chamber 1 upstream
+  G4Tubs *fWE1D;//Wire electronics, chamber 1,  downstream
+  G4Tubs *fWE2U;
+  G4Tubs *fWE2D;
+  G4LogicalVolume *fWE1ULogic;
+  G4LogicalVolume *fWE1DLogic;
+  G4LogicalVolume *fWE2ULogic;
+  G4LogicalVolume *fWE2DLogic;
+  G4VPhysicalVolume *fWE1UPhysi; 
+  G4VPhysicalVolume *fWE1DPhysi;
+  G4VPhysicalVolume *fWE2UPhysi;
+  G4VPhysicalVolume *fWE2DPhysi;
+
+  G4Tubs *fANOI;   //Inner chamber anode wire
+  G4LogicalVolume* fANOILogic; //Logical Volume
+  G4VPhysicalVolume** fANOIPhysi;
+
+  G4Tubs *fANOO; //Outer Chamber anode wire
+  G4LogicalVolume* fANOOLogic;
+  G4VPhysicalVolume** fANOOPhysi;
+ 
+  A2SD *fCHF1SD; //Sensitive Detector for Inner Chamber
+  A2SD *fCHF2SD; //Sensitive Detector for Outer Chamber
+
+  //geometric parameters
+  G4double fzpos;
+  G4double fchf1_dz;
+  G4double fchf1_rmin;
+  G4double fchf1_rmax;
+  G4double fchf2_dz;
+  G4double fchf2_rmin;
+  G4double fchf2_rmax;
+  G4double fanoi_theta;
+  G4double fanoo_theta;
+  
+  G4double fcha1_dz;
+  G4double fcha1_rmin;
+  G4double fcha1_rmax;
+  G4double fcha2_dz;
+  G4double fcha2_rmin;
+  G4double fcha2_rmax;
+};
+#endif
+
+
+
+

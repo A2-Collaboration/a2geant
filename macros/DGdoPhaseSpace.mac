@@ -1,0 +1,23 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#####Pre-Initialisation
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+/A2/physics/Physics QGSP_BIC
+
+####Initialise
+/run/initialize
+
+#Set the number of particles to be tracked from the input ntuple
+/A2/generator/NToBeTracked 1
+#give the indexes of the particles to be tracked
+#(have a look at the branch names in the input file)
+/A2/generator/Track 1
+#Open the file and set up the ntuple for reading
+/A2/generator/InputFile /scratch/phase_space2/proton_0-1seed1111.root
+
+#####Output
+#Open the output file for writing
+/A2/event/setOutputFile /scratch/dglazier/phase_space2/tr_proton_0-1seed111115.08.07.root
+
+

@@ -1,0 +1,8 @@
+/control/verbose 2
+/vis/open DAWNFILE
+/vis/drawVolume
+/vis/viewer/reset
+/vis/viewer/set/style surface
+/vis/viewer/set/projection perspective 20 deg
+/control/alias phi 10
+/control/loop macros/movieloop.mac theta 0 360 10

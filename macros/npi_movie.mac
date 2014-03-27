@@ -1,0 +1,48 @@
+#####Pre-Initialisation
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+#/A2/physics/Physics QGSP_BIC
+#/A2/physics/Physics LHEP
+
+####Initialise
+#/run/initialize
+
+/control/verbose 2
+/vis/verbose confirmations
+
+/vis/open OGLSX
+/vis/drawVolume
+/vis/scene/add/eventID
+/vis/scene/add/trajectories rich
+/vis/viewer/zoom 1.5
+/vis/viewer/set/viewpointThetaPhi 70. 20.
+/vis/viewer/set/style surface
+
+# Set up drawByCharge with time slicing
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawAuxPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setAuxPtsSize 5
+/vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.1 ns
+/vis/modeling/trajectories/list
+#/N03/det/setField 5 T
+#/N03/det/update
+#Set the number of particles to be tracked from the input ntuple
+#Set the number of particles to be tracked from the input ntuple
+/A2/generator/NToBeTracked 2
+#give the indexes of the particles to be tracked
+#(have a look at the branch names in the input file)
+/A2/generator/Track 1
+/A2/generator/Track 2
+#Open the file and set up the ntuple for reading
+/A2/generator/InputFile /scratch/crystalball/mc/mkin_pin_400mev.root
+
+/run/beamOn 1
+
+# Configure OpenGL for display-by-time
+/vis/ogl/set/fade 1
+/vis/ogl/set/displayHeadTime true
+/control/alias timeRange 0.1
+/vis/verbose warnings
+/control/verbose 0
+/control/loop macros/exN03Vis12.loop startTime -{timeRange} 20 0.2

@@ -1,0 +1,25 @@
+#####Pre-Initialisation
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+/A2/physics/Physics QGSP_BIC_NoGammaNuc
+
+####Initialise
+/run/initialize
+
+/A2/generator/Mode 1
+/A2/generator/SetTMax 1 GeV
+/A2/generator/SetTMin 1 MeV
+/A2/generator/SetThetaMin 0 deg
+/A2/generator/SetThetaMax 0.05 deg
+/A2/generator/SetBeamXSigma 1 mm
+/A2/generator/SetBeamYSigma 1 mm
+/A2/generator/SetTargetZ0 -10 m
+/A2/generator/SetTargetThick 0.4 mm
+/A2/generator/SetTargetRadius 0.1 cm
+
+/A2/event/setOutputFile /scratch/beamtestHX5T.root
+
+/gun/particle gamma
+#/gun/position 0 0 -10 m
+#/gun/direction 0 0 1 
+#/gun/energy 100 MeV
+/run/beamOn 1000000

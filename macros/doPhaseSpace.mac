@@ -1,0 +1,31 @@
+#####Pre-Initialisation
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+/A2/physics/Physics QGSP_BERT
+
+####Initialise
+/run/initialize
+
+/A2/generator/Mode 1
+/A2/generator/SetTMax 450 MeV
+/A2/generator/SetTMin 200.9999999 MeV
+/A2/generator/SetThetaMin 89.9 deg
+/A2/generator/SetThetaMax 90.1 deg
+/A2/generator/SetBeamXSigma 10 mm
+/A2/generator/SetBeamYSigma 10 mm
+/A2/generator/SetTargetZ0 0 mm
+/A2/generator/SetTargetThick 0.4 mm
+/A2/generator/SetTargetRadius 0.5 cm
+
+#####Output
+#Open the output file for writing
+/A2/event/setOutputFile test.root
+#/A2/physics/CutsAll 1 mm
+/gun/particle kaon+
+#/gun/direction 0 1 0
+#/gun/energy 300 MeV
+/particle/select kaon+
+/particle/process/inactivate 3
+/particle/process/inactivate 4
+/particle/process/inactivate 5
+#/process/msc/StepLimit UseDistanceToBoundary
+/run/beamOn 100

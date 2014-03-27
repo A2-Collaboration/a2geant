@@ -1,0 +1,34 @@
+# No Backup files in git
+*~
+[#]*[#]
+.\#*
+*.swp
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# CMake
+# only build dirs are ignored
+/build*/
+
+# QtCreator
+CMakeLists.txt.user
+
+# G4 user's history 
+G4History.macro
+
+# ignore some generated files
+/A2
+/TOFpos.dat
+

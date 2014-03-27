@@ -1,0 +1,38 @@
+#
+#####Pre-Initialisation
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+/A2/physics/Physics QGSP_BIC
+#/A2/physics/Physics QGSP_BERT_CHIPS
+
+####Initialise
+/run/verbose 1
+/run/initialize
+#/A2/physics/CutEl 0.01 mm
+#/A2/physics/CutsAll 0.01 mm
+
+/A2/physics/SetRegion CB
+/A2/physics/RegionCut  0.1 mm
+/A2/physics/SetRegion TAPS
+/A2/physics/RegionCut  0.1 mm
+/A2/physics/SetRegion TAPSV
+/A2/physics/RegionCut 0.01 mm
+/A2/physics/SetRegion PID
+/A2/physics/RegionCut 0.01 mm
+/A2/physics/SetRegion MWPC
+/A2/physics/RegionCut 0.1 mm
+
+##the initial random number seed
+/A2/generator/Seed 1111111
+
+#Set the number of particles to be tracked from the input ntuple
+/A2/generator/NToBeTracked 3
+#give the indexes of the particles to be tracked
+#(have a look at the branch names in the input file)
+/A2/generator/Track 1
+/A2/generator/Track 2
+/A2/generator/Track 3
+#Open the file and set up the ntuple for reading
+/A2/generator/InputFile /Disk/thehub_disk_5/msikora/GP_PPi0_SAID_hub__1M_99.root
+#####Output
+#Open the output file for writing
+/A2/event/setOutputFile test1.root

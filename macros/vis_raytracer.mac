@@ -1,0 +1,9 @@
+/vis/rayTracer/target 0 0 0 cm
+/vis/rayTracer/eyePosition 500 300 -500 cm
+/control/alias xdir 0.1
+/control/alias ydir -0.2
+/control/alias zdir 0.3
+/vis/rayTracer/lightDirection {xdir} {ydir} {zdir}
+/vis/rayTracer/column 1280
+/vis/rayTracer/row 720
+/vis/rayTracer/trace crystal_ball.jpeg

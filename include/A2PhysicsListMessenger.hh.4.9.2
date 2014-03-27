@@ -1,0 +1,45 @@
+//A2PhysicsListMessenager taken from advanced example Hadr01 
+#ifndef A2PhysicsListMessenger_h
+#define A2PhysicsListMessenger_h 1
+
+#include "globals.hh"
+#include "G4UImessenger.hh"
+#include "G4String.hh"
+
+class A2PhysicsList;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
+class G4UIdirectory;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class A2PhysicsListMessenger: public G4UImessenger
+{
+public:
+  
+  A2PhysicsListMessenger(A2PhysicsList* );
+  virtual ~A2PhysicsListMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+  
+  A2PhysicsList* fpPhysicsList;
+  G4String fRegion;
+
+  G4UIcmdWithADoubleAndUnit* fgammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* felectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fposCutCmd;
+  G4UIcmdWithADoubleAndUnit* fallCutCmd;
+  G4UIcmdWithAString*        fpListCmd;
+  G4UIcmdWithoutParameter*   flistCmd;  
+  G4UIcmdWithADoubleAndUnit* fRegCutCmd;
+  G4UIcmdWithAString*        fRegCmd;
+  G4UIdirectory* fphysDir;
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

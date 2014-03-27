@@ -1,0 +1,2 @@
+/vis/open RayTracer 1200x800
+/control/execute macros/vis_raytracer_movie.mac

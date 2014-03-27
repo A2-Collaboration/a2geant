@@ -1,0 +1,18 @@
+/A2/physics/Physics QGSP_BIC
+
+####Initialise
+/run/initialize
+
+##the initial random number seed
+/A2/generator/Seed 1111111
+
+/gun/position 0 0 -3.0 m
+/gun/energy 6 GeV
+/gun/direction 0 0 1
+/gun/particle e-
+
+#Open the output file for writing
+/A2/event/setOutputFile /scratch/dglazier/simCLAS12/6GeVe10cmCTarget.root
+
+
+/run/beamOn 100000
