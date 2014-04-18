@@ -38,7 +38,7 @@ A2DetCrystalBall::A2DetCrystalBall()
   fCrystPhysi=new G4VPhysicalVolume*[fNcrystals];   //Crystal physical volumes
   for(G4int i=0;i<fNcrystals;i++) fCrystPhysi[i]=NULL;
 
-  fGap=G4ThreeVector(0.4*cm,0.4*cm,0); //default gap between hemispheres
+  fGap=G4ThreeVector(0.4*CLHEP::cm,0.4*CLHEP::cm,0); //default gap between hemispheres
 
   fCNIN=NULL;
   fCCUT=NULL;
@@ -112,7 +112,7 @@ G4VPhysicalVolume* A2DetCrystalBall::Construct(G4LogicalVolume* MotherLogical)
 
 void A2DetCrystalBall::MakeOther1(){//please read note above
   //define an inch!
-  const G4double inch=1.0/0.393700787*cm;
+  const G4double inch=1.0/0.393700787*CLHEP::cm;
   G4VisAttributes* CBVisAtt= new G4VisAttributes(G4Colour(1,.0,.0));
   CBVisAtt->SetVisibility(true);
 
@@ -128,16 +128,16 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   // Changed back on 17/3/11
 
   //Actually not needed as it is only used to hold the exit tunnel
-  G4double tunl_rin=10.3*cm;
+  G4double tunl_rin=10.3*CLHEP::cm;
   G4double tunl_rout = tunl_rin + 2.5/16*inch;
 
   G4double ccut_rin=0;
-  //  G4double ccut_rout=10.3*cm+1.0/16*inch;
-  G4double ccut_rout=tunl_rout+1*mm; //cut at the tunnel outer radius + small distance to avoid overlap
-  // G4double ccut_rout=8.95*cm;
-  G4double ccut_z=44*cm; //half lenght in z
+  //  G4double ccut_rout=10.3*CLHEP::cm+1.0/16*inch;
+  G4double ccut_rout=tunl_rout+1*CLHEP::mm; //cut at the tunnel outer radius + small distance to avoid overlap
+  // G4double ccut_rout=8.95*CLHEP::cm;
+  G4double ccut_z=44*CLHEP::cm; //half lenght in z
   G4double ccut_phlow=0;
-  G4double ccut_phdelta=360*deg;
+  G4double ccut_phdelta=360*CLHEP::deg;
   fCCUT=new G4Tubs("CCUT",ccut_rin,ccut_rout,ccut_z,ccut_phlow,ccut_phdelta);
   fCCUTLogic=new G4LogicalVolume(fCCUT,fNistManager->FindOrBuildMaterial("G4_AIR"),"CCUT");
   fCCUTLogic->SetVisAttributes(CBVisAtt);
@@ -145,14 +145,14 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  steel tubes, 10.3 cm in inner diameter, 1/16" thick, and 11.5 cm
   //  wide, one around each beam opening.
   // S.P. version of TUNL
-  G4double tunl_z = 11*cm/2; //half length in z
-  G4double tunl_phlow=0*deg;
-  G4double tunl_phdelta=180*deg;
-  G4double tunl_z0=22.6*cm;
+  G4double tunl_z = 11*CLHEP::cm/2; //half length in z
+  G4double tunl_phlow=0*CLHEP::deg;
+  G4double tunl_phdelta=180*CLHEP::deg;
+  G4double tunl_z0=22.6*CLHEP::cm;
   fTUNL=new G4Tubs("TUNL",tunl_rin,tunl_rout,tunl_z,tunl_phlow,tunl_phdelta);
   fTUNLLogic=new G4LogicalVolume(fTUNL,fNistManager->FindOrBuildMaterial("G4_Fe"),"TUNL");
   fTUNLLogic->SetVisAttributes(CBVisAtt);
-  G4double Tshift=28.1*cm;
+  G4double Tshift=28.1*CLHEP::cm;
   fTUNLPhysi[0]=new G4PVPlacement(0,G4ThreeVector(0,fGap.x(),Tshift),fTUNLLogic,"TUNL",fMotherLogic,false,1);
   fTUNLPhysi[1]=new G4PVPlacement(0,G4ThreeVector(0,fGap.x(),-Tshift),fTUNLLogic,"TUNL",fMotherLogic,false,2);
   fTUNLPhysi[2]=new G4PVPlacement(fRot[96],G4ThreeVector(0,-fGap.y(),Tshift),fTUNLLogic,"TUNL",fMotherLogic,false,3);
@@ -166,10 +166,10 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  Starostin changed thickness to 3/16" prior to G4,changed back Prakhov08/07
   G4double cnin_rin=9.8*inch;
   G4double cnin_rout=cnin_rin+1.0/16*inch;
-  G4double cnin_thlow=asin(tunl_rout/cnin_rin)*rad;
-  G4double cnin_thdelta=180*deg-2*cnin_thlow;
-  G4double cnin_phlow=0*deg;
-  G4double cnin_phdelta=180*deg;
+  G4double cnin_thlow=asin(tunl_rout/cnin_rin)*CLHEP::rad;
+  G4double cnin_thdelta=180*CLHEP::deg-2*cnin_thlow;
+  G4double cnin_phlow=0*CLHEP::deg;
+  G4double cnin_phdelta=180*CLHEP::deg;
   //Note G4Sphere sets phi limits first then theta, ROOT+G3 are vice versa
   fCNIN=new G4Sphere("CNIN",cnin_rin,cnin_rout,cnin_phlow,cnin_phdelta,cnin_thlow,cnin_thdelta);
   fCNINLogic=new G4LogicalVolume(fCNIN,fNistManager->FindOrBuildMaterial("G4_Fe"),"CNIN");
@@ -185,12 +185,12 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   fCNINPhysi[1]=new G4PVPlacement(trans,fCNINLogic,fCNINLogic->GetName(),fMotherLogic,false,2);
 
   //test outer can
-  G4double cnout_rin=67*cm;
-  G4double cnout_rout=cnout_rin+0.5*cm;
-  G4double cnout_thlow=asin(tunl_rout/cnin_rin)*rad;
-  G4double cnout_thdelta=180*deg-2*cnin_thlow;
-  G4double cnout_phlow=0*deg;
-  G4double cnout_phdelta=180*deg;
+  G4double cnout_rin=67*CLHEP::cm;
+  G4double cnout_rout=cnout_rin+0.5*CLHEP::cm;
+  G4double cnout_thlow=asin(tunl_rout/cnin_rin)*CLHEP::rad;
+  G4double cnout_thdelta=180*CLHEP::deg-2*cnin_thlow;
+  G4double cnout_phlow=0*CLHEP::deg;
+  G4double cnout_phdelta=180*CLHEP::deg;
   //Note G4Sphere sets phi limits first then theta, ROOT+G3 are vice versa
   G4Sphere* CNOUT=new G4Sphere("CNOUT",cnout_rin,cnout_rout,cnout_phlow,cnout_phdelta,cnout_thlow,cnout_thdelta);
   G4LogicalVolume* CNOUTLogic=new G4LogicalVolume(CNOUT,fNistManager->FindOrBuildMaterial("G4_Fe"),"CNOUT");
@@ -211,17 +211,17 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  with out radius equal outer radius of the outer shell of the CB.
 
   //June 2012 thcikness changed to 0.063inch, note this also needs changed in the crystal postioning...
-  //  G4double btmthnss= 0.076*cm;
+  //  G4double btmthnss= 0.076*CLHEP::cm;
   G4double btmthnss= 0.063*inch;
-  // G4double gap1  = 0.05*cm + btmthnss;
-  // G4double gap2  = 0.05*cm + btmthnss;
+  // G4double gap1  = 0.05*CLHEP::cm + btmthnss;
+  // G4double gap2  = 0.05*CLHEP::cm + btmthnss;
   G4double gap1  = fGap.x() + btmthnss;
   G4double gap2  = fGap.y() + btmthnss;
-  G4double btm_rin = sqrt(34.7*34.7 + 20.6*20.6)/2*cm;    // inner radius
+  G4double btm_rin = sqrt(34.7*34.7 + 20.6*20.6)/2*CLHEP::cm;    // inner radius
   G4double cnou_radius = (26. + 11./16.) * inch;  // inner radius of Al sphere
   G4double btm_rout = cnou_radius + 7./8. * inch;  // outer radius
-  G4double btm_phlow=21.*deg;
-  G4double btm_phdelta=(180-2*21.)*deg;
+  G4double btm_phlow=21.*CLHEP::deg;
+  G4double btm_phdelta=(180-2*21.)*CLHEP::deg;
   fBTMM=new G4Tubs("BTMM",btm_rin,btm_rout,btmthnss/2,btm_phlow,btm_phdelta);
   fBTMMLogic=new G4LogicalVolume(fBTMM,fNistManager->FindOrBuildMaterial("G4_Fe"),"BTMM");
   fBTMMLogic->SetVisAttributes(CBVisAtt);
@@ -234,12 +234,12 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //note arguemnts for ROOT trd1 are dx1, dx2, dy and dz
   //for g4 they are dx1,dx2 dy1=dy,dy2=dy,dz, dy=half thickness =inch/32
   //  G4double tunl_zpos=tunl_z0+tunl_z/2;//! outer end of cylindrical tunnels region
-  G4double skrl=63./2*cm;//!half-length of skirt's trapezoids
+  G4double skrl=63./2*CLHEP::cm;//!half-length of skirt's trapezoids
   G4double skrt =3.5*inch/32;//!half-thickness of skirt's steel (1/16") 
 
-  fSKI[0]=new G4Trd("SKI1",8*cm,21.8*cm,skrt,skrt,skrl);
-  fSKI[1]=new G4Trd("SKI2",7.*cm,18.65*cm,skrt,skrt,skrl);
-  fSKI[2]=new G4Trd("SKI3",7.*cm,18.65*cm,skrt,skrt,skrl);
+  fSKI[0]=new G4Trd("SKI1",8*CLHEP::cm,21.8*CLHEP::cm,skrt,skrt,skrl);
+  fSKI[1]=new G4Trd("SKI2",7.*CLHEP::cm,18.65*CLHEP::cm,skrt,skrt,skrl);
+  fSKI[2]=new G4Trd("SKI3",7.*CLHEP::cm,18.65*CLHEP::cm,skrt,skrt,skrl);
 
   fSKILogic[0]=new G4LogicalVolume(fSKI[0],fNistManager->FindOrBuildMaterial("G4_Fe"),"SKI1");
   fSKILogic[1]=new G4LogicalVolume(fSKI[1],fNistManager->FindOrBuildMaterial("G4_Fe"),"SKI2");
@@ -267,12 +267,12 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  Rims right after the beam tunnel and inside the CB tunnel. Simulated by placing a 4 mm
   //  steel ring after the Ball. The ring is shadowing 19.93 degree cone. Updated now a 17.7degree cone.15/11/07
 
-  G4double rims_rin = tunl_rout/(tunl_z0+tunl_z*2)*101*cm;
-  G4double rims_rout = 65*cm;
+  G4double rims_rin = tunl_rout/(tunl_z0+tunl_z*2)*101*CLHEP::cm;
+  G4double rims_rout = 65*CLHEP::cm;
   G4double rims_z  = 3.5*inch/32;       // half length
-  G4double rims_phlow=0*deg;
-  G4double rims_phdelta = 180*deg;
-  G4double rims_zpos=1.01*m;
+  G4double rims_phlow=0*CLHEP::deg;
+  G4double rims_phdelta = 180*CLHEP::deg;
+  G4double rims_zpos=1.01*CLHEP::m;
   fRIMS=new G4Tubs("RIMS",rims_rin,rims_rout,rims_z,rims_phlow,rims_phdelta);
   fRIMSLogic=new G4LogicalVolume(fRIMS,fNistManager->FindOrBuildMaterial("G4_Fe"),"RIMS");
   fRIMSLogic->SetVisAttributes(G4VisAttributes::Invisible);
@@ -285,7 +285,7 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
 //******************************************************************//
 void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   //define an inch!
-  const G4double inch=1.0/0.393700787*cm;
+  const G4double inch=1.0/0.393700787*CLHEP::cm;
   G4VisAttributes* CBVisAtt= new G4VisAttributes(G4Colour(1,.0,.0));
   CBVisAtt->SetVisibility(true);
 
@@ -300,26 +300,26 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
 
   //Actually not needed as it is only used to hold the exit tunnel
   G4double radincb = 8.7*inch;
-  G4double thcb = 24.*deg;
+  G4double thcb = 24.*CLHEP::deg;
   G4double radtun = sin(thcb)*radincb;// (~8.95 cm)
   G4double ccut_rin=0;
   G4double ccut_rout=radtun;
-  G4double ccut_z=44*cm; //half lenght in z
+  G4double ccut_z=44*CLHEP::cm; //half lenght in z
   G4double ccut_phlow=0;
-  G4double ccut_phdelta=360*deg;
+  G4double ccut_phdelta=360*CLHEP::deg;
   fCCUT=new G4Tubs("CCUT",ccut_rin,ccut_rout,ccut_z,ccut_phlow,ccut_phdelta);
   fCCUTLogic=new G4LogicalVolume(fCCUT,fNistManager->FindOrBuildMaterial("G4_AIR"),"CCUT");
   fCCUTLogic->SetVisAttributes(CBVisAtt);
    //  The actual beam entrance and exit tunnels - a pair of cylindrical
   //  steel tubes, 10.3 cm in inner diameter, 1/16" thick, and 11.5 cm
   //  wide, one around each beam opening.
-  //G4double tunl_rin=10.3*cm;
+  //G4double tunl_rin=10.3*CLHEP::cm;
   G4double tunl_rout = radtun;
-  G4double tunl_zin =1.25*cm;
-  G4double tunl_len=6.8*cm+tunl_zin;
-  //G4double tunl_z = 11*cm/2; //half length in z
-  G4double tunl_phlow=0*deg;
-  G4double tunl_phdelta=180*deg;
+  G4double tunl_zin =1.25*CLHEP::cm;
+  G4double tunl_len=6.8*CLHEP::cm+tunl_zin;
+  //G4double tunl_z = 11*CLHEP::cm/2; //half length in z
+  G4double tunl_phlow=0*CLHEP::deg;
+  G4double tunl_phdelta=180*CLHEP::deg;
   G4double tunl_z0=cos(thcb)*radincb - tunl_zin;
   G4double tunl_rin = tunl_rout - 2.75*inch/16.;
   fTUNL=new G4Tubs("TUNL",tunl_rin,tunl_rout,tunl_len/2,tunl_phlow,tunl_phdelta);
@@ -339,10 +339,10 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   //  Starostin changed thickness to 3/16" prior to G4,changed back Prakhov08/07
   G4double cnin_rin=9.8*inch;
   G4double cnin_rout=cnin_rin+1.0/16*inch;
-  G4double cnin_thlow=asin(tunl_rout/cnin_rin)*rad;
-  G4double cnin_thdelta=180*deg-2*cnin_thlow;
-  G4double cnin_phlow=0*deg;
-  G4double cnin_phdelta=180*deg;
+  G4double cnin_thlow=asin(tunl_rout/cnin_rin)*CLHEP::rad;
+  G4double cnin_thdelta=180*CLHEP::deg-2*cnin_thlow;
+  G4double cnin_phlow=0*CLHEP::deg;
+  G4double cnin_phdelta=180*CLHEP::deg;
   //Note G4Sphere sets phi limits first then theta, ROOT+G3 are vice versa
   fCNIN=new G4Sphere("CNIN",cnin_rin,cnin_rout,cnin_phlow,cnin_phdelta,cnin_thlow,cnin_thdelta);
   fCNINLogic=new G4LogicalVolume(fCNIN,fNistManager->FindOrBuildMaterial("G4_Fe"),"CNIN");
@@ -358,12 +358,12 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   fCNINPhysi[1]=new G4PVPlacement(trans,fCNINLogic,fCNINLogic->GetName(),fMotherLogic,false,2);
 
   //test outer can
-  G4double cnout_rin=67*cm;
-  G4double cnout_rout=cnout_rin+0.5*cm;
-  G4double cnout_thlow=asin(tunl_rout/cnin_rin)*rad;
-  G4double cnout_thdelta=180*deg-2*cnin_thlow;
-  G4double cnout_phlow=0*deg;
-  G4double cnout_phdelta=180*deg;
+  G4double cnout_rin=67*CLHEP::cm;
+  G4double cnout_rout=cnout_rin+0.5*CLHEP::cm;
+  G4double cnout_thlow=asin(tunl_rout/cnin_rin)*CLHEP::rad;
+  G4double cnout_thdelta=180*CLHEP::deg-2*cnin_thlow;
+  G4double cnout_phlow=0*CLHEP::deg;
+  G4double cnout_phdelta=180*CLHEP::deg;
   //Note G4Sphere sets phi limits first then theta, ROOT+G3 are vice versa
   G4Sphere* CNOUT=new G4Sphere("CNOUT",cnout_rin,cnout_rout,cnout_phlow,cnout_phdelta,cnout_thlow,cnout_thdelta);
   G4LogicalVolume* CNOUTLogic=new G4LogicalVolume(CNOUT,fNistManager->FindOrBuildMaterial("G4_Fe"),"CNOUT");
@@ -384,14 +384,14 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   //  with out radius equal outer radius of the outer shell of the CB.
 
  
-  G4double btmthnss= 0.076*cm;
+  G4double btmthnss= 0.076*CLHEP::cm;
   G4double gap1  = fGap.x() + btmthnss;
   G4double gap2  = fGap.y() + btmthnss;
   G4double btm_rin = radincb;    // inner radius, changed from 20-22cm
   G4double cnou_radius = (26. + 11./16.) * inch;  // inner radius of Al sphere
   G4double btm_rout = cnou_radius + 7./8. * inch;  // outer radius
   G4double btm_phlow=thcb;
-  G4double btm_phdelta=(180*deg-2*thcb);
+  G4double btm_phdelta=(180*CLHEP::deg-2*thcb);
   fBTMM=new G4Tubs("BTMM",btm_rin,btm_rout,btmthnss/2,btm_phlow,btm_phdelta);
   fBTMMLogic=new G4LogicalVolume(fBTMM,fNistManager->FindOrBuildMaterial("G4_Fe"),"BTMM");
   fBTMMLogic->SetVisAttributes(CBVisAtt);
@@ -404,14 +404,14 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   //note arguemnts for ROOT trd1 are dx1, dx2, dy and dz
   //for g4 they are dx1,dx2 dy1=dy,dy2=dy,dz, dy=half thickness =inch/32
   //  G4double tunl_zpos=tunl_z0+tunl_z/2;//! outer end of cylindrical tunnels region
-  G4double tunl_zpos=cos(thcb)*25.*cm+10*cm;//! outer end of cylindrical tunnels region
+  G4double tunl_zpos=cos(thcb)*25.*CLHEP::cm+10*CLHEP::cm;//! outer end of cylindrical tunnels region
   //Ammended now to prakovs version
-  G4double skrl=63./2*cm;//!half-length of skirt's trapezoids
+  G4double skrl=63./2*CLHEP::cm;//!half-length of skirt's trapezoids
   G4double skrt =2.5*inch/32;//!half-thickness of skirt's steel  
 
-  fSKI[0]=new G4Trd("SKI1",8*cm,21.8*cm,skrt,skrt,skrl);
-  fSKI[1]=new G4Trd("SKI2",7.*cm,18.65*cm,skrt,skrt,skrl);
-  fSKI[2]=new G4Trd("SKI3",7.*cm,18.65*cm,skrt,skrt,skrl);
+  fSKI[0]=new G4Trd("SKI1",8*CLHEP::cm,21.8*CLHEP::cm,skrt,skrt,skrl);
+  fSKI[1]=new G4Trd("SKI2",7.*CLHEP::cm,18.65*CLHEP::cm,skrt,skrt,skrl);
+  fSKI[2]=new G4Trd("SKI3",7.*CLHEP::cm,18.65*CLHEP::cm,skrt,skrt,skrl);
 
   fSKILogic[0]=new G4LogicalVolume(fSKI[0],fNistManager->FindOrBuildMaterial("G4_Fe"),"SKI1");
   fSKILogic[1]=new G4LogicalVolume(fSKI[1],fNistManager->FindOrBuildMaterial("G4_Fe"),"SKI2");
@@ -423,27 +423,27 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
 
   //Calculate rotation matrix via TGeoRotation which has geant3 style implementation!
   TGeoRotation* tempRot = new TGeoRotation("tempRot",90,90,0,0,90,0);
-  double th3 = 20.9*deg;
-  double ph3 = 148.1*deg;
-  double alf = -0.12*deg;
-  double ph1=ph3 - 90.*deg - alf;
-  double th1=atan(-1./(tan(th3)*cos(ph1-ph3)))+180.*deg;
-  double ph2=atan((tan(th3)*cos(ph3)-tan(th1)*cos(ph1))/(tan(th1)*sin(ph1)-tan(th3)*sin(ph3)))+180.*deg;
-  double th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*deg;
+  double th3 = 20.9*CLHEP::deg;
+  double ph3 = 148.1*CLHEP::deg;
+  double alf = -0.12*CLHEP::deg;
+  double ph1=ph3 - 90.*CLHEP::deg - alf;
+  double th1=atan(-1./(tan(th3)*cos(ph1-ph3)))+180.*CLHEP::deg;
+  double ph2=atan((tan(th3)*cos(ph3)-tan(th1)*cos(ph1))/(tan(th1)*sin(ph1)-tan(th3)*sin(ph3)))+180.*CLHEP::deg;
+  double th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*CLHEP::deg;
 
-  tempRot->SetAngles(th1/deg,ph1/deg,th2/deg,ph2/deg,th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,th2/CLHEP::deg,ph2/CLHEP::deg,th3/CLHEP::deg,ph3/CLHEP::deg);
   const Double_t *m = tempRot->GetRotationMatrix();
   fRot[51] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg+180,th2/deg,ph2/deg+180,th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg+180,th2/CLHEP::deg,ph2/CLHEP::deg+180,th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[52] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg+180,180-th2/deg,ph2/deg,180-th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg+180,180-th2/CLHEP::deg,ph2/CLHEP::deg,180-th3/CLHEP::deg,ph3/CLHEP::deg);
   m = tempRot->GetRotationMatrix();
   fRot[53] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg,180-th2/deg,ph2/deg+180,180-th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,180-th2/CLHEP::deg,ph2/CLHEP::deg+180,180-th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[54] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
@@ -461,27 +461,27 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
 
   //Calculate rotation matrix via TGeoRotation which has geant3 style implementation!
   //SK2
-  th3 = 19.8*deg;
-  ph3 = 89.2*deg;
-  alf = 7.9*deg;
-  ph1=ph3 - 90.*deg - alf+360*deg;
+  th3 = 19.8*CLHEP::deg;
+  ph3 = 89.2*CLHEP::deg;
+  alf = 7.9*CLHEP::deg;
+  ph1=ph3 - 90.*CLHEP::deg - alf+360*CLHEP::deg;
   th1=atan(-1./(tan(th3)*cos(ph1-ph3)));
   ph2=atan((tan(th3)*cos(ph3)-tan(th1)*cos(ph1))/(tan(th1)*sin(ph1)-tan(th3)*sin(ph3)));
-  th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*deg;
+  th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*CLHEP::deg;
   
-  tempRot->SetAngles(th1/deg,ph1/deg,th2/deg,ph2/deg,th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,th2/CLHEP::deg,ph2/CLHEP::deg,th3/CLHEP::deg,ph3/CLHEP::deg);
   m = tempRot->GetRotationMatrix();
   fRot[61] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg-180,th2/deg,ph2/deg+180,th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg-180,th2/CLHEP::deg,ph2/CLHEP::deg+180,th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[62] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg-180,180-th2/deg,ph2/deg,180-th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg-180,180-th2/CLHEP::deg,ph2/CLHEP::deg,180-th3/CLHEP::deg,ph3/CLHEP::deg);
   m = tempRot->GetRotationMatrix();
   fRot[63] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg,180-th2/deg,ph2/deg+180,180-th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,180-th2/CLHEP::deg,ph2/CLHEP::deg+180,180-th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[64] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
@@ -497,27 +497,27 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
   fSKIPhysi[6]=new G4PVPlacement(fRot[63],G4ThreeVector(x,y+fGap.x(),-z),fSKILogic[1],"SKIRT",fMotherLogic,false,7);
   fSKIPhysi[7]=new G4PVPlacement(fRot[64],G4ThreeVector(-x,-y-fGap.y(),-z),fSKILogic[1],"SKIRT",fMotherLogic,false,8);
   //SK3
-  th3 = 19.8*deg;
-  ph3 = 27.2*deg;
-  alf = -8.1*deg;
-  ph1=ph3 - 90.*deg - alf+360*deg;
-  th1=atan(-1./(tan(th3)*cos(ph1-ph3)))+180*deg;
+  th3 = 19.8*CLHEP::deg;
+  ph3 = 27.2*CLHEP::deg;
+  alf = -8.1*CLHEP::deg;
+  ph1=ph3 - 90.*CLHEP::deg - alf+360*CLHEP::deg;
+  th1=atan(-1./(tan(th3)*cos(ph1-ph3)))+180*CLHEP::deg;
   ph2=atan((tan(th3)*cos(ph3)-tan(th1)*cos(ph1))/(tan(th1)*sin(ph1)-tan(th3)*sin(ph3)));
-  th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*deg;
+  th2=atan(-1./(tan(th3)*cos(ph2-ph3)))+180*CLHEP::deg;
   
-  tempRot->SetAngles(th1/deg,ph1/deg,th2/deg,ph2/deg,th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,th2/CLHEP::deg,ph2/CLHEP::deg,th3/CLHEP::deg,ph3/CLHEP::deg);
   m = tempRot->GetRotationMatrix();
   fRot[71] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg-180,th2/deg,ph2/deg+180,th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg-180,th2/CLHEP::deg,ph2/CLHEP::deg+180,th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[72] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg-180,180-th2/deg,ph2/deg,180-th3/deg,ph3/deg);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg-180,180-th2/CLHEP::deg,ph2/CLHEP::deg,180-th3/CLHEP::deg,ph3/CLHEP::deg);
   m = tempRot->GetRotationMatrix();
   fRot[73] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
-  tempRot->SetAngles(th1/deg,ph1/deg,180-th2/deg,ph2/deg+180,180-th3/deg,ph3/deg+180);
+  tempRot->SetAngles(th1/CLHEP::deg,ph1/CLHEP::deg,180-th2/CLHEP::deg,ph2/CLHEP::deg+180,180-th3/CLHEP::deg,ph3/CLHEP::deg+180);
   m = tempRot->GetRotationMatrix();
   fRot[74] = new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 
@@ -535,14 +535,14 @@ void A2DetCrystalBall::MakeOther2(){//Based on ugeom_mamic_apr09.F
 
 
   //  Rims right after the beam tunnel and inside the CB tunnel. Simulated by placing a 4 mm
-  //  steel ring after the Ball. The ring is shadowing 19.93 degree cone. Updated now a 17.7degree cone.15/11/07
-  //DG move inside exit tunnel and reduce outer angle to 21degrees
-  G4double zrim=100*cm;
+  //  steel ring after the Ball. The ring is shadowing 19.93 CLHEP::degree cone. Updated now a 17.7CLHEP::degree cone.15/11/07
+  //DG move inside exit tunnel and reduce outer angle to 21CLHEP::degrees
+  G4double zrim=100*CLHEP::cm;
   G4double rims_rin = tunl_rin/(tunl_z0+tunl_len)*zrim;
-  G4double rims_rout = tan(30*deg)*zrim;
+  G4double rims_rout = tan(30*CLHEP::deg)*zrim;
   G4double rims_z  = 2.5*inch/32;       // half length
-  G4double rims_phlow=0*deg;
-  G4double rims_phdelta = 180*deg;
+  G4double rims_phlow=0*CLHEP::deg;
+  G4double rims_phdelta = 180*CLHEP::deg;
   G4double rims_zpos=zrim;
   fRIMS=new G4Tubs("RIMS",rims_rin,rims_rout,rims_z,rims_phlow,rims_phdelta);
   fRIMSLogic=new G4LogicalVolume(fRIMS,fNistManager->FindOrBuildMaterial("G4_Fe"),"RIMS");
@@ -557,13 +557,13 @@ void A2DetCrystalBall::MakeBall(){
   CBVisAtt->SetVisibility(true);
 
   //Create ball detector logic volume
-  fMyLogic=new G4LogicalVolume(new G4Box("ball",5*m,5*m,5*m),fNistManager->FindOrBuildMaterial("G4_AIR"),"ball");
+  fMyLogic=new G4LogicalVolume(new G4Box("ball",5*CLHEP::m,5*CLHEP::m,5*CLHEP::m),fNistManager->FindOrBuildMaterial("G4_AIR"),"ball");
   // G4VisAttributes* CBVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   fMyLogic->SetVisAttributes(CBVisAtt);
    CBVisAtt->SetVisibility(true);
    if(fCrystVisAtt==NULL) fCrystVisAtt= new G4VisAttributes(G4Colour(1,0.9,0.9));
 
-  const G4double inch=1.0/0.393700787*cm;
+  const G4double inch=1.0/0.393700787*CLHEP::cm;
  
   //In GEANT3 the ball was constructed in two hemispheres CBLU and CBLD
   //However these hemispheres were actually spheres and therefore gave
@@ -695,7 +695,7 @@ void A2DetCrystalBall::MakeBall(){
 	      //Need to subtract off the CCUT volume
 	      //First rotate it into the frame of the crystal  
 	      G4SubtractionSolid* subtract=new G4SubtractionSolid("Subtract",fCrystal[cryt],fCCUT,trans.inverse());
-	      //union used to check positioning of CCUT to be subtracted, need to change z half length to 20*cm or visualisation won't work
+	      //union used to check positioning of CCUT to be subtracted, need to change z half length to 20*CLHEP::cm or visualisation won't work
 	      //G4UnionSolid* subtract=new G4UnionSolid("Subtract",fCrystal[cryt],fCCUT,trans.inverse());
 	      fCrystLogic[copy]=new G4LogicalVolume(subtract,fNistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE"),fCrystal[cryt]->GetName()+G4String(crystname));
 	  
@@ -736,7 +736,7 @@ void A2DetCrystalBall::MakeBall(){
 	      //Need to subtract off the CCUT volume
 	      //First rotate it into the frame of the crystal  
 	      G4SubtractionSolid* subtract=new G4SubtractionSolid("Subtract",fCrystal[cryt],fCCUT,trans.inverse());
-	      //union used to check positioning of CCUT to be subtracted, need to change z half length to 20*cm or visualisation won't work
+	      //union used to check positioning of CCUT to be subtracted, need to change z half length to 20*CLHEP::cm or visualisation won't work
 	      //G4UnionSolid* subtract=new G4UnionSolid("Subtract",fCrystal[cryt],fCCUT,trans.inverse());
 	      fCrystLogic[icut]=new G4LogicalVolume(subtract,fNistManager->FindOrBuildMaterial("G4_SODIUM_IODIDE"),fCrystal[cryt]->GetName()+G4String(crystname));
 	      fCrystLogic[icut]->SetVisAttributes(fCrystVisAtt);
@@ -768,19 +768,19 @@ void A2DetCrystalBall::MakeCrystals(){
   //which is a root conversion of cbsim ugeom.F
   //original parameters were calculated in the Prism.F file
   //There are 11 different shapes of crystal as defined below, each needs it's own logical volume
-  G4double Vanish=1*nm;//small length to make G4Trap work with approx 3 sides
+  G4double Vanish=1*CLHEP::nm;//small length to make G4Trap work with approx 3 sides
   G4double Shrink=1;///for testing
-  fCrystal[1]=new G4Trap("CR01", 20.19144*Shrink*cm,2.217791*deg,89.99987*deg,1.875317*Shrink*cm,2.707754*Shrink*cm,Vanish,    0.*deg,         4.875824*Shrink*cm, 7.04016*Shrink*cm,  Vanish,   0.*deg);
-  fCrystal[2]=new G4Trap("CR02", 20.18581*Shrink*cm,2.130379*deg,90.53368*deg,1.975611*Shrink*cm,2.723455*Shrink*cm,Vanish,    -0.2537469*deg, 5.136588*Shrink*cm, 7.080982*Shrink*cm, Vanish,   -0.2537412*deg);
-  fCrystal[3]=new G4Trap("CR03", 20.18625*Shrink*cm,2.093683*deg,269.9998*deg,1.987023*Shrink*cm,Vanish,   2.7077546*Shrink*cm,0.*deg,         5.16626*Shrink*cm,  Vanish,    7.04016*Shrink*cm, 0.*deg);
-  fCrystal[4]=new G4Trap("CR04", 20.18581*Shrink*cm,2.130379*deg,89.46632*deg,1.975611*Shrink*cm,2.723455*Shrink*cm,Vanish,    0.2537469*deg,  5.136588*Shrink*cm, 7.080982*Shrink*cm, Vanish,   0.2537412*deg);
-  fCrystal[5]=new G4Trap("CR05", 20.1931*Shrink*cm, 1.978827*deg,95.34957*deg,1.961185*Shrink*cm,2.615028*Shrink*cm,Vanish,    -2.374402*deg,  5.09908*Shrink*cm,  6.799075*Shrink*cm, Vanish,   -2.374406*deg);
-  fCrystal[6]=new G4Trap("CR06", 20.18483*Shrink*cm,2.109143*deg,268.5951*deg,1.995582*Shrink*cm,Vanish,   2.723455*Shrink*cm, 0.6542568*deg,  5.188515*Shrink*cm, Vanish,    7.080982*Shrink*cm,0.6542572*deg);
-  fCrystal[7]=new G4Trap("CR07", 20.18352*Shrink*cm,2.114796*deg,89.99928*deg,2.007283*Shrink*cm,2.734993*Shrink*cm,Vanish,    0.*deg,         5.218937*Shrink*cm, 7.110981*Shrink*cm, Vanish,   0.*deg);
-  fCrystal[8]=new G4Trap("CR08", 20.18483*Shrink*cm,2.109143*deg,271.4048*deg,1.995582*Shrink*cm,Vanish,   2.7234556*Shrink*cm,-0.6542568*deg, 5.188515*Shrink*cm, Vanish,    7.080982*Shrink*cm,-0.6542572*deg);
-  fCrystal[9]=new G4Trap("CR09", 20.1931*Shrink*cm, 1.978827*deg,84.65044*deg,1.961185*Shrink*cm,2.615028*Shrink*cm,Vanish,    2.374402*deg,   5.09908*Shrink*cm,  6.799075*Shrink*cm, Vanish,   2.374406*deg);
-  fCrystal[10]=new G4Trap("CR10",20.17123*Shrink*cm,1.674679*deg,260.4183*deg,2.331228*Shrink*cm,Vanish,   2.6150286*Shrink*cm,3.013278*deg,   6.061194*Shrink*cm, Vanish,    6.799075*Shrink*cm,3.013267*deg);
-  fCrystal[11]=new G4Trap("CR11",20.16107*Shrink*cm,1.812293*deg,91.16*deg,   2.3732*Shrink*cm,  2.751179*Shrink*cm,Vanish,    -0.3896213*deg, 6.17032*Shrink*cm,  7.153065*Shrink*cm, Vanish,   -0.3896199*deg);
+  fCrystal[1]=new G4Trap("CR01", 20.19144*Shrink*CLHEP::cm,2.217791*CLHEP::deg,89.99987*CLHEP::deg,1.875317*Shrink*CLHEP::cm,2.707754*Shrink*CLHEP::cm,Vanish,    0.*CLHEP::deg,         4.875824*Shrink*CLHEP::cm, 7.04016*Shrink*CLHEP::cm,  Vanish,   0.*CLHEP::deg);
+  fCrystal[2]=new G4Trap("CR02", 20.18581*Shrink*CLHEP::cm,2.130379*CLHEP::deg,90.53368*CLHEP::deg,1.975611*Shrink*CLHEP::cm,2.723455*Shrink*CLHEP::cm,Vanish,    -0.2537469*CLHEP::deg, 5.136588*Shrink*CLHEP::cm, 7.080982*Shrink*CLHEP::cm, Vanish,   -0.2537412*CLHEP::deg);
+  fCrystal[3]=new G4Trap("CR03", 20.18625*Shrink*CLHEP::cm,2.093683*CLHEP::deg,269.9998*CLHEP::deg,1.987023*Shrink*CLHEP::cm,Vanish,   2.7077546*Shrink*CLHEP::cm,0.*CLHEP::deg,         5.16626*Shrink*CLHEP::cm,  Vanish,    7.04016*Shrink*CLHEP::cm, 0.*CLHEP::deg);
+  fCrystal[4]=new G4Trap("CR04", 20.18581*Shrink*CLHEP::cm,2.130379*CLHEP::deg,89.46632*CLHEP::deg,1.975611*Shrink*CLHEP::cm,2.723455*Shrink*CLHEP::cm,Vanish,    0.2537469*CLHEP::deg,  5.136588*Shrink*CLHEP::cm, 7.080982*Shrink*CLHEP::cm, Vanish,   0.2537412*CLHEP::deg);
+  fCrystal[5]=new G4Trap("CR05", 20.1931*Shrink*CLHEP::cm, 1.978827*CLHEP::deg,95.34957*CLHEP::deg,1.961185*Shrink*CLHEP::cm,2.615028*Shrink*CLHEP::cm,Vanish,    -2.374402*CLHEP::deg,  5.09908*Shrink*CLHEP::cm,  6.799075*Shrink*CLHEP::cm, Vanish,   -2.374406*CLHEP::deg);
+  fCrystal[6]=new G4Trap("CR06", 20.18483*Shrink*CLHEP::cm,2.109143*CLHEP::deg,268.5951*CLHEP::deg,1.995582*Shrink*CLHEP::cm,Vanish,   2.723455*Shrink*CLHEP::cm, 0.6542568*CLHEP::deg,  5.188515*Shrink*CLHEP::cm, Vanish,    7.080982*Shrink*CLHEP::cm,0.6542572*CLHEP::deg);
+  fCrystal[7]=new G4Trap("CR07", 20.18352*Shrink*CLHEP::cm,2.114796*CLHEP::deg,89.99928*CLHEP::deg,2.007283*Shrink*CLHEP::cm,2.734993*Shrink*CLHEP::cm,Vanish,    0.*CLHEP::deg,         5.218937*Shrink*CLHEP::cm, 7.110981*Shrink*CLHEP::cm, Vanish,   0.*CLHEP::deg);
+  fCrystal[8]=new G4Trap("CR08", 20.18483*Shrink*CLHEP::cm,2.109143*CLHEP::deg,271.4048*CLHEP::deg,1.995582*Shrink*CLHEP::cm,Vanish,   2.7234556*Shrink*CLHEP::cm,-0.6542568*CLHEP::deg, 5.188515*Shrink*CLHEP::cm, Vanish,    7.080982*Shrink*CLHEP::cm,-0.6542572*CLHEP::deg);
+  fCrystal[9]=new G4Trap("CR09", 20.1931*Shrink*CLHEP::cm, 1.978827*CLHEP::deg,84.65044*CLHEP::deg,1.961185*Shrink*CLHEP::cm,2.615028*Shrink*CLHEP::cm,Vanish,    2.374402*CLHEP::deg,   5.09908*Shrink*CLHEP::cm,  6.799075*Shrink*CLHEP::cm, Vanish,   2.374406*CLHEP::deg);
+  fCrystal[10]=new G4Trap("CR10",20.17123*Shrink*CLHEP::cm,1.674679*CLHEP::deg,260.4183*CLHEP::deg,2.331228*Shrink*CLHEP::cm,Vanish,   2.6150286*Shrink*CLHEP::cm,3.013278*CLHEP::deg,   6.061194*Shrink*CLHEP::cm, Vanish,    6.799075*Shrink*CLHEP::cm,3.013267*CLHEP::deg);
+  fCrystal[11]=new G4Trap("CR11",20.16107*Shrink*CLHEP::cm,1.812293*CLHEP::deg,91.16*CLHEP::deg,   2.3732*Shrink*CLHEP::cm,  2.751179*Shrink*CLHEP::cm,Vanish,    -0.3896213*CLHEP::deg, 6.17032*Shrink*CLHEP::cm,  7.153065*Shrink*CLHEP::cm, Vanish,   -0.3896199*CLHEP::deg);
   if(fIsInteractive==1)return;
   //set up sensitive detectors
   if(!fCBSD){
@@ -808,87 +808,87 @@ void A2DetCrystalBall::MakeTransformVectors(){
   fTrans=new G4ThreeVector[100];
 
   // fTrans[]=G4ThreeVector();
-  fTrans[1]=G4ThreeVector(28.86752*cm,-9.379624*cm,39.73272*cm);
-  fTrans[2]=G4ThreeVector(46.70862*cm,-15.17655*cm,9.379623*cm);
-  fTrans[3]=G4ThreeVector(46.70862*cm,15.17655*cm,-9.379623*cm);
-  fTrans[4]=G4ThreeVector(28.86752*cm,9.379626*cm,-39.73272*cm);  
-  fTrans[5]=G4ThreeVector(17.8411*cm,24.55618*cm,39.73272*cm);
-  fTrans[6]=G4ThreeVector(28.86751*cm,39.73272*cm,9.379623*cm);
-  fTrans[7]=G4ThreeVector(0.5975973E-06*cm,49.11235*cm,-9.379623*cm);
-  fTrans[8]=G4ThreeVector(0.3693355E-06*cm,30.35311*cm,-39.73272*cm);
-  fTrans[9]=G4ThreeVector(-17.8411*cm,24.55618*cm,39.73272*cm);
-  fTrans[10]=G4ThreeVector(-28.86751*cm,39.73272*cm,9.379623*cm);
-  fTrans[11]=G4ThreeVector(-46.70861*cm,15.17655*cm,-9.379623*cm);
-  fTrans[12]=G4ThreeVector(-28.86752*cm,9.379626*cm,-39.73272*cm);
-  fTrans[13]=G4ThreeVector(-28.86752*cm,-9.379623*cm,39.73272*cm);
-  fTrans[14]=G4ThreeVector(-46.70862*cm,-15.17655*cm,9.379623*cm);
-  fTrans[15]=G4ThreeVector(-28.86752*cm,-39.73272*cm,-9.379623*cm);
-  fTrans[16]=G4ThreeVector(-17.84111*cm,-24.55618*cm,-39.73272*cm);
-  fTrans[17]=G4ThreeVector(-0.1108006E-05*cm,-30.3531*cm,39.73272*cm);
-  fTrans[18]=G4ThreeVector(-0.1792792E-05*cm,-49.11235*cm,9.379623*cm);
-  fTrans[19]=G4ThreeVector(28.86751*cm,-39.73272*cm,-9.379623*cm);
-  fTrans[20]=G4ThreeVector(17.84111*cm,-24.55618*cm,-39.73272*cm); 
-  fTrans[21]=G4ThreeVector(0.*cm,19.63683*cm,-6.779331*cm);
-  fTrans[22]=G4ThreeVector(-17.00599*cm,-9.818414*cm,-6.779331*cm);
+  fTrans[1]=G4ThreeVector(28.86752*CLHEP::cm,-9.379624*CLHEP::cm,39.73272*CLHEP::cm);
+  fTrans[2]=G4ThreeVector(46.70862*CLHEP::cm,-15.17655*CLHEP::cm,9.379623*CLHEP::cm);
+  fTrans[3]=G4ThreeVector(46.70862*CLHEP::cm,15.17655*CLHEP::cm,-9.379623*CLHEP::cm);
+  fTrans[4]=G4ThreeVector(28.86752*CLHEP::cm,9.379626*CLHEP::cm,-39.73272*CLHEP::cm);  
+  fTrans[5]=G4ThreeVector(17.8411*CLHEP::cm,24.55618*CLHEP::cm,39.73272*CLHEP::cm);
+  fTrans[6]=G4ThreeVector(28.86751*CLHEP::cm,39.73272*CLHEP::cm,9.379623*CLHEP::cm);
+  fTrans[7]=G4ThreeVector(0.5975973E-06*CLHEP::cm,49.11235*CLHEP::cm,-9.379623*CLHEP::cm);
+  fTrans[8]=G4ThreeVector(0.3693355E-06*CLHEP::cm,30.35311*CLHEP::cm,-39.73272*CLHEP::cm);
+  fTrans[9]=G4ThreeVector(-17.8411*CLHEP::cm,24.55618*CLHEP::cm,39.73272*CLHEP::cm);
+  fTrans[10]=G4ThreeVector(-28.86751*CLHEP::cm,39.73272*CLHEP::cm,9.379623*CLHEP::cm);
+  fTrans[11]=G4ThreeVector(-46.70861*CLHEP::cm,15.17655*CLHEP::cm,-9.379623*CLHEP::cm);
+  fTrans[12]=G4ThreeVector(-28.86752*CLHEP::cm,9.379626*CLHEP::cm,-39.73272*CLHEP::cm);
+  fTrans[13]=G4ThreeVector(-28.86752*CLHEP::cm,-9.379623*CLHEP::cm,39.73272*CLHEP::cm);
+  fTrans[14]=G4ThreeVector(-46.70862*CLHEP::cm,-15.17655*CLHEP::cm,9.379623*CLHEP::cm);
+  fTrans[15]=G4ThreeVector(-28.86752*CLHEP::cm,-39.73272*CLHEP::cm,-9.379623*CLHEP::cm);
+  fTrans[16]=G4ThreeVector(-17.84111*CLHEP::cm,-24.55618*CLHEP::cm,-39.73272*CLHEP::cm);
+  fTrans[17]=G4ThreeVector(-0.1108006E-05*CLHEP::cm,-30.3531*CLHEP::cm,39.73272*CLHEP::cm);
+  fTrans[18]=G4ThreeVector(-0.1792792E-05*CLHEP::cm,-49.11235*CLHEP::cm,9.379623*CLHEP::cm);
+  fTrans[19]=G4ThreeVector(28.86751*CLHEP::cm,-39.73272*CLHEP::cm,-9.379623*CLHEP::cm);
+  fTrans[20]=G4ThreeVector(17.84111*CLHEP::cm,-24.55618*CLHEP::cm,-39.73272*CLHEP::cm); 
+  fTrans[21]=G4ThreeVector(0.*CLHEP::cm,19.63683*CLHEP::cm,-6.779331*CLHEP::cm);
+  fTrans[22]=G4ThreeVector(-17.00599*CLHEP::cm,-9.818414*CLHEP::cm,-6.779331*CLHEP::cm);
   fTrans[23]=G4ThreeVector();
-  fTrans[24]=G4ThreeVector(17.00599*cm,-9.818414*cm,-6.779331*cm);
-  //  fTrans[25]=G4ThreeVector(0.,0.126*cm,0.);//split 2 hemi in the LABB frame
-  //  fTrans[26]=G4ThreeVector(0.,0,0.126*cm);//or split 2 hemi in one sphere frame 
-  // fTrans[25]=G4ThreeVector(0.,fGap+0.076*cm,0.);//split 2 hemi in the LABB frame
-  // fTrans[26]=G4ThreeVector(0.,0,fGap+0.076*cm);//or split 2 hemi in one sphere frame 
-  fTrans[27]=G4ThreeVector(0.*cm,0.*cm,-3.291383*cm);  //added in for central minor placement with no rotation
-  fTrans[28]=G4ThreeVector(0.*cm,19.63683*cm,-6.779331*cm);//fix for 21
+  fTrans[24]=G4ThreeVector(17.00599*CLHEP::cm,-9.818414*CLHEP::cm,-6.779331*CLHEP::cm);
+  //  fTrans[25]=G4ThreeVector(0.,0.126*CLHEP::cm,0.);//split 2 hemi in the LABB frame
+  //  fTrans[26]=G4ThreeVector(0.,0,0.126*CLHEP::cm);//or split 2 hemi in one sphere frame 
+  // fTrans[25]=G4ThreeVector(0.,fGap+0.076*CLHEP::cm,0.);//split 2 hemi in the LABB frame
+  // fTrans[26]=G4ThreeVector(0.,0,fGap+0.076*CLHEP::cm);//or split 2 hemi in one sphere frame 
+  fTrans[27]=G4ThreeVector(0.*CLHEP::cm,0.*CLHEP::cm,-3.291383*CLHEP::cm);  //added in for central minor placement with no rotation
+  fTrans[28]=G4ThreeVector(0.*CLHEP::cm,19.63683*CLHEP::cm,-6.779331*CLHEP::cm);//fix for 21
   fTrans[29]=G4ThreeVector();
   fTrans[30]=G4ThreeVector();
-  fTrans[31]=G4ThreeVector(0.*cm,6.561235*cm,-3.284699*cm);
-  fTrans[32]=G4ThreeVector(-4.873957*cm,-0.2755656*cm,-2.268451*cm);
-  fTrans[33]=G4ThreeVector(0.*cm,-0.2669953*cm,-2.005777*cm);
-  fTrans[34]=G4ThreeVector(4.873957*cm,-0.2755656*cm,-2.268451*cm);
-  fTrans[35]=G4ThreeVector(-9.636768*cm,-7.360624*cm,-2.795638*cm);
-  fTrans[36]=G4ThreeVector(-4.898472*cm,-7.413983*cm,-2.043895*cm);
-  fTrans[37]=G4ThreeVector(0.*cm,-7.405412*cm,-1.781221*cm);
-  fTrans[38]=G4ThreeVector(4.898472*cm,-7.413983*cm,-2.043895*cm);
-  fTrans[39]=G4ThreeVector(9.636768*cm,-7.360624*cm,-2.795638*cm);
+  fTrans[31]=G4ThreeVector(0.*CLHEP::cm,6.561235*CLHEP::cm,-3.284699*CLHEP::cm);
+  fTrans[32]=G4ThreeVector(-4.873957*CLHEP::cm,-0.2755656*CLHEP::cm,-2.268451*CLHEP::cm);
+  fTrans[33]=G4ThreeVector(0.*CLHEP::cm,-0.2669953*CLHEP::cm,-2.005777*CLHEP::cm);
+  fTrans[34]=G4ThreeVector(4.873957*CLHEP::cm,-0.2755656*CLHEP::cm,-2.268451*CLHEP::cm);
+  fTrans[35]=G4ThreeVector(-9.636768*CLHEP::cm,-7.360624*CLHEP::cm,-2.795638*CLHEP::cm);
+  fTrans[36]=G4ThreeVector(-4.898472*CLHEP::cm,-7.413983*CLHEP::cm,-2.043895*CLHEP::cm);
+  fTrans[37]=G4ThreeVector(0.*CLHEP::cm,-7.405412*CLHEP::cm,-1.781221*CLHEP::cm);
+  fTrans[38]=G4ThreeVector(4.898472*CLHEP::cm,-7.413983*CLHEP::cm,-2.043895*CLHEP::cm);
+  fTrans[39]=G4ThreeVector(9.636768*CLHEP::cm,-7.360624*CLHEP::cm,-2.795638*CLHEP::cm);
   fTrans[40]=G4ThreeVector();
-  fTrans[41]=G4ThreeVector(-9.685799*cm,4.170954*cm,-2.545603*cm);
-  fTrans[42]=G4ThreeVector(1.230747*cm,-10.47362*cm,-2.545603*cm);
-  fTrans[43]=G4ThreeVector(8.455051*cm,6.30267*cm,-2.545603*cm);
-  fTrans[44]=G4ThreeVector(-4.922987*cm,4.263432*cm,-1.793192*cm);
-  fTrans[45]=G4ThreeVector(-1.230747*cm,-6.395147*cm,-1.793192*cm);
-  fTrans[46]=G4ThreeVector(6.153733*cm,2.131716*cm,-1.793192*cm);
-  fTrans[47]=G4ThreeVector(-6.153733*cm,-2.131716*cm,-1.793192*cm);
-  fTrans[48]=G4ThreeVector(4.922987*cm,-4.263432*cm,-1.793192*cm);
-  fTrans[49]=G4ThreeVector(1.230747*cm,6.395147*cm,-1.793192*cm);
-//   fTrans[51]=G4ThreeVector(-19.60074*cm,12.32638*cm,60.68302*cm);
-//   fTrans[52]=G4ThreeVector(19.60074*cm,-12.32638*cm,60.68302*cm);
-//   fTrans[53]=G4ThreeVector(-19.60074*cm,12.32638*cm,-60.68302*cm);
-//   fTrans[54]=G4ThreeVector(19.60074*cm,-12.32638*cm,-60.68302*cm);
-//   fTrans[61]=G4ThreeVector(0.3097284*cm,22.30712*cm,60.84964*cm);
-//   fTrans[62]=G4ThreeVector(-0.3097284*cm,-22.30712*cm,60.84964*cm);
-//   fTrans[63]=G4ThreeVector(0.3097284*cm,22.30712*cm,-60.84964*cm);
-//   fTrans[64]=G4ThreeVector(-0.3097284*cm,-22.30712*cm,-60.84964*cm);
-//   fTrans[71]=G4ThreeVector(19.73018*cm,10.26593*cm,60.84964*cm);
-//   fTrans[72]=G4ThreeVector(-19.73018*cm,-10.26593*cm,60.84964*cm);
-//   fTrans[73]=G4ThreeVector(19.73018*cm,10.26593*cm,-60.84964*cm);
-//   fTrans[74]=G4ThreeVector(-19.73018*cm,-10.26593*cm,-60.84964*cm);
+  fTrans[41]=G4ThreeVector(-9.685799*CLHEP::cm,4.170954*CLHEP::cm,-2.545603*CLHEP::cm);
+  fTrans[42]=G4ThreeVector(1.230747*CLHEP::cm,-10.47362*CLHEP::cm,-2.545603*CLHEP::cm);
+  fTrans[43]=G4ThreeVector(8.455051*CLHEP::cm,6.30267*CLHEP::cm,-2.545603*CLHEP::cm);
+  fTrans[44]=G4ThreeVector(-4.922987*CLHEP::cm,4.263432*CLHEP::cm,-1.793192*CLHEP::cm);
+  fTrans[45]=G4ThreeVector(-1.230747*CLHEP::cm,-6.395147*CLHEP::cm,-1.793192*CLHEP::cm);
+  fTrans[46]=G4ThreeVector(6.153733*CLHEP::cm,2.131716*CLHEP::cm,-1.793192*CLHEP::cm);
+  fTrans[47]=G4ThreeVector(-6.153733*CLHEP::cm,-2.131716*CLHEP::cm,-1.793192*CLHEP::cm);
+  fTrans[48]=G4ThreeVector(4.922987*CLHEP::cm,-4.263432*CLHEP::cm,-1.793192*CLHEP::cm);
+  fTrans[49]=G4ThreeVector(1.230747*CLHEP::cm,6.395147*CLHEP::cm,-1.793192*CLHEP::cm);
+//   fTrans[51]=G4ThreeVector(-19.60074*CLHEP::cm,12.32638*CLHEP::cm,60.68302*CLHEP::cm);
+//   fTrans[52]=G4ThreeVector(19.60074*CLHEP::cm,-12.32638*CLHEP::cm,60.68302*CLHEP::cm);
+//   fTrans[53]=G4ThreeVector(-19.60074*CLHEP::cm,12.32638*CLHEP::cm,-60.68302*CLHEP::cm);
+//   fTrans[54]=G4ThreeVector(19.60074*CLHEP::cm,-12.32638*CLHEP::cm,-60.68302*CLHEP::cm);
+//   fTrans[61]=G4ThreeVector(0.3097284*CLHEP::cm,22.30712*CLHEP::cm,60.84964*CLHEP::cm);
+//   fTrans[62]=G4ThreeVector(-0.3097284*CLHEP::cm,-22.30712*CLHEP::cm,60.84964*CLHEP::cm);
+//   fTrans[63]=G4ThreeVector(0.3097284*CLHEP::cm,22.30712*CLHEP::cm,-60.84964*CLHEP::cm);
+//   fTrans[64]=G4ThreeVector(-0.3097284*CLHEP::cm,-22.30712*CLHEP::cm,-60.84964*CLHEP::cm);
+//   fTrans[71]=G4ThreeVector(19.73018*CLHEP::cm,10.26593*CLHEP::cm,60.84964*CLHEP::cm);
+//   fTrans[72]=G4ThreeVector(-19.73018*CLHEP::cm,-10.26593*CLHEP::cm,60.84964*CLHEP::cm);
+//   fTrans[73]=G4ThreeVector(19.73018*CLHEP::cm,10.26593*CLHEP::cm,-60.84964*CLHEP::cm);
+//   fTrans[74]=G4ThreeVector(-19.73018*CLHEP::cm,-10.26593*CLHEP::cm,-60.84964*CLHEP::cm);
   //note 61-74 are slighly changed in sergeis new version cb_mamic.C
   //old version above
-  fTrans[51]=G4ThreeVector(-20.18045*cm,12.63722*cm,63.02744*cm);
-  fTrans[52]=G4ThreeVector(20.18045*cm,-12.63722*cm,63.02744*cm);
-  fTrans[53]=G4ThreeVector(-20.18045*cm,12.63722*cm,-63.02744*cm);
-  fTrans[54]=G4ThreeVector(20.18045*cm,-12.63722*cm,-63.02744*cm);
-  fTrans[61]=G4ThreeVector(0.3137556*cm,22.54553*cm,63.23774*cm);
-  fTrans[62]=G4ThreeVector(-0.3137556*cm,-22.54553*cm,63.23774*cm);
-  fTrans[63]=G4ThreeVector(0.3137556*cm,22.54553*cm,-63.23774*cm);
-  fTrans[64]=G4ThreeVector(-0.3137556*cm,-22.54553*cm,-63.23774*cm);
-  fTrans[71]=G4ThreeVector(19.98671*cm,10.34778*cm,63.23774*cm);
-  fTrans[72]=G4ThreeVector(-19.98671*cm,-10.34778*cm,63.23774*cm);
-  fTrans[73]=G4ThreeVector(19.98671*cm,10.34778*cm,-63.23774*cm);
-  fTrans[74]=G4ThreeVector(-19.98671*cm,-10.34778*cm,-63.23774*cm);
-  // fTrans[96]=G4ThreeVector(0*cm,0*cm,28.4*cm);
+  fTrans[51]=G4ThreeVector(-20.18045*CLHEP::cm,12.63722*CLHEP::cm,63.02744*CLHEP::cm);
+  fTrans[52]=G4ThreeVector(20.18045*CLHEP::cm,-12.63722*CLHEP::cm,63.02744*CLHEP::cm);
+  fTrans[53]=G4ThreeVector(-20.18045*CLHEP::cm,12.63722*CLHEP::cm,-63.02744*CLHEP::cm);
+  fTrans[54]=G4ThreeVector(20.18045*CLHEP::cm,-12.63722*CLHEP::cm,-63.02744*CLHEP::cm);
+  fTrans[61]=G4ThreeVector(0.3137556*CLHEP::cm,22.54553*CLHEP::cm,63.23774*CLHEP::cm);
+  fTrans[62]=G4ThreeVector(-0.3137556*CLHEP::cm,-22.54553*CLHEP::cm,63.23774*CLHEP::cm);
+  fTrans[63]=G4ThreeVector(0.3137556*CLHEP::cm,22.54553*CLHEP::cm,-63.23774*CLHEP::cm);
+  fTrans[64]=G4ThreeVector(-0.3137556*CLHEP::cm,-22.54553*CLHEP::cm,-63.23774*CLHEP::cm);
+  fTrans[71]=G4ThreeVector(19.98671*CLHEP::cm,10.34778*CLHEP::cm,63.23774*CLHEP::cm);
+  fTrans[72]=G4ThreeVector(-19.98671*CLHEP::cm,-10.34778*CLHEP::cm,63.23774*CLHEP::cm);
+  fTrans[73]=G4ThreeVector(19.98671*CLHEP::cm,10.34778*CLHEP::cm,-63.23774*CLHEP::cm);
+  fTrans[74]=G4ThreeVector(-19.98671*CLHEP::cm,-10.34778*CLHEP::cm,-63.23774*CLHEP::cm);
+  // fTrans[96]=G4ThreeVector(0*CLHEP::cm,0*CLHEP::cm,28.4*CLHEP::cm);
   //TUNL offset slighly changed in sergeis new version cb_mamic.C
   //old version above
-  //fTrans[96]=G4ThreeVector(0*cm,fGap,28.1*cm);
+  //fTrans[96]=G4ThreeVector(0*CLHEP::cm,fGap,28.1*CLHEP::cm!);
 
 }
 void A2DetCrystalBall::MakeRotationMatrices(){
@@ -978,12 +978,12 @@ void A2DetCrystalBall::MakeRotationMatrices(){
     if(rot[i]){
       //G4cout<<"Rotation Matrix "<<i<<G4endl;
       if(i==95){
-// 	const Double_t *m = rot[26]->Inverse().GetRotationMatrix();
+// 	const Double_t *CLHEP::m = rot[26]->Inverse().GetRotationMatrix();
 // 	fRot[i]=new G4RotationMatrix(G4ThreeVector(m[0],m[1],m[2]),G4ThreeVector(m[3],m[4],m[5]),G4ThreeVector(m[6],m[7],m[8]));
 // 	G4cout<<"MAde 95"<<G4endl;
 	fRot[i]=new G4RotationMatrix();
-	fRot[i]->rotateX(90*deg);
-	fRot[i]->rotateY(90*deg);
+	fRot[i]->rotateX(90*CLHEP::deg);
+	fRot[i]->rotateY(90*CLHEP::deg);
       }
       else{
 	const Double_t *m = rot[i]->GetRotationMatrix();

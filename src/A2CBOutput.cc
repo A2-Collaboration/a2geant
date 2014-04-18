@@ -124,64 +124,64 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
     //G4cout<<i<<" "<<hc->GetName()<< " "<<hc_nhits<<G4endl;
     if(hc->GetName()=="A2SDHitsCBSD"||hc->GetName()=="A2SDHitsVisCBSD"){
       fnhits=hc_nhits;
-      for(Int_t i=0;i<fnhits;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	fecryst[i]=hit->GetEdep()/GeV;
-	ftcryst[i]=hit->GetTime()/ns;
-	ficryst[i]=hit->GetID();
-	fetot+=fecryst[i];
+      for(Int_t ii=0;ii<fnhits;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	fecryst[ii]=hit->GetEdep()/CLHEP::GeV;
+	ftcryst[ii]=hit->GetTime()/CLHEP::ns;
+	ficryst[ii]=hit->GetID();
+	fetot+=fecryst[ii];
       }
     }
     if(hc->GetName()=="A2SDHitsTAPSSD"||hc->GetName()=="A2SDHitsTAPSVisSD"){
       fntaps=hc_nhits;
-      for(Int_t i=0;i<fntaps;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	fectapsl[i]=hit->GetEdep()/GeV;
-	fictaps[i]=hit->GetID();
-	ftctaps[i]=hit->GetTime()/ns;
+      for(Int_t ii=0;ii<fntaps;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	fectapsl[ii]=hit->GetEdep()/CLHEP::GeV;
+	fictaps[ii]=hit->GetID();
+	ftctaps[ii]=hit->GetTime()/CLHEP::ns;
 	//fetot+=fectapsl[i];//***TEMP!!!!
       }
     }
     if(hc->GetName()=="A2SDHitsTAPSVSD"||hc->GetName()=="A2SDHitsTAPSVVisSD"){
       fnvtaps=hc_nhits;
-      for(Int_t i=0;i<fnvtaps;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	fevtaps[i]=hit->GetEdep()/GeV;
-	fivtaps[i]=hit->GetID();
+      for(Int_t ii=0;ii<fnvtaps;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	fevtaps[ii]=hit->GetEdep()/CLHEP::GeV;
+	fivtaps[ii]=hit->GetID();
       }
     }
     if(hc->GetName()=="A2SDHitsPIDSD"){
       fvhits=hc_nhits;
-      for(Int_t i=0;i<fvhits;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	feveto[i]=hit->GetEdep()/GeV;
-	ftveto[i]=hit->GetTime()/ns;
-	fiveto[i]=hit->GetID();
+      for(Int_t ii=0;ii<fvhits;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	feveto[ii]=hit->GetEdep()/CLHEP::GeV;
+	ftveto[ii]=hit->GetTime()/CLHEP::ns;
+	fiveto[ii]=hit->GetID();
       }
     }
     if(hc->GetName().contains("A2MWPCSD")){
       // fnmwpc=hc_nhits;
-      for(Int_t i=0;i<hc_nhits;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	fimwpc[fnmwpc+i]   = hit->GetID();
-	fmposx[fnmwpc+i] = (Float_t)hit->GetPos().getX();
-	fmposy[fnmwpc+i] = (Float_t)hit->GetPos().getY();
-	fmposz[fnmwpc+i] = (Float_t)hit->GetPos().getZ();
-	femwpc[fnmwpc+i] = (Float_t)hit->GetEdep()/GeV;
+      for(Int_t ii=0;ii<hc_nhits;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	fimwpc[fnmwpc+ii]   = hit->GetID();
+	fmposx[fnmwpc+ii] = (Float_t)hit->GetPos().getX();
+	fmposy[fnmwpc+ii] = (Float_t)hit->GetPos().getY();
+	fmposz[fnmwpc+ii] = (Float_t)hit->GetPos().getZ();
+	femwpc[fnmwpc+ii] = (Float_t)hit->GetEdep()/CLHEP::GeV;
 	//	G4cout<<fnmwpc+i<<" "<<fimwpc[fnmwpc+i]<<" "<<fmpos[fnmwpc+i][0]<<" "<<fmpos[fnmwpc+i][1]<<" "<<fmpos[fnmwpc+i][2]<<G4endl;
       }
       fnmwpc+=hc_nhits;
     }
     if(hc->GetName()=="A2SDHitsTOFSD"){
       fntof=hc_nhits;
-      for(Int_t i=0;i<fntof;i++){
-	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-	ftofe[i]=hit->GetEdep()/GeV;
-	ftoft[i]=hit->GetTime()/ns;
-	ftofx[i]=hit->GetPos().x()/cm;
-	ftofy[i]=hit->GetPos().y()/cm;
-	ftofz[i]=hit->GetPos().z()/cm;
-	ftofi[i]=hit->GetID();
+      for(Int_t ii=0;ii<fntof;ii++){
+	A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(ii));
+	ftofe[ii]=hit->GetEdep()/CLHEP::GeV;
+	ftoft[ii]=hit->GetTime()/CLHEP::ns;
+	ftofx[ii]=hit->GetPos().x()/CLHEP::cm;
+	ftofy[ii]=hit->GetPos().y()/CLHEP::cm;
+	ftofz[ii]=hit->GetPos().z()/CLHEP::cm;
+	ftofi[ii]=hit->GetID();
       }
     }
   }
@@ -194,8 +194,8 @@ void A2CBOutput::WriteGenInput(){
   fbeam[0]=vec.X();
   fbeam[1]=vec.Y();
   fbeam[2]=vec.Z();
-  fbeam[3]=fBeamLorentzVec->Rho()/GeV;
-  fbeam[4]=fBeamLorentzVec->E()/GeV;
+  fbeam[3]=fBeamLorentzVec->Rho()/CLHEP::GeV;
+  fbeam[4]=fBeamLorentzVec->E()/CLHEP::GeV;
 
   //Loop over the input particles and write their real kinematics
   for(Int_t i=0;i<fnpart;i++){
@@ -208,8 +208,8 @@ void A2CBOutput::WriteGenInput(){
     fdircos[i][1]=static_cast<Float_t>(vec.Y());
     fdircos[i][2]=static_cast<Float_t>(vec.Z());
     // G4cout<<fdircos[i][0]<<" "<<fdircos[i][1]<<" "<<fdircos[i][2]<<G4endl;
-    felab[i]=fGenLorentzVec[i+1]->E()/GeV;
-    fplab[i]=fGenLorentzVec[i+1]->Rho()/GeV;
+    felab[i]=fGenLorentzVec[i+1]->E()/CLHEP::GeV;
+    fplab[i]=fGenLorentzVec[i+1]->Rho()/CLHEP::GeV;
     fidpart[i]=fGenPartType[i+1];
   }
 }

@@ -3,6 +3,7 @@
 #define A2EventActionMessenger_h 1
 
 #include "globals.hh"
+
 #include "G4UImessenger.hh"
 
 class A2EventAction;

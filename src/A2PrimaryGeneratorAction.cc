@@ -44,14 +44,14 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
   fThreeVector=G4ThreeVector(0,0,1);
   //default phase space limits
   fTmin=0;
-  fTmax=400*MeV;
+  fTmax=400*CLHEP::MeV;
   fThetamin=0;
-  fThetamax=180*deg;
-  fBeamXSigma=0.5*cm;
-  fBeamYSigma=0.5*cm;
-  fTargetZ0=0*cm;
-  fTargetThick=5*cm;
-  fTargetRadius=2*cm;
+  fThetamax=180*CLHEP::deg;
+  fBeamXSigma=0.5*CLHEP::cm;
+  fBeamYSigma=0.5*CLHEP::cm;
+  fTargetZ0=0*CLHEP::cm;
+  fTargetThick=5*CLHEP::cm;
+  fTargetRadius=2*CLHEP::cm;
   //overlap
   fSplitTheta=0;
  //default mode is g4 command line input
@@ -125,9 +125,9 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       //Get the event from input tree
       fGenTree->GetEvent(fNevent++);
       //Set vertex position
-      fThreeVector.setX(fGenPosition[0]*cm);
-      fThreeVector.setY(fGenPosition[1]*cm);
-      fThreeVector.setZ(fGenPosition[2]*cm);
+      fThreeVector.setX(fGenPosition[0]*CLHEP::cm);
+      fThreeVector.setY(fGenPosition[1]*CLHEP::cm);
+      fThreeVector.setZ(fGenPosition[2]*CLHEP::cm);
       while(!IsInTarget(fThreeVector)){
 	if(fTargetWarning==0){
 	G4cout<<"Warning vertex position from ROOT input file is not inside target cell"<<G4endl;
@@ -135,10 +135,10 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
 	fThreeVector.setZ(fDetCon->GetTarget()->GetCenter().z()+fDetCon->GetTarget()->GetLength()/2*(2*G4UniformRand()-1));
 	fThreeVector.setPerp(fDetCon->GetTarget()->GetRadius()*G4UniformRand());
-	if(fTargetWarning==0){G4cout<<fThreeVector<<" from "<<"("<<fGenPosition[0]*cm<<","<<fGenPosition[1]*cm<<","<<fGenPosition[2]*cm<<")*mm"<<G4endl;}
-	fGenPosition[0]=fThreeVector.x()/cm;
-	fGenPosition[1]=fThreeVector.y()/cm;
-	fGenPosition[2]=fThreeVector.z()/cm;
+	if(fTargetWarning==0){G4cout<<fThreeVector<<" from "<<"("<<fGenPosition[0]*CLHEP::cm<<","<<fGenPosition[1]*CLHEP::cm<<","<<fGenPosition[2]*CLHEP::cm<<")*mm"<<G4endl;}
+	fGenPosition[0]=fThreeVector.x()/CLHEP::cm;
+	fGenPosition[1]=fThreeVector.y()/CLHEP::cm;
+	fGenPosition[2]=fThreeVector.z()/CLHEP::cm;
 	fTargetWarning=1;
       };
        fParticleGun->SetParticlePosition(fThreeVector);
@@ -146,20 +146,20 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       
       for(Int_t i=0;i<fNToBeTracked;i++){
 	fParticleGun->SetParticleDefinition(fParticleDefinition[fTrackThis[i]]);
-	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(fGen4Vectors[fTrackThis[i]][0]*GeV,fGen4Vectors[fTrackThis[i]][1]*GeV,fGen4Vectors[fTrackThis[i]][2]*GeV).unit());
-	fParticleGun->SetParticleEnergy(fGen4Vectors[fTrackThis[i]][3]*GeV-fGenMass[fTrackThis[i]]);
+	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(fGen4Vectors[fTrackThis[i]][0]*CLHEP::GeV,fGen4Vectors[fTrackThis[i]][1]*CLHEP::GeV,fGen4Vectors[fTrackThis[i]][2]*CLHEP::GeV).unit());
+	fParticleGun->SetParticleEnergy(fGen4Vectors[fTrackThis[i]][3]*CLHEP::GeV-fGenMass[fTrackThis[i]]);
 	fParticleGun->GeneratePrimaryVertex(anEvent);
       }
       for(Int_t i=1;i<fNGenParticles;i++){//0 is not used
 	//Set ROOT LorentzVector, first calculate momentum
 	//	if(!fParticleDefinition[i])continue;
-	//	Float_t P=sqrt( fGen4Vectors[i][3]*GeV*fGen4Vectors[i][3]*GeV-fGenMass[i]*fGenMass[i]);
-	Float_t P=fGen4Vectors[i][4]*GeV;
+	//	Float_t P=sqrt( fGen4Vectors[i][3]*CLHEP::GeV*fGen4Vectors[i][3]*CLHEP::GeV-fGenMass[i]*fGenMass[i]);
+	P=fGen4Vectors[i][4]*CLHEP::GeV;
 	if(fParticleDefinition[i])fGenLorentzVec[i]->SetXYZM(P*fGen4Vectors[i][0],P*fGen4Vectors[i][1],P*fGen4Vectors[i][2],fGenMass[i]);
-	else fGenLorentzVec[i]->SetXYZM(P*fGen4Vectors[i][0],P*fGen4Vectors[i][1],P*fGen4Vectors[i][2],sqrt(fGen4Vectors[i][3]*fGen4Vectors[i][3]*GeV*GeV-P*P));
+	else fGenLorentzVec[i]->SetXYZM(P*fGen4Vectors[i][0],P*fGen4Vectors[i][1],P*fGen4Vectors[i][2],sqrt(fGen4Vectors[i][3]*fGen4Vectors[i][3]*CLHEP::GeV*CLHEP::GeV-P*P));
       }	
       //Assume photon beam!
-      Float_t P=fGen4Vectors[0][3]*GeV;
+      P=fGen4Vectors[0][3]*CLHEP::GeV;
       fBeamLorentzVec->SetXYZM(fGen4Vectors[0][0]*P,fGen4Vectors[0][1]*P,fGen4Vectors[0][2]*P,0);
     }
     else{ G4cerr<<"ROOT input mode specidied but no input file given"<<G4endl; exit(1);}
@@ -189,8 +189,8 @@ void A2PrimaryGeneratorAction::PhaseSpaceGenerator(G4Event* anEvent){
   fBeamLorentzVec->SetXYZM(fThreeVector.x(),fThreeVector.y(),fThreeVector.z(),Mass);
   fGenLorentzVec[1]->SetXYZM(fThreeVector.x(),fThreeVector.y(),fThreeVector.z(),Mass);
   //position vertex
-  G4float tx=1E10*m;
-  G4float ty=1E10*m;
+  G4float tx=1E10*CLHEP::m;
+  G4float ty=1E10*CLHEP::m;
   // while(tx*tx+ty*ty>fTargetRadius*fTargetRadius||(!IsInTarget(fThreeVector))){
   while(tx*tx+ty*ty>fTargetRadius*fTargetRadius){
     tx=G4RandGauss::shoot(0,fBeamXSigma);
@@ -201,9 +201,9 @@ void A2PrimaryGeneratorAction::PhaseSpaceGenerator(G4Event* anEvent){
   }
 
   fParticleGun->SetParticlePosition(fThreeVector);
-  fGenPosition[0]=fThreeVector.x()/cm;
-  fGenPosition[1]=fThreeVector.y()/cm;
-  fGenPosition[2]=fThreeVector.z()/cm;
+  fGenPosition[0]=fThreeVector.x()/CLHEP::cm;
+  fGenPosition[1]=fThreeVector.y()/CLHEP::cm;
+  fGenPosition[2]=fThreeVector.z()/CLHEP::cm;
 
   
   //produce event
@@ -213,8 +213,8 @@ void A2PrimaryGeneratorAction::PhaseSpaceGenerator(G4Event* anEvent){
 void A2PrimaryGeneratorAction::OverlapGenerator(G4Event* anEvent){
   //phase space genreator + creates an additional particle at angle fSplitTheta to the first
 
-  G4float tx=1E10*m;
-  G4float ty=1E10*m;
+  G4float tx=1E10*CLHEP::m;
+  G4float ty=1E10*CLHEP::m;
   while(tx*tx+ty*ty>fTargetRadius*fTargetRadius){
     tx=G4RandGauss::shoot(0,fBeamXSigma);
     ty=G4RandGauss::shoot(0,fBeamYSigma);
@@ -222,19 +222,19 @@ void A2PrimaryGeneratorAction::OverlapGenerator(G4Event* anEvent){
   fThreeVector.setX(tx);
   fThreeVector.setY(ty);
   fThreeVector.setZ(fTargetZ0+fTargetThick/2*(2*G4UniformRand()-1));
-  //G4cout<<"PGA "<<fTargetZ0/cm<<" "<<fTargetThick/cm<<" "<<(2*G4UniformRand()-1)<<G4endl;
+  //G4cout<<"PGA "<<fTargetZ0/CLHEP::cm<<" "<<fTargetThick/CLHEP::cm<<" "<<(2*G4UniformRand()-1)<<G4endl;
   fParticleGun->SetParticlePosition(fThreeVector);
-  fGenPosition[0]=fThreeVector.x()/cm;
-  fGenPosition[1]=fThreeVector.y()/cm;
-  fGenPosition[2]=fThreeVector.z()/cm;
+  fGenPosition[0]=fThreeVector.x()/CLHEP::cm;
+  fGenPosition[1]=fThreeVector.y()/CLHEP::cm;
+  fGenPosition[2]=fThreeVector.z()/CLHEP::cm;
   G4float theta=acos((cos(fThetamax)-cos(fThetamin))*G4UniformRand()+cos(fThetamin));
   G4float phi=2*3.141592653589*G4UniformRand();
   G4float T=fTmin+(fTmax-fTmin)*G4UniformRand();
   G4float Mass=fParticleGun->GetParticleDefinition()->GetPDGMass();
   G4float E=T+Mass;
   G4float P=sqrt(E*E-Mass*Mass);
-  //theta=90*deg;
-  //phi=30.*deg;
+  //theta=90*CLHEP::deg;
+  //phi=30.*CLHEP::deg;
   fThreeVector.setMag(P);
   fThreeVector.setTheta(theta);
   fThreeVector.setPhi(phi);
@@ -348,7 +348,7 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
 	fGenMass[index]=fParticleDefinition[index]->GetPDGMass();
       //G4cout<<"here3 "<<fGenMass[index]<<" "<<fParticleDefinition[index]->GetParticleName()<<G4endl;
       }
-      fGenLorentzVec[index]=new TLorentzVector(0,0,0,fGenMass[index]*GeV);
+      fGenLorentzVec[index]=new TLorentzVector(0,0,0,fGenMass[index]*CLHEP::GeV);
     }
   }
   for(Int_t i=0;i<fNToBeTracked;i++)

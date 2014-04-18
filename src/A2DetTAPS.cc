@@ -10,7 +10,7 @@ A2DetTAPS::A2DetTAPS(){
   fregionTAPSV=new G4Region("TAPSV");//allows seperate cuts to be defined for vetos
   //Default constructor (2003 settings)
   fNTaps=552;//including dummies
-  fZ0=175*cm;
+  fZ0=175*CLHEP::cm;
   fNPbWORings=0;
   fSetupFile="taps.dat";
   fCOVRPhysi=new G4VPhysicalVolume*[fNTaps+1];   //Crystal physical volumes
@@ -69,12 +69,12 @@ G4VPhysicalVolume* A2DetTAPS::Construct(G4LogicalVolume* MotherLogical){
   return fFWMVPhysi;
 }
 void  A2DetTAPS::PlaceCrystals(){
-  G4double z_vbox = 10.*cm;   // z size of Veto box
-  G4double z_Al = 50.*cm;     // z size of Al box
-  G4double az=25.*cm;            // z
-  G4double t_veto = 0.5*cm;     //thickness of veto detector
+  G4double z_vbox = 10.*CLHEP::cm;   // z size of Veto box
+  G4double z_Al = 50.*CLHEP::cm;     // z size of Al box
+  G4double az=25.*CLHEP::cm;            // z
+  G4double t_veto = 0.5*CLHEP::cm;     //thickness of veto detector
   G4double  pz = -(z_Al - z_vbox - az)/2.;              //COVR(+BaF2)
-  G4double  vz = -(z_Al - z_vbox + t_veto)/2. - 0.35*cm;   //Veto
+  G4double  vz = -(z_Al - z_vbox + t_veto)/2. - 0.35*CLHEP::cm;   //Veto
 
   FILE* TAPSfile=fopen(fSetupFile.data(),"r");
   //FILE* TAPSfile=fopen("taps.dat","r");//workaround until get new taps files
@@ -89,8 +89,8 @@ void  A2DetTAPS::PlaceCrystals(){
   for(G4int i=1;i<=fNTaps;i++){
     G4int scan=fscanf(TAPSfile,"%d%d%d",&index,&ix,&iy);
     if(scan<0) continue;//no more lines left in file
-    px = ix * 1.5 * 6.0 / sqrt(3.)*cm;
-    py = iy * 6. / 2.*cm;
+    px = ix * 1.5 * 6.0 / sqrt(3.)*CLHEP::cm;
+    py = iy * 6. / 2.*CLHEP::cm;
     //    if(index<fNRealTaps&&fSetupFile=="taps.dat"){
 
     if(index<fNRealTaps){
@@ -117,16 +117,16 @@ void  A2DetTAPS::PlaceCrystals(){
   fclose(TAPSfile);
 }
 void  A2DetTAPS::MakeForwardWallMother(){
-  G4double z_vbox = 10.*cm;   // z size of Veto box
-  G4double z_Al = 50.*cm;     // z size of Al box
-  //G4double  set0 = 175.*cm;   //distance from target to front of TAPS
-  G4double fwmv_phlow=0.*deg;
-  G4double fwmv_phdelta=360.*deg;
+  G4double z_vbox = 10.*CLHEP::cm;   // z size of Veto box
+  G4double z_Al = 50.*CLHEP::cm;     // z size of Al box
+  //G4double  set0 = 175.*CLHEP::cm;   //distance from target to front of TAPS
+  G4double fwmv_phlow=0.*CLHEP::deg;
+  G4double fwmv_phdelta=360.*CLHEP::deg;
   G4int fwmv_npdv=6;
   G4int fwmv_nz=2;
   const G4double fwmv_z[]={-(z_vbox + z_Al)/2.,(z_vbox + z_Al)/2.};
   const G4double fwmv_rin[]={0,0};
-  const G4double fwmv_rout[]={74.5*cm,74.5*cm};
+  const G4double fwmv_rout[]={74.5*CLHEP::cm,74.5*CLHEP::cm};
   fFWMV=new G4Polyhedra("FWMV",fwmv_phlow,fwmv_phdelta,fwmv_npdv,fwmv_nz,fwmv_z,fwmv_rin,fwmv_rout);
   fFWMVLogic=new G4LogicalVolume(fFWMV,fNistManager->FindOrBuildMaterial("G4_AIR"),"FWMV");
   G4double zpos = fZ0 + (z_Al - z_vbox)/2.;
@@ -135,14 +135,14 @@ void  A2DetTAPS::MakeForwardWallMother(){
   fFWMVLogic->SetVisAttributes (G4VisAttributes::Invisible);
 }
 void  A2DetTAPS::MakeCrystals(){
-  G4double rin=3.*cm;               //radius of inscribed circle [cm]
-  G4double az=25.*cm;                              //z
-  G4double phlow=0*deg;
-  G4double phdelta=360*deg;
+  G4double rin=3.*CLHEP::cm;               //radius of inscribed circle [CLHEP::cm]
+  G4double az=25.*CLHEP::cm;                              //z
+  G4double phlow=0*CLHEP::deg;
+  G4double phdelta=360*CLHEP::deg;
   G4int npdv=6; //Number of sides
   G4int nz=2; //Number of perp. planes along z axis
-  G4double  t_covr = 0.05*cm;   // thickness of covering for BaF2
-  G4double z_vbox = 10.*cm;   // z size of Veto box
+  G4double  t_covr = 0.05*CLHEP::cm;   // thickness of covering for BaF2
+  G4double z_vbox = 10.*CLHEP::cm;   // z size of Veto box
 
   //TAPS crystals are placed in a PVC cover volume
   const G4double covr_rin[]={0,0};
@@ -156,19 +156,19 @@ void  A2DetTAPS::MakeCrystals(){
   //TAPS BaF2 crystal
   const G4double taps_rin[]={0,0};
   const G4double taps_rout[]={rin-t_covr,rin-t_covr};
-  const G4double taps_z[]={-(az-2.5*cm)/2,(az-2.5*cm)/2};
+  const G4double taps_z[]={-(az-2.5*CLHEP::cm)/2,(az-2.5*CLHEP::cm)/2};
   fTAPS=new G4Polyhedra("TAPS",phlow,phdelta,npdv,nz,taps_z,taps_rin,taps_rout);
   fTAPSLogic=new G4LogicalVolume(fTAPS,fNistManager->FindOrBuildMaterial("G4_BARIUM_FLUORIDE"),"TAPS");
   //note copy number must be zero for PbWO4 crystal IDs to work
-  fTAPSPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,-1.25*cm),fTAPSLogic,"TAPS",fCOVRLogic,false,0);
+  fTAPSPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,-1.25*CLHEP::cm),fTAPSLogic,"TAPS",fCOVRLogic,false,0);
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(0.,1,0.,1));
   fTAPSLogic->SetVisAttributes(visatt);
 
   //TAPS PbW04 crystal
   //Polyhedra with two sides does not work as it has to be symmetric whereas our crystals have one side longer than the other!
-//   phlow=-15*deg;
-//   phdelta=90*deg;
+//   phlow=-15*CLHEP::deg;
+//   phdelta=90*CLHEP::deg;
 //   npdv=2;
 //////  fPbWO=new G4Polyhedra("TAPS",phlow,phdelta,npdv,nz,taps_z,taps_rin,taps_rout);
   G4RotationMatrix* PbRot0=new G4RotationMatrix();
@@ -177,23 +177,23 @@ void  A2DetTAPS::MakeCrystals(){
   G4RotationMatrix* PbRot3=new G4RotationMatrix();
   //Note the subtraction solid did not work perfectly with angles 90 and 270, i.e. when gamma
   //fired at subtracted part  there was always 1 conversion. 270 270 seems to work although the 
-  //crystals do not appear when use RayTracer from 0 0 degrees, fine form 180 0.
+  //crystals do not appear when use RayTracer from 0 0 CLHEP::degrees, fine form 180 0.
   //placing the 4 crystals inside the COVR would hopefully mask this anyway.
-  PbRot0->rotateZ(180*deg);
-  G4Tubs* PbCut=new G4Tubs("PbCut",0,rin*2,(az*cm),270*deg,270*deg);
-  const G4double pb_z[]={-(20*cm)/2,(20*cm)/2};//PBWO crystal is 20cm long
+  PbRot0->rotateZ(180*CLHEP::deg);
+  G4Tubs* PbCut=new G4Tubs("PbCut",0,rin*2,(az*CLHEP::cm),270*CLHEP::deg,270*CLHEP::deg);
+  const G4double pb_z[]={-(20*CLHEP::cm)/2,(20*CLHEP::cm)/2};//PBWO crystal is 20CLHEP::cm long
   G4Polyhedra* PbTAPS=new G4Polyhedra("PbTAPS",phlow,phdelta,npdv,nz,pb_z,taps_rin,taps_rout);
 
   fPbWO=new G4SubtractionSolid("PbWO4",PbTAPS,PbCut);
   fPbWOLogic=new G4LogicalVolume(fPbWO,fNistManager->FindOrBuildMaterial("G4_PbWO4"),"PbWO");
  
-  new G4PVPlacement(PbRot0,G4ThreeVector(0,0,-1.25*cm-1.25*cm),fPbWOLogic,"PbWO0",fCOVRPbLogic,false,0);
-  PbRot1->rotateX(180*deg);
-  new G4PVPlacement(PbRot1,G4ThreeVector(0,0,-1.25*cm-1.25*cm),fPbWOLogic,"PbWO1",fCOVRPbLogic,false,1);
-  PbRot2->rotateY(180*deg);
-  new G4PVPlacement(PbRot2,G4ThreeVector(0,0,-1.25*cm-1.25*cm),fPbWOLogic,"PbWO2",fCOVRPbLogic,false,2);
-  PbRot3->rotateZ(0*deg);
-  new G4PVPlacement(PbRot3,G4ThreeVector(0,0,-1.25*cm-1.25*cm),fPbWOLogic,"PbWO3",fCOVRPbLogic,false,3);
+  new G4PVPlacement(PbRot0,G4ThreeVector(0,0,-1.25*CLHEP::cm-1.25*CLHEP::cm),fPbWOLogic,"PbWO0",fCOVRPbLogic,false,0);
+  PbRot1->rotateX(180*CLHEP::deg);
+  new G4PVPlacement(PbRot1,G4ThreeVector(0,0,-1.25*CLHEP::cm-1.25*CLHEP::cm),fPbWOLogic,"PbWO1",fCOVRPbLogic,false,1);
+  PbRot2->rotateY(180*CLHEP::deg);
+  new G4PVPlacement(PbRot2,G4ThreeVector(0,0,-1.25*CLHEP::cm-1.25*CLHEP::cm),fPbWOLogic,"PbWO2",fCOVRPbLogic,false,2);
+  PbRot3->rotateZ(0*CLHEP::deg);
+  new G4PVPlacement(PbRot3,G4ThreeVector(0,0,-1.25*CLHEP::cm-1.25*CLHEP::cm),fPbWOLogic,"PbWO3",fCOVRPbLogic,false,3);
 
   G4VisAttributes* visattpb=new G4VisAttributes();
   visattpb->SetColor(G4Color(1.,0,0.,1));
@@ -201,15 +201,15 @@ void  A2DetTAPS::MakeCrystals(){
 
 
   //c======= G4_BARIUM_FLUORIDE crystal(cylider part) ==============>
-  fTEND=new G4Tubs("TEND",0,2.7*cm,1.25*cm,0*deg,360*deg);
+  fTEND=new G4Tubs("TEND",0,2.7*CLHEP::cm,1.25*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);
   fTENDLogic=new G4LogicalVolume(fTEND,fNistManager->FindOrBuildMaterial("G4_BARIUM_FLUORIDE"),"TEND");
   //note copy number must be zero for PbWO4 crystal IDs to work
-  fTENDPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,11.25*cm),fTENDLogic,"TEND",fCOVRLogic,false,0);
+  fTENDPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,11.25*CLHEP::cm),fTENDLogic,"TEND",fCOVRLogic,false,0);
   //c======= Air(for the cylider part) ==============>
   //Should probably be a polyhedra as leaves some G4_POLYVINYL_CHLORIDE volume surrounding!!
-  fAIRC=new G4Tubs("AIRC",2.7*cm,5.9/2*cm,1.25*cm,0*deg,360*deg);
+  fAIRC=new G4Tubs("AIRC",2.7*CLHEP::cm,5.9/2*CLHEP::cm,1.25*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);
   fAIRCLogic=new G4LogicalVolume(fAIRC,fNistManager->FindOrBuildMaterial("G4_AIR"),"AIRC");
-  fAIRCPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,11.25*cm),fAIRCLogic,"AIRC",fCOVRLogic,false,1);
+  fAIRCPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,11.25*CLHEP::cm),fAIRCLogic,"AIRC",fCOVRLogic,false,1);
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   if(fIsInteractive){
     if(!fTAPSVisSD)fTAPSVisSD = new A2VisSD("TAPSVisSD",fNTaps);
@@ -240,9 +240,9 @@ void  A2DetTAPS::MakeCrystals(){
 
 
   //c========== Al box for TAPS =============>
-  const G4double abox_z[]={-25.*cm,25.*cm};
-  const G4double abox_rin[]={72.5*cm,72.5*cm};
-  const G4double abox_rout[]={74.5*cm,74.5*cm};
+  const G4double abox_z[]={-25.*CLHEP::cm,25.*CLHEP::cm};
+  const G4double abox_rin[]={72.5*CLHEP::cm,72.5*CLHEP::cm};
+  const G4double abox_rout[]={74.5*CLHEP::cm,74.5*CLHEP::cm};
   fABOX=new G4Polyhedra("ABOX",phlow,phdelta,npdv,nz,abox_z,abox_rin,abox_rout);
   fABOXLogic=new G4LogicalVolume(fABOX,fNistManager->FindOrBuildMaterial("G4_Al"),"ABOX");
   G4double zposbox = z_vbox/2.;
@@ -256,13 +256,13 @@ void  A2DetTAPS::MakeCrystals(){
   fCOVRPbLogic->SetVisAttributes(G4VisAttributes::Invisible);
 }
 void  A2DetTAPS::MakeVeto(){
-  G4double z_vbox = 10.*cm;   // z size of Veto box
-  G4double z_Al = 50.*cm;     // z size of Al box
+  G4double z_vbox = 10.*CLHEP::cm;   // z size of Veto box
+  G4double z_Al = 50.*CLHEP::cm;     // z size of Al box
   //c======= Veto detector ==============>
-  G4double rin=3.*cm;    //radius of inscribed circle [cm]  
-  G4double tveto=0.5*cm;
-  G4double phlow=0*deg;
-  G4double phdelta=360*deg;
+  G4double rin=3.*CLHEP::cm;    //radius of inscribed circle [CLHEP::cm]  
+  G4double tveto=0.5*CLHEP::cm;
+  G4double phlow=0*CLHEP::deg;
+  G4double phdelta=360*CLHEP::deg;
   G4int npdv=6; //Number of sides
   G4int nz=2; //Number of perp. planes along z axis
   G4double veto_z[]={-tveto/2.,tveto/2};
@@ -292,15 +292,15 @@ void  A2DetTAPS::MakeVeto(){
   vbox_visatt->SetColor(G4Color(0,0,1));
 
   //c=== Veto detector box (front and back walls) =======>
-  G4double vbox_z1[]={-0.1*cm,0.1*cm};//1mm wall thickness + 1mm as effective thickness of the light guide fibers
+  G4double vbox_z1[]={-0.1*CLHEP::cm,0.1*CLHEP::cm};//1mm wall thickness + 1mm as effective thickness of the light guide fibers
   G4double vbox_rin[]={0,0};
-  G4double vbox_rout[]={72.5*cm,72.5*cm};
+  G4double vbox_rout[]={72.5*CLHEP::cm,72.5*CLHEP::cm};
   fVDB1=new G4Polyhedra("VDB1",phlow,phdelta,npdv,nz,vbox_z1,vbox_rin,vbox_rout);
   fVDB1Logic=new G4LogicalVolume(fVDB1,fNistManager->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"VDB1");
   G4double  zpos1 = -(z_vbox + z_Al)/2. - vbox_z1[0];
   fVDB1Physi=new G4PVPlacement(0,G4ThreeVector(0,0,zpos1),fVDB1Logic,"VDB1",fFWMVLogic,false,1);
 
-  G4double vbox_z2[]={-0.175*cm,0.175*cm};//3mm wall thickness + 0.5mm thickness of covering for G4_BARIUM_FLUORIDE
+  G4double vbox_z2[]={-0.175*CLHEP::cm,0.175*CLHEP::cm};//3mm wall thickness + 0.5mm thickness of covering for G4_BARIUM_FLUORIDE
   fVDB2=new G4Polyhedra("VDB2",phlow,phdelta,npdv,nz,vbox_z2,vbox_rin,vbox_rout);
   fVDB2Logic=new G4LogicalVolume(fVDB2,fNistManager->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"VDB2");
   G4double  zpos2 = -(z_vbox + z_Al)/2. +z_vbox+ vbox_z1[0];

@@ -90,10 +90,10 @@ void A2EventAction::EndOfEventAction(const G4Event* evt)
       //      if(hc->GetName()=="A2SDHitsVisCBSD"){
       if(hc->GetName().contains("Vis")){
 	//	G4cout<<hc_nhits <<" hits"<<G4endl;
-	for(G4int i=0;i<hc_nhits;i++){
-	  A2VisHit* hit=static_cast<A2VisHit*>(hc->GetHit(i));
+	for(G4int ii=0;ii<hc_nhits;ii++){
+	  A2VisHit* hit=static_cast<A2VisHit*>(hc->GetHit(ii));
 	  // G4cout<<"Got hit "<<hit<<G4endl;
-	  hit->Draw(1*MeV,fHitDrawOpt);
+	  hit->Draw(1*CLHEP::MeV,fHitDrawOpt);
 	  
 	}
 	

@@ -1,7 +1,7 @@
 A2 GEANT4 SIMULATION
 ==================
 
-works with GEANT4.9.6 p02
+works with GEANT4.10.00.p01
 
 Prerequisites
 -------------
@@ -9,7 +9,7 @@ Prerequisites
 * git
 * XercesC
 * CLHEP
-* GEANT4.9.6p02
+* GEANT4.10.00p01
 * For polarised targets the magnetic field map (transverse only) is here ( http://www.ph.ed.ac.uk/nuclear/G4/wouter_field_map.dat  ).
 
 Installation

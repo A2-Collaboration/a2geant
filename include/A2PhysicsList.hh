@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/include/A2PhysicsList.hh
+/// \brief Definition of the A2PhysicsList class
 //
-// $Id: A2PhysicsList.hh,v 1.9 2010-11-19 20:12:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+//
+// $Id: A2PhysicsList.hh 68803 2013-04-05 13:59:55Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +36,7 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -57,38 +59,37 @@ public:
   A2PhysicsList();
   virtual ~A2PhysicsList();
 
-  void ConstructParticle();
-    
-  void SetCuts();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();    
+
+  virtual void SetCuts();
+
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
   void SetCutForProton(G4double);
   void SetCutForRegion(G4String reg,G4double cut);
-     
+        
   void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
   void List();
   
 private:
 
   void SetBuilderList0(G4bool flagHP = false);
   void SetBuilderList1(G4bool flagHP = false);
-  void SetBuilderList2(G4bool addStopping = false);
-  void SetBuilderList3();
-  void SetBuilderList4();
+  void SetBuilderList2();
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForProton;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
 
-  G4VPhysicsConstructor*  emA2PhysicsList;
-  G4VPhysicsConstructor*  particleList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4VPhysicsConstructor*  fEmA2PhysicsList;
+  G4VPhysicsConstructor*  fParticleList;
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;
     
-  A2PhysicsListMessenger* pMessenger;
-  G4bool dump;
+  A2PhysicsListMessenger* fMessenger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

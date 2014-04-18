@@ -71,7 +71,7 @@ G4bool A2CBSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;
+  if ((edep/CLHEP::keV == 0.)) return false;
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
   G4TouchableHistory* theTouchable
@@ -87,12 +87,12 @@ G4bool A2CBSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     //if this crystal has already had a hit
     //don't make a new one, add on to old one.   
     //G4cout<<"Make hit "<<fCollection<<G4endl;    
-    A2Hit* Hit = new A2Hit;
-    Hit->AddEnergy(edep);
-    Hit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-    Hit->SetID(id);
-    Hit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
-    fhitID[id] = fCollection->insert(Hit) -1;
+    A2Hit* myHit = new A2Hit;
+    myHit->AddEnergy(edep);
+    myHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+    myHit->SetID(id);
+    myHit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
+    fhitID[id] = fCollection->insert(myHit) -1;
     fHits[fNhits++]=id;
   }
   else // This is not new

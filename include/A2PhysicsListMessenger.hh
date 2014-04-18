@@ -44,6 +44,7 @@
 #define A2PhysicsListMessenger_h 1
 
 #include "globals.hh"
+
 #include "G4UImessenger.hh"
 
 class A2PhysicsList;

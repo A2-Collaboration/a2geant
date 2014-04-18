@@ -11,7 +11,6 @@
 #include "G4RotationMatrix.hh"
 #include "globals.hh"
 
-
 class A2DetTOF : public A2Detector
 {
 public:

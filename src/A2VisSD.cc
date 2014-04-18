@@ -51,7 +51,7 @@ G4bool A2VisSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
  
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
+  if ((edep/CLHEP::keV == 0.)) return false;      
   
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
@@ -101,17 +101,17 @@ G4bool A2VisSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     //if this crystal has already had a hit
     //don't make a new one, add on to old one.   
     //G4cout<<"Make hit "<<fCollection<<G4endl;    
-    A2VisHit* Hit = new A2VisHit();
+    A2VisHit* myHit = new A2VisHit();
     //standard hit stuff
-    Hit->AddEnergy(edep);
-    Hit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-    Hit->SetID(id);
-    Hit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
+    myHit->AddEnergy(edep);
+    myHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+    myHit->SetID(id);
+    myHit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
     //visualisation hit stuff
-    Hit->SetLogicalVolume(theTouchable->GetVolume()->GetLogicalVolume());
-    Hit->SetCharge(charge);
+    myHit->SetLogicalVolume(theTouchable->GetVolume()->GetLogicalVolume());
+    myHit->SetCharge(charge);
     //insert hit
-    fhitID[id] = fCollection->insert(Hit) -1;
+    fhitID[id] = fCollection->insert(myHit) -1;
     fHits[fNhits++]=id;
  
   }

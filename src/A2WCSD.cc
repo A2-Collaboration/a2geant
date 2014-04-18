@@ -50,8 +50,8 @@ G4bool A2WCSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
-  if (aStep->GetPreStepPoint()->GetGlobalTime()>2*ms)return false; 
+  if ((edep/CLHEP::keV == 0.)) return false;      
+  if (aStep->GetPreStepPoint()->GetGlobalTime()>2*CLHEP::ms)return false; 
   if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0.) return false;
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
@@ -73,19 +73,19 @@ G4bool A2WCSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4ThreeVector vhit=aStep->GetPreStepPoint()->GetPosition();
   G4int oldid=-1;
   for(G4int i=0;i<fNhits;i++){
-    if((fabs((vhit-((*fCollection)[i]->GetPos())).r()))<3*mm) {oldid=i;}
+    if((fabs((vhit-((*fCollection)[i]->GetPos())).r()))<3*CLHEP::mm) {oldid=i;}
     // G4cout<<" diff " <<i<<" "<<abs((vhit-((*fCollection)[i]->GetPos())).r())/mm<<G4endl;
   }
   if (oldid<0){
     //if this crystal has already had a hit
     //don't make a new one, add on to old one.   
     //  G4cout<<"Make hit "<<fNhits<<" "<<vhit<<G4endl;    
-    A2Hit* Hit = new A2Hit;
-    Hit->AddEnergy(edep);
-    Hit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-    Hit->SetID(id);
-    Hit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
-    fCollection->insert(Hit);
+    A2Hit* myHit = new A2Hit;
+    myHit->AddEnergy(edep);
+    myHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+    myHit->SetID(id);
+    myHit->SetTime(aStep->GetPreStepPoint()->GetGlobalTime());
+    fCollection->insert(myHit);
     fNhits++;
   }
   else // This is not new

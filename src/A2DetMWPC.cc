@@ -86,51 +86,51 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
 
 //Positioning Parameters
 
-   fz = 0*mm;
-   fdz = 64.5*cm/2;
+   fz = 0*CLHEP::mm;
+   fdz = 64.5*CLHEP::cm/2;
 
 //Parameters for the First (Inner) Chamber
   //Geometric Parameters for the inner Cu Shielding
 
-   fchsi1_rmin = 136./2*mm;
-   fchsi1_rmax = fchsi1_rmin+0.01*mm;
+   fchsi1_rmin = 136./2*CLHEP::mm;
+   fchsi1_rmax = fchsi1_rmin+0.01*CLHEP::mm;
   //Geometric Parameters for the inner Rohacell Wall
 
    fchri1_rmin = fchsi1_rmax;
-   fchri1_rmax = fchsi1_rmax+2*mm-0.01*mm-0.05*mm;//subtract off Cu and Kapton thickness
+   fchri1_rmax = fchsi1_rmax+2*CLHEP::mm-0.01*CLHEP::mm-0.05*CLHEP::mm;//subtract off Cu and Kapton thickness
   //Geometric Parameters for the inner Kapton Strip
 
    fchki1_rmin = fchri1_rmax;
-   fchki1_rmax = fchri1_rmax+0.05*mm;
+   fchki1_rmax = fchri1_rmax+0.05*CLHEP::mm;
 
   //Geometric Parameters for the inner Cathode Strip (Approximation of the Wires)
 
-  // fchci1_rmin = 69.99*mm;
-   //   fchci1_rmax = 70.0*mm;
+  // fchci1_rmin = 69.99*CLHEP::mm;
+   //   fchci1_rmax = 70.0*CLHEP::mm;
    fchci1_rmin = fchki1_rmax;
-   fchci1_rmax = fchci1_rmin+0.01*mm;
+   fchci1_rmax = fchci1_rmin+0.01*CLHEP::mm;
 
   //Geometric Parameters for the outer Cathode Strip (Approximation of the Wires)
 
-   //fchco1_rmin = 78.0*mm;
-   //fchco1_rmax = 78.01*mm;
-   fchco1_rmin = 156./2*mm-0.01*mm;
-   fchco1_rmax = 156./2*mm;
+   //fchco1_rmin = 78.0*CLHEP::mm;
+   //fchco1_rmax = 78.01*CLHEP::mm;
+   fchco1_rmin = 156./2*CLHEP::mm-0.01*CLHEP::mm;
+   fchco1_rmax = 156./2*CLHEP::mm;
 
   //Geometric Parameters for the outer Kapton Strip
 
    fchko1_rmin = fchco1_rmax;
-   fchko1_rmax = fchko1_rmin+0.05*mm;
+   fchko1_rmax = fchko1_rmin+0.05*CLHEP::mm;
 
   //Geometric Parameters for the outer Rohacell Wall
 
    fchro1_rmin = fchko1_rmax;
-   fchro1_rmax = fchro1_rmin+2*mm;
+   fchro1_rmax = fchro1_rmin+2*CLHEP::mm;
 
   //Geometric Parameters for the outer Shielding
 
    fchso1_rmin = fchro1_rmax;
-   fchso1_rmax = fchso1_rmin+0.01*mm;
+   fchso1_rmax = fchso1_rmin+0.01*CLHEP::mm;
 
   //Geometric Parameters for the First Chamber Gas
 
@@ -141,41 +141,41 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
    //Parameters for the Second  Chamber
   // Inner Cu Shielding
 
-   fchsi2_rmin = 177./2*mm;
-   fchsi2_rmax = fchsi2_rmin+0.01*mm;
+   fchsi2_rmin = 177./2*CLHEP::mm;
+   fchsi2_rmax = fchsi2_rmin+0.01*CLHEP::mm;
   // inner Rohacell Wall
 
    fchri2_rmin = fchsi2_rmax;
-   fchri2_rmax = fchsi2_rmax+2*mm-0.01*mm-0.05*mm;//subtract off Cu and Kapton thickness
+   fchri2_rmax = fchsi2_rmax+2*CLHEP::mm-0.01*CLHEP::mm-0.05*CLHEP::mm;//subtract off Cu and Kapton thickness
   // inner Kapton Strip
 
    fchki2_rmin = fchri2_rmax;
-   fchki2_rmax = fchri2_rmax+0.05*mm;
+   fchki2_rmax = fchri2_rmax+0.05*CLHEP::mm;
 
   // inner Cathode Strip (Approximation of the Wires)
 
    fchci2_rmin = fchki2_rmax;
-   fchci2_rmax = fchci2_rmin+0.01*mm;
+   fchci2_rmax = fchci2_rmin+0.01*CLHEP::mm;
 
   //Geometric Parameters for the outer Cathode Strip (Approximation of the Wires)
 
-   fchco2_rmin = 197./2*mm-0.01*mm;
-   fchco2_rmax = 197./2*mm;
+   fchco2_rmin = 197./2*CLHEP::mm-0.01*CLHEP::mm;
+   fchco2_rmax = 197./2*CLHEP::mm;
 
   // outer Kapton Strip
 
    fchko2_rmin = fchco2_rmax;
-   fchko2_rmax = fchko2_rmin+0.05*mm;
+   fchko2_rmax = fchko2_rmin+0.05*CLHEP::mm;
 
   // outer Rohacell Wall
 
    fchro2_rmin = fchko2_rmax;
-   fchro2_rmax = fchro2_rmin+2*mm;
+   fchro2_rmax = fchro2_rmin+2*CLHEP::mm;
 
   // outer Shielding
 
    fchso2_rmin = fchro2_rmax;
-   fchso2_rmax = fchso2_rmin+0.01*mm;
+   fchso2_rmax = fchso2_rmin+0.01*CLHEP::mm;
 
   //Geometric Parameters for the Second Chamber Gas
 
@@ -191,13 +191,13 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
    ///////////////////////////////////////////////////
   //Angular Wire SPacing for Chambers
 
-   fanoi_theta = 360*deg/fNIWires;
-   fanoo_theta = 360*deg/fNOWires;
+   fanoi_theta = 360*CLHEP::deg/fNIWires;
+   fanoo_theta = 360*CLHEP::deg/fNOWires;
 
   //Geometric Parameters for a single wire
 
-   fanode_rmin = 0*mm;
-   fanode_rmax = 0.01*mm;
+   fanode_rmin = 0*CLHEP::mm;
+   fanode_rmax = 0.01*CLHEP::mm;
 
 
   MakeChambers();
@@ -207,14 +207,14 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
 
 //Mother Volume Parameters
 
-//  G4double moth_rmin = 55.6*mm;
-//  G4double moth_rmax = 100.562*mm;
-  //G4double moth_rmin = fchsi1_rmin-0.1*mm;
-  //G4double moth_rmax = fchso2_rmax+0.1*mm;
-  G4double moth_rmin = fchsi1_rmin-0.1*mm;//werthmeuller correst for overlap
-  G4double moth_rmax = fchso2_rmax+0.1*mm;//werthmeuller correst for overlap
-  // G4Tubs *MWPCMother = new G4Tubs("MWPC", moth_rmin, moth_rmax, fdz, 0*deg, 360*deg); dglazier make sure mv is large enough to incude supports
-  G4Tubs *MWPCMother = new G4Tubs("MWPC", moth_rmin, moth_rmax, fdz+1*cm, 0*deg, 360*deg);
+//  G4double moth_rmin = 55.6*CLHEP::mm;
+//  G4double moth_rmax = 100.562*CLHEP::mm;
+  //G4double moth_rmin = fchsi1_rmin-0.1*CLHEP::mm;
+  //G4double moth_rmax = fchso2_rmax+0.1*CLHEP::mm;
+  G4double moth_rmin = fchsi1_rmin-0.1*CLHEP::mm;//werthmeuller correst for overlap
+  G4double moth_rmax = fchso2_rmax+0.1*CLHEP::mm;//werthmeuller correst for overlap
+  // G4Tubs *MWPCMother = new G4Tubs("MWPC", moth_rmin, moth_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg); dglazier make sure mv is large enough to incude supports
+  G4Tubs *MWPCMother = new G4Tubs("MWPC", moth_rmin, moth_rmax, fdz+1*CLHEP::cm, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fMyLogic = new G4LogicalVolume(MWPCMother, fNistManager->FindOrBuildMaterial("G4_AIR"),"MWPC");
   fregionMWPC->AddRootLogicalVolume(fMyLogic);
@@ -237,7 +237,7 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
 void A2DetMWPC::MakeInnerWire(){
 //Make individual wire for the inner chamber
 
-  fANOI = new G4Tubs ("Inner Wire", fanode_rmin, fanode_rmax, fdz, 0*deg, 360*deg);
+  fANOI = new G4Tubs ("Inner Wire", fanode_rmin, fanode_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fANOILogic = new G4LogicalVolume (fANOI, fNistManager->FindOrBuildMaterial("G4_W"), "ANOIL");
 
@@ -251,7 +251,7 @@ void A2DetMWPC::MakeInnerWire(){
 void A2DetMWPC::MakeOuterWire(){
 //Make individual wire for the outer chamber
 
-  fANOO = new G4Tubs ("Outer Wire", fanode_rmin, fanode_rmax, fdz, 0*deg, 360*deg);
+  fANOO = new G4Tubs ("Outer Wire", fanode_rmin, fanode_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fANOOLogic = new G4LogicalVolume (fANOO, fNistManager->FindOrBuildMaterial("G4_W"), "ANOOL");
 
@@ -266,7 +266,7 @@ void A2DetMWPC::MakeChambers(){
 //Makes materials in the chambers (Copper Shields, Rohacell Walls, Kapton Strips, Cathode Approximation and Chamber Gas.
 
 //Shielding
-  fCHSI1 = new G4Tubs("Inner Shield 1", fchsi1_rmin, fchsi1_rmax, fdz, 0*deg, 360*deg);
+  fCHSI1 = new G4Tubs("Inner Shield 1", fchsi1_rmin, fchsi1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHSI1Logic = new G4LogicalVolume(fCHSI1, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHSI1L");
 
@@ -274,7 +274,7 @@ void A2DetMWPC::MakeChambers(){
   is1_visatt->SetColor(G4Color(0.0,1.0,0.0));
   fCHSI1Logic->SetVisAttributes(is1_visatt);
 
-  fCHSO1 = new G4Tubs("Outer Shield 1", fchso1_rmin, fchso1_rmax, fdz, 0*deg, 360*deg);
+  fCHSO1 = new G4Tubs("Outer Shield 1", fchso1_rmin, fchso1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHSO1Logic = new G4LogicalVolume(fCHSO1, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHSO1L");
 
@@ -282,7 +282,7 @@ void A2DetMWPC::MakeChambers(){
   os1_visatt->SetColor(G4Color(0.0,1.0,0.0));
   fCHSO1Logic->SetVisAttributes(os1_visatt); 
 
-  fCHSI2 = new G4Tubs("Inner Shield 2", fchsi2_rmin, fchsi2_rmax, fdz, 0*deg, 360*deg);
+  fCHSI2 = new G4Tubs("Inner Shield 2", fchsi2_rmin, fchsi2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHSI2Logic = new G4LogicalVolume(fCHSI2, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHSI2L");
 
@@ -290,7 +290,7 @@ void A2DetMWPC::MakeChambers(){
   is2_visatt->SetColor(G4Color(0.0,1.0,0.0));
   fCHSI2Logic->SetVisAttributes(is2_visatt);
 
-  fCHSO2 = new G4Tubs("Outer Shield 2", fchso2_rmin, fchso2_rmax, fdz, 0*deg, 360*deg);
+  fCHSO2 = new G4Tubs("Outer Shield 2", fchso2_rmin, fchso2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHSO2Logic = new G4LogicalVolume(fCHSO2, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHSO2L");
 
@@ -301,7 +301,7 @@ void A2DetMWPC::MakeChambers(){
 
 //Rohacell
 
-  fCHRI1 = new G4Tubs("Inner Rohacell 1", fchri1_rmin, fchri1_rmax, fdz, 0*deg, 360*deg);
+  fCHRI1 = new G4Tubs("Inner Rohacell 1", fchri1_rmin, fchri1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHRI1Logic = new G4LogicalVolume(fCHRI1, fNistManager->FindOrBuildMaterial("A2_ROHACELL"), "CHRI1L");
 
@@ -309,7 +309,7 @@ void A2DetMWPC::MakeChambers(){
   ir1_visatt->SetColor(G4Color(1.0,0.0,0.0));
   fCHRI1Logic->SetVisAttributes(ir1_visatt);
 
-  fCHRO1 = new G4Tubs("Outer Rohacell 1", fchro1_rmin, fchro1_rmax, fdz, 0*deg, 360*deg);
+  fCHRO1 = new G4Tubs("Outer Rohacell 1", fchro1_rmin, fchro1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHRO1Logic = new G4LogicalVolume(fCHRO1, fNistManager->FindOrBuildMaterial("A2_ROHACELL"), "CHRO1L");
 
@@ -317,7 +317,7 @@ void A2DetMWPC::MakeChambers(){
   or1_visatt->SetColor(G4Color(1.0,0.0,0.0));
   fCHRO1Logic->SetVisAttributes(or1_visatt);
 
-  fCHRI2 = new G4Tubs("Inner Rohacell 2", fchri2_rmin, fchri2_rmax, fdz, 0*deg, 360*deg);
+  fCHRI2 = new G4Tubs("Inner Rohacell 2", fchri2_rmin, fchri2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHRI2Logic = new G4LogicalVolume(fCHRI2, fNistManager->FindOrBuildMaterial("A2_ROHACELL"), "CHRI2L");
 
@@ -325,7 +325,7 @@ void A2DetMWPC::MakeChambers(){
   ir2_visatt->SetColor(G4Color(1.0,0.0,0.0));
   fCHRI2Logic->SetVisAttributes(ir2_visatt);
 
-  fCHRO2 = new G4Tubs("Outer Rohacell 2", fchro2_rmin, fchro2_rmax, fdz, 0*deg, 360*deg);
+  fCHRO2 = new G4Tubs("Outer Rohacell 2", fchro2_rmin, fchro2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHRO2Logic = new G4LogicalVolume(fCHRO2, fNistManager->FindOrBuildMaterial("A2_ROHACELL"), "CHRO2L");
 
@@ -336,7 +336,7 @@ void A2DetMWPC::MakeChambers(){
 
 //Kapton Strips
 
-  fCHKI1 = new G4Tubs("Inner Kapton 1", fchki1_rmin, fchki1_rmax, fdz, 0*deg, 360*deg);
+  fCHKI1 = new G4Tubs("Inner Kapton 1", fchki1_rmin, fchki1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHKI1Logic = new G4LogicalVolume(fCHKI1, fNistManager->FindOrBuildMaterial("G4_KAPTON"), "CHKI1L");
 
@@ -344,7 +344,7 @@ void A2DetMWPC::MakeChambers(){
   ik1_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHKI1Logic->SetVisAttributes(ik1_visatt);
 
-  fCHKO1 = new G4Tubs("Outer Kapton 1", fchko1_rmin, fchko1_rmax, fdz, 0*deg, 360*deg);
+  fCHKO1 = new G4Tubs("Outer Kapton 1", fchko1_rmin, fchko1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHKO1Logic = new G4LogicalVolume(fCHKO1, fNistManager->FindOrBuildMaterial("G4_KAPTON"), "CHKO1L");
 
@@ -352,7 +352,7 @@ void A2DetMWPC::MakeChambers(){
   ok1_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHKO1Logic->SetVisAttributes(ok1_visatt);
 
-  fCHKI2 = new G4Tubs("Inner Kapton 2", fchki2_rmin, fchki2_rmax, fdz, 0*deg, 360*deg);
+  fCHKI2 = new G4Tubs("Inner Kapton 2", fchki2_rmin, fchki2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHKI2Logic = new G4LogicalVolume(fCHKI2, fNistManager->FindOrBuildMaterial("G4_KAPTON"), "CHKI2L");
 
@@ -360,7 +360,7 @@ void A2DetMWPC::MakeChambers(){
   ik2_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHKI2Logic->SetVisAttributes(ik2_visatt);
 
-  fCHKO2 = new G4Tubs("Outer Kapton 2", fchko2_rmin, fchko2_rmax, fdz, 0*deg, 360*deg);
+  fCHKO2 = new G4Tubs("Outer Kapton 2", fchko2_rmin, fchko2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHKO2Logic = new G4LogicalVolume(fCHKO2, fNistManager->FindOrBuildMaterial("G4_KAPTON"), "CHKO2L");
 
@@ -370,7 +370,7 @@ void A2DetMWPC::MakeChambers(){
 
 //Cathodes
 
-  fCHCI1 = new G4Tubs("Inner Cathode 1", fchci1_rmin, fchci1_rmax, fdz, 0*deg, 360*deg);
+  fCHCI1 = new G4Tubs("Inner Cathode 1", fchci1_rmin, fchci1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHCI1Logic = new G4LogicalVolume(fCHCI1, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHCI1L");
 
@@ -378,7 +378,7 @@ void A2DetMWPC::MakeChambers(){
   ic1_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHCI1Logic->SetVisAttributes(ic1_visatt);
 
-  fCHCO1 = new G4Tubs("Outer Cathode 1", fchco1_rmin, fchco1_rmax, fdz, 0*deg, 360*deg);
+  fCHCO1 = new G4Tubs("Outer Cathode 1", fchco1_rmin, fchco1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHCO1Logic = new G4LogicalVolume(fCHCO1, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHCO1L");
 
@@ -386,7 +386,7 @@ void A2DetMWPC::MakeChambers(){
   oc1_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHCO1Logic->SetVisAttributes(oc1_visatt);
 
-  fCHCI2 = new G4Tubs("Inner Cathode 2", fchci2_rmin, fchci2_rmax, fdz, 0*deg, 360*deg);
+  fCHCI2 = new G4Tubs("Inner Cathode 2", fchci2_rmin, fchci2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHCI2Logic = new G4LogicalVolume(fCHCI2, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHCI2L");
 
@@ -394,7 +394,7 @@ void A2DetMWPC::MakeChambers(){
   ic2_visatt->SetColor(G4Color(0.0,0.0,1.0));
   fCHCI2Logic->SetVisAttributes(ic2_visatt);
 
-  fCHCO2 = new G4Tubs("Outer Cathode 2", fchco2_rmin, fchco2_rmax, fdz, 0*deg, 360*deg);
+  fCHCO2 = new G4Tubs("Outer Cathode 2", fchco2_rmin, fchco2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHCO2Logic = new G4LogicalVolume(fCHCO2, fNistManager->FindOrBuildMaterial("G4_Cu"), "CHCO2L");
 
@@ -404,7 +404,7 @@ void A2DetMWPC::MakeChambers(){
 
 //Gas
 
-  fCHG1 = new G4Tubs("Gas 1", fchg1_rmin, fchg1_rmax, fdz, 0*deg, 360*deg);
+  fCHG1 = new G4Tubs("Gas 1", fchg1_rmin, fchg1_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHG1Logic = new G4LogicalVolume(fCHG1, fNistManager->FindOrBuildMaterial("A2_WCMAT"), "CHG1L");
 
@@ -412,7 +412,7 @@ void A2DetMWPC::MakeChambers(){
   fCHG1Logic->SetVisAttributes(G4VisAttributes::Invisible); 
 
 
-  fCHG2 = new G4Tubs("Gas 2", fchg2_rmin, fchg2_rmax, fdz, 0*deg, 360*deg);
+  fCHG2 = new G4Tubs("Gas 2", fchg2_rmin, fchg2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
   fCHG2Logic = new G4LogicalVolume(fCHG2, fNistManager->FindOrBuildMaterial("A2_WCMAT"), "CHG2L");
 
@@ -463,25 +463,25 @@ void A2DetMWPC::MakeSupports(){
 //  fWS2DLogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fALTULogic->SetVisAttributes(G4VisAttributes::Invisible);
 
-  G4Tubs* fWS1U=new G4Tubs("fWS1U",fchsi1_rmin-1.5*mm,fchsi1_rmin,3.5*cm/2,0*deg,360*deg);
+  G4Tubs* fWS1U=new G4Tubs("fWS1U",fchsi1_rmin-1.5*CLHEP::mm,fchsi1_rmin,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS1ULogic = new G4LogicalVolume(fWS1U,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS1UL");
 
-  G4Tubs* fWS1U2=new G4Tubs("fWS1U2",fchso2_rmax,fchso2_rmax+1.5*mm,3.5*cm/2,0*deg,360*deg);
+  G4Tubs* fWS1U2=new G4Tubs("fWS1U2",fchso2_rmax,fchso2_rmax+1.5*CLHEP::mm,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS1U2Logic = new G4LogicalVolume(fWS1U2,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS1UL2");
 
-  G4Tubs* fWS1D=new G4Tubs("fWS1D",fchg1_rmin,(fchg1_rmin+fchg1_rmax)/2-1*mm,3.5*cm/2,0*deg,360*deg);
+  G4Tubs* fWS1D=new G4Tubs("fWS1D",fchg1_rmin,(fchg1_rmin+fchg1_rmax)/2-1*CLHEP::mm,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS1DLogic = new G4LogicalVolume(fWS1D,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS1DL");
 
-  G4Tubs* fSC1U = new G4Tubs("fSC1D",(fchg1_rmin+fchg1_rmax)/2+1*mm,fchg1_rmax,3.5*cm/2,0*deg,360*deg);
+  G4Tubs* fSC1U = new G4Tubs("fSC1D",(fchg1_rmin+fchg1_rmax)/2+1*CLHEP::mm,fchg1_rmax,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fSC1ULogic = new G4LogicalVolume(fSC1U,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"SC1UL");
 
-  G4Tubs* fSC1D= new G4Tubs("fSC1D",fchso1_rmax,fchsi2_rmin,3.5*cm/2,0*deg,360*deg);
+  G4Tubs* fSC1D= new G4Tubs("fSC1D",fchso1_rmax,fchsi2_rmin,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fSC1DLogic = new G4LogicalVolume(fSC1D,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"SC1DL");
 				   
-  G4Tubs *fWS2U = new G4Tubs("fWS2U",fchg2_rmin,(fchg2_rmin+fchg2_rmax)/2-1*mm ,3.5*cm/2,0*deg,360*deg);
+  G4Tubs *fWS2U = new G4Tubs("fWS2U",fchg2_rmin,(fchg2_rmin+fchg2_rmax)/2-1*CLHEP::mm ,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS2ULogic = new G4LogicalVolume(fWS2U,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS2UL");
  
-  G4Tubs *fWS2D = new G4Tubs("fWS2D",(fchg2_rmin+fchg2_rmax)/2+1*mm ,fchg2_rmax,3.5*cm/2,0*deg,360*deg);
+  G4Tubs *fWS2D = new G4Tubs("fWS2D",(fchg2_rmin+fchg2_rmax)/2+1*CLHEP::mm ,fchg2_rmax,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS2DLogic = new G4LogicalVolume(fWS2D,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS2DL");
 
 }

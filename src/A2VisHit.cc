@@ -41,7 +41,7 @@ void A2VisHit::Reset()
 
 void A2VisHit::Draw(G4double thresh,G4String opt)
 {
-  if(fEdep/MeV<thresh)return;
+  if(fEdep/CLHEP::MeV<thresh)return;
   //opt 0 - charge of the first particle to deposit energy
   if(opt=="charge"){
     fHitPosVisAtt=new G4VisAttributes(G4Colour(0.1,0.1,1.0));
@@ -55,20 +55,20 @@ void A2VisHit::Draw(G4double thresh,G4String opt)
   //i.e not shaded above opt MeV but full colour
   if(opt=="depth"){
     //    G4double frac=fEdep/MeV/opt;
-    G4double frac=(fPos.mag()-20*cm)/cm/50;
+    G4double frac=(fPos.mag()-20*CLHEP::cm)/CLHEP::cm/50;
     if(frac>1)frac=1;
     fHitPosVisAtt=new G4VisAttributes(G4Colour(1,(1-frac)*0.8,(1-frac)*0.8));
     fLV->SetVisAttributes(fHitPosVisAtt);
   }
   //i.e not shaded above opt MeV but full colour
   if(opt=="edep"){
-    G4double frac=fEdep/MeV/70;   
+    G4double frac=fEdep/CLHEP::MeV/70;   
     if(frac>1)frac=1;
     fHitPosVisAtt=new G4VisAttributes(G4Colour((1-frac)*0.8,(1-frac)*0.8,1));
     fLV->SetVisAttributes(fHitPosVisAtt);
   }
   if(opt=="time"){
-    G4double frac=fTime/10/ns;
+    G4double frac=fTime/10/CLHEP::ns;
     
     G4cout<<"FRAC "<<frac<<G4endl;
     if(frac>1)frac=1;

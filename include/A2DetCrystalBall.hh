@@ -18,7 +18,6 @@
 #include "G4VisAttributes.hh"
 #include "globals.hh"
 
-
 class A2DetCrystalBall : public A2Detector
 {
 public:

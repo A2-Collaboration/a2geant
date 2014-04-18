@@ -87,12 +87,12 @@ G4VPhysicalVolume* A2DetTOF::Construct(G4LogicalVolume* MotherLogical){
   Vbar=new G4ThreeVector[fTotBars];
   for(G4int w=0;w<fNWalls;w++){
     //Make sure dimension in cm
-    fBarX[w]*=cm;
-    fBarY[w]*=cm;
-    fBarZ[w]*=cm;
-    fWallX[w]*=cm;
-    fWallY[w]*=cm;
-    fWallZ[w]*=cm;
+    fBarX[w]*=CLHEP::cm;
+    fBarY[w]*=CLHEP::cm;
+    fBarZ[w]*=CLHEP::cm;
+    fWallX[w]*=CLHEP::cm;
+    fWallY[w]*=CLHEP::cm;
+    fWallZ[w]*=CLHEP::cm;
     if(fNLayers[w]==0){
       //Copy the previous wall if NLayers set to 0 in config file
       fNLayers[w]=fNLayers[w-1];
@@ -136,7 +136,7 @@ G4VPhysicalVolume* A2DetTOF::Construct(G4LogicalVolume* MotherLogical){
     G4Box *layBox=new G4Box(G4String("TOFL")+G4String(stname),fBarX[w]/2*fNBars[w],fBarY[w]/2,fBarZ[w]/2);
     G4LogicalVolume* layLogic=new G4LogicalVolume(layBox,fNistManager->FindOrBuildMaterial("G4_AIR"),G4String("TOFL")+G4String(stname)); 
    layLogic->SetVisAttributes (G4VisAttributes::Invisible);
-      layRot->rotateZ(fRotAng[w][l]*deg);
+      layRot->rotateZ(fRotAng[w][l]*CLHEP::deg);
       new G4PVPlacement(layRot,G4ThreeVector(0,0,zlay),layLogic,layBox->GetName(),wallLogic,false,2000*w+l);
       Vlay=Vwall+G4ThreeVector(0,0,zlay);
       for(G4int b=0;b<fNBars[w];b++){
@@ -149,10 +149,10 @@ G4VPhysicalVolume* A2DetTOF::Construct(G4LogicalVolume* MotherLogical){
 	new G4PVPlacement(0,G4ThreeVector(xbar,0,0),barLogic,tofBox->GetName(),layLogic,false,fCounter++);
 	G4ThreeVector End=Vbar[fCounter-1]+G4ThreeVector(0,fBarY[w]/2,0);
 	End*=(*layRot);
-	pos<<End.x()/cm<<" "<<End.y()/cm<<" "<<End.z()/cm<<G4endl;
+	pos<<End.x()/CLHEP::cm<<" "<<End.y()/CLHEP::cm<<" "<<End.z()/CLHEP::cm<<G4endl;
 	End=Vbar[fCounter-1]+G4ThreeVector(0,-fBarY[w]/2,0);
 	End*=(*layRot);
-	pos<<End.x()/cm<<" "<<End.y()/cm<<" "<<End.z()/cm<<G4endl;
+	pos<<End.x()/CLHEP::cm<<" "<<End.y()/CLHEP::cm<<" "<<End.z()/CLHEP::cm<<G4endl;
       }
 
     }
