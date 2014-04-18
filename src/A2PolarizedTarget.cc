@@ -387,7 +387,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
  //The cylinders with the Ti windows attached were rounded on the down-beam end. This makes the approximation of 90*deg corners. 
  //Outer Ti window:
  G4double r_TIOW = 12.5*mm;
- G4double t_TIOW = 0.20*mm;
+ G4double t_TIOW = 0.02*mm;
  G4Tubs* TIOW=new G4Tubs("TIOW",0,r_TIOW,t_TIOW/2,0*deg,360*deg);
  G4LogicalVolume* TIOWLogic=new G4LogicalVolume(TIOW,fNistManager->FindOrBuildMaterial("G4_Ti"),"TIOW");
  new G4PVPlacement(0,G4ThreeVector(0,0,(t_TIOW/2 + 276*mm + 67*mm - l_TRGT/2.)),TIOWLogic,"TIOW",fMyLogic,false,1);
@@ -405,7 +405,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
 
  //Outer Al window:
  G4double r_ALOW = 29.0*mm;
- G4double t_ALOW = 0.10*mm;
+ G4double t_ALOW = 0.01*mm;
  G4Tubs* ALOW=new G4Tubs("ALOW",0,r_ALOW,t_ALOW/2,0*deg,360*deg);
  G4LogicalVolume* ALOWLogic=new G4LogicalVolume(ALOW,fNistManager->FindOrBuildMaterial("G4_Al"),"ALOW");
  new G4PVPlacement(0,G4ThreeVector(0,0,(t_ALOW/2 + 265*mm + 67*mm - l_TRGT/2.)),ALOWLogic,"ALOW",fMyLogic,false,1);
@@ -414,7 +414,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
 
  //Inner Al window:
  G4double r_ALIW = 23.7*mm;
- G4double t_ALIW = 0.10*mm;
+ G4double t_ALIW = 0.01*mm;
  G4Tubs* ALIW=new G4Tubs("ALIW",0,r_ALIW,t_ALIW/2,0*deg,360*deg);
  G4LogicalVolume* ALIWLogic=new G4LogicalVolume(ALIW,fNistManager->FindOrBuildMaterial("G4_Al"),"ALIW");
  new G4PVPlacement(0,G4ThreeVector(0,0,(t_ALIW/2 + 256.5*mm + 67*mm - l_TRGT/2.)),ALIWLogic,"ALIW",fMyLogic,false,1);
@@ -444,7 +444,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
 
  //Middle Ti window:
  G4double r_TIMW = 11.0*mm;
- G4double t_TIMW = 0.20*mm;
+ G4double t_TIMW = 0.02*mm;
  G4Tubs* TIMW=new G4Tubs("TIMW",0,r_TIMW,t_TIMW/2,0*deg,360*deg);
  G4LogicalVolume* TIMWLogic=new G4LogicalVolume(TIMW,fNistManager->FindOrBuildMaterial("G4_Ti"),"TIMW");
  new G4PVPlacement(0,G4ThreeVector(0,0,(-t_TIMW/2 + 267*mm - l_TRGT/2.)),TIMWLogic,"TIMW",fMyLogic,false,1);
@@ -462,7 +462,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
 
  //Inner Ti window:
  G4double r_TIIW = 10.0*mm;
- G4double t_TIIW = 0.20*mm;
+ G4double t_TIIW = 0.02*mm;
  G4Tubs* TIIW=new G4Tubs("TIIW",0,r_TIIW,t_TIIW/2,0*deg,360*deg);
  G4LogicalVolume* TIIWLogic=new G4LogicalVolume(TIIW,fNistManager->FindOrBuildMaterial("G4_Ti"),"TIIW");
  new G4PVPlacement(0,G4ThreeVector(0,0,(t_TIIW/2 + 11.5*mm + 231.5*mm - l_TRGT/2.)),TIIWLogic,"TIIW",fMyLogic,false,1);
