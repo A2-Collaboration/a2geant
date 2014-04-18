@@ -58,7 +58,7 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
   fMode=EPGA_g4;
   fTargetWarning=0;
   //G4int setup=SetUpROOTInput("/scratch/crystalball/mc/kin_pi0p_100000.root");
-  fNevent=1;
+  fNevent=0;
   fNToBeTcount=0;
   fNToBeTracked=0;
   fNGenParticles=1;//for interactive use 
