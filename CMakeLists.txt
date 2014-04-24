@@ -31,17 +31,14 @@ if(WITH_GEANT4_UIVIS)
 else()
   find_package(Geant4 REQUIRED)
 endif()
-message("Inc: ${Geant4_USE_FILE}")
+
 include_directories(${Geant4_INCLUDE_DIRS})
 add_definitions(${Geant4_DEFINITIONS})
-
-#set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS}")
-
 
 # the project header files
 include_directories(${PROJECT_SOURCE_DIR}/include)
   
-# create the main A2 executable, link it to Geant4 and ROOT
+# create the "main" A2 executable, link it to Geant4 and ROOT
 # explicitly list all source files, this is recommended to detect
 # changes in the source file list by the build system!
 add_executable(A2 src/A2.cc
@@ -56,3 +53,22 @@ add_executable(A2 src/A2.cc
   src/A2SteppingVerbose.cc src/A2Target.cc src/A2VisCBSD.cc src/A2VisHit.cc
   src/A2VisSD.cc src/A2WCSD.cc)
 target_link_libraries(A2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+
+
+# build the pluto2mkin tool
+foreach(f TOGlobals TOMCMkinWriter TOMCParticle TOSUtils)
+  list(APPEND pluto2mkin_HEADERS "${CMAKE_SOURCE_DIR}/include/${f}.h")
+  list(APPEND pluto2mkin_SRCS "${CMAKE_SOURCE_DIR}/src/${f}.cxx")
+endforeach()
+set(pluto2mkin_DICT "${CMAKE_BINARY_DIR}/include/pluto2mkinDict.cc")
+
+ROOT_GENERATE_DICTIONARY(
+  "${pluto2mkin_HEADERS}"
+  "${CMAKE_SOURCE_DIR}/include/LinkDef.h"
+  "${pluto2mkin_DICT}"
+  "${ROOT_INCLUDES};${CMAKE_SOURCE_DIR}/include")
+add_executable(pluto2mkin src/MainPluto2Mkin.cxx ${pluto2mkin_SRCS} ${pluto2mkin_DICT})
+target_link_libraries(pluto2mkin ${ROOT_LIBRARIES})
+
+
+

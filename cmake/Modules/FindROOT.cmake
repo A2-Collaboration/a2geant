@@ -158,3 +158,4 @@ Find_Program(RLIBMAP_EXECUTABLE
   )
 
 
+include(FindROOTHelpers)
