@@ -11,6 +11,7 @@ find_path(Geant4_BUILD_DIR NAMES Geant4Config.cmake
   $ENV{G4INSTALL}
   "$ENV{G4INSTALL}-build"
   /opt/geant4 /opt/geant4-build
+  /cern/geant4 /cern/geant4-build
   PATH_SUFFIXES build
   NO_DEFAULT_PATH
   ) 
