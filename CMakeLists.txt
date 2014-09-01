@@ -11,6 +11,7 @@ if(CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR AND NOT MSVC_IDE)
 endif()
     
 include (cmake/settings.cmake)
+include (cmake/FindPluto.cmake)
 
 message(STATUS "*** Build Type:      " ${CMAKE_BUILD_TYPE})
 message(STATUS "*** Compiler Flags:  " ${DEFAULT_COMPILE_FLAGS})
@@ -20,7 +21,7 @@ message(STATUS "*** Install bin to:  " ${EXECUTABLE_OUTPUT_PATH})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(ROOT "5.30" REQUIRED)
 include_directories(${ROOT_INCLUDES})
-link_directories(${ROOT_LIBRARY_DIR})
+link_directories(${ROOT_LIBRARY_DIR} ${PLUTO_LIBRARY_PATH})
 
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -36,7 +37,7 @@ include_directories(${Geant4_INCLUDE_DIRS})
 add_definitions(${Geant4_DEFINITIONS})
 
 # the project header files
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include ${PLUTO_INCLUDE_PATH})
   
 # create the "main" A2 executable, link it to Geant4 and ROOT
 # explicitly list all source files, this is recommended to detect
@@ -52,7 +53,7 @@ add_executable(A2 src/A2.cc
   src/A2RunAction.cc src/A2SD.cc src/A2SolidTarget.cc src/A2SteppingAction.cc
   src/A2SteppingVerbose.cc src/A2Target.cc src/A2VisCBSD.cc src/A2VisHit.cc
   src/A2VisSD.cc src/A2WCSD.cc)
-target_link_libraries(A2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+target_link_libraries(A2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
 
 
 # build the pluto2mkin tool
