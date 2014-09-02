@@ -17,6 +17,13 @@
 #include "TTree.h"
 #include "TString.h"
 #include "TLorentzVector.h"
+#include "TClonesArray.h"
+
+#include <map>
+
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+
 
 class G4ParticleGun;
 class G4Event;
@@ -34,6 +41,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 	public:
 		void GeneratePrimaries(G4Event*);
 
+        TClonesArray* GetTruePtr() { return fGenParticles; }
+
 		void SetUpROOTInput();
 		void SetInputFile(TString filename){fInFileName=filename;};
 		void SetNParticlesToBeTracked(Int_t n){fNToBeTracked=n;fTrackThis=new Int_t[n];}
@@ -46,9 +55,12 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		Int_t GetNGenParticles(){return fNGenParticles;}
 		TLorentzVector* GetGenLorentzVec(Int_t i){return fGenLorentzVec[i];}
 		TLorentzVector** GetGenLorentzVecs(){return fGenLorentzVec;}
-		TLorentzVector* GetBeamLorentzVec(){return fBeamLorentzVec;}
+        TLorentzVector* GetBeamLorentzVec(){return &fBeamLorentzVec;}
 		Float_t* GetVertex(){return fGenPosition;}
 		Int_t* GetGenPartType(){return fGenPartType;}
+
+        std::map<G4int, G4ParticleDefinition*> pluto2G4;
+        G4ParticleDefinition* PlutoIDToGeant( int pluto_id );
 
 		void SetDetCon(A2DetectorConstruction* det){fDetCon=det;}
 		G4bool IsInTarget(G4ThreeVector vec){
@@ -71,12 +83,14 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		TString fInFileName;  //Name of input file
 		TFile* fGeneratedFile;       //Root file with input events ntuple produced bt mkin or MCGenerator
 		TTree* fGenTree;  //Tree of input events stored in fGeneratedFile
+        TClonesArray* fGenParticles;  // List of Pluto particles
+
 		Int_t fNGenBranches;      //Total number of branches in ntuple
 		Int_t fNGenParticles;     //Number of particles in ntuple
 		Float_t fGenPosition[3]; //vertex position from ntuple, can't be double!
 		Float_t ** fGen4Vectors;    //4 vector components from the ntuple branches
 		TLorentzVector ** fGenLorentzVec;    //4 vector components from the ntuple branches converted into a ROOT lorentz vector
-		TLorentzVector* fBeamLorentzVec; //For the beam or nonntuple input
+        TLorentzVector fBeamLorentzVec; //For the beam or nonntuple input
 
 		Float_t *fGenMass;        //Masses of the generated particles 
 		Int_t *fGenPartType;        //Array of G3 particle types 
@@ -88,6 +102,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		G4int fMode;    //select events via standard, phase space or ROOT input
 		G4int fTargetWarning;
 	public:
+        G4ThreeVector GetRandomVertex();
 		void SetMode(G4int mode){
 			fMode=mode;
 			G4cout<<"Set Mode "<<G4endl;
