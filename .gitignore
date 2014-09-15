@@ -32,6 +32,7 @@ G4History.macro
 /A2
 /TOFpos.dat
 /pluto2mkin
+/a2pluto
 
 # some typical names for output folders
 # you can also use symlinks to your "real" folders
