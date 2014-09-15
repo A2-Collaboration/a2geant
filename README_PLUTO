@@ -1,0 +1,10 @@
+a2GEANT PLUTO INPUT
+
+I removed all the mkin format stuff from the "PrimaryGeneratorAction".
+
+Some arrays used in the A2CBOutput format are not filled and I removed
+some branches in the output tree. These seemed to contain some kind of true
+information. And the beam 4Vector is wrong at the moment.
+
+AcquROOT an run with the mew output of a2geant, but I am sure there are miskates in there.
+
