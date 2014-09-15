@@ -71,5 +71,7 @@ ROOT_GENERATE_DICTIONARY(
 add_executable(pluto2mkin src/MainPluto2Mkin.cxx ${pluto2mkin_SRCS} ${pluto2mkin_DICT})
 target_link_libraries(pluto2mkin ${ROOT_LIBRARIES})
 
+# anyoption dependencies
+set(anyoption src/anyoption.cpp include/anyoption.h)
 
 
