@@ -6,7 +6,9 @@
 #include "A2DetectorConstruction.hh"
 #include "A2Hit.hh"
 #include "G4HCofThisEvent.hh"
+#include "PParticle.h"
 
+#define MAX_SIM_PARTS 100
 
 #include "TLorentzVector.h"
 
@@ -36,7 +38,7 @@ protected:
   Float_t ftcryst[MAXSIZE_NAI];  //Time of hit in each NaI crystal
   Float_t fectapfs[MAXSIZE_TAPS];  //Fast compenent of energy deposited in TAPS crystals 
   Float_t fectapsl[MAXSIZE_TAPS];  //Slow compenent of energy deposited in TAPS crystals(currently Edep in taps)
-  Float_t *felab;    //Energy of initial generatd particles
+  Float_t felab[MAX_SIM_PARTS];    //Energy of initial generatd particles
   Float_t feleak;    //Energy leaking out of system (NOT CURRENTLY IMPLEMENTED)
   Float_t fenai;     //Total energy deposited in NaI
   Float_t fetot;     //Total energy deposited in all detectors
@@ -46,13 +48,13 @@ protected:
   Int_t ficryst[MAXSIZE_NAI];   //id numbers of Nai hits
   Int_t fictaps[MAXSIZE_TAPS];   //id numbers of TAPS hits
   Int_t fivtaps[MAXSIZE_TAPS];   //id numbers of TAPS veto hits
-  Int_t *fidpart;   //g3 id number of initial generated particle
+  Int_t fidpart[MAX_SIM_PARTS];   //g3 id number of initial generated particle
   Int_t fiveto[MAXSIZE_PID];    //id number of the PID hits
   Int_t fnhits;    //Number of NaI hits
   Int_t fnpart;    //number of generated particles (not necessarily same as # tracked)
   Int_t fntaps;    //Number of hits in TAPS
   Int_t fnvtaps;    //Number of veto hits in TAPS
-  Float_t *fplab;   //momentum of original generated particles
+  Float_t fplab[MAX_SIM_PARTS];   //momentum of original generated particles
   Float_t ftctaps[MAXSIZE_TAPS];  //Time of hits in TAPS
   Float_t *fvertex;  //Vertex position
   Int_t fvhits;     //Number of hits in PID

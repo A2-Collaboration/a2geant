@@ -12,6 +12,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Material.hh"
 #include "globals.hh"
+
 //ROOT includes
 #include "TFile.h"
 #include "TTree.h"
@@ -19,11 +20,14 @@
 #include "TLorentzVector.h"
 #include "TClonesArray.h"
 
+//std
 #include <map>
+#include <list>
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
+class PParticle;
 
 class G4ParticleGun;
 class G4Event;
@@ -53,6 +57,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		}
 
 		Int_t GetNGenParticles(){return fNGenParticles;}
+        TClonesArray* GetPlutoParticles() { return fGenParticles; }
 		TLorentzVector* GetGenLorentzVec(Int_t i){return fGenLorentzVec[i];}
 		TLorentzVector** GetGenLorentzVecs(){return fGenLorentzVec;}
         TLorentzVector* GetBeamLorentzVec(){return &fBeamLorentzVec;}
@@ -71,6 +76,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 			return (vol->GetLogicalVolume()->GetMaterial()==fDetCon->GetTargetMaterial());
 		}
 
+        std::list<PParticle*>* SimParticles() { return &fSimParticles; }
+
 	private:
 		G4ParticleGun*  fParticleGun;    //pointer to particle gun
 		G4ParticleTable* fParticleTable;  //pointer to particle table
@@ -84,6 +91,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		TFile* fGeneratedFile;       //Root file with input events ntuple produced bt mkin or MCGenerator
 		TTree* fGenTree;  //Tree of input events stored in fGeneratedFile
         TClonesArray* fGenParticles;  // List of Pluto particles
+        std::list<PParticle*> fSimParticles;  // List of Pluto particles that went into geant
 
 		Int_t fNGenBranches;      //Total number of branches in ntuple
 		Int_t fNGenParticles;     //Number of particles in ntuple

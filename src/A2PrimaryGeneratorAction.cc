@@ -171,6 +171,9 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //Loop over tracked particles, set particle gun and create vertex for each particle
 
     int final_particles = 0;
+
+    fSimParticles.clear();
+
     for( int p=0; p< fGenParticles->GetEntries(); ++p) {
 
         PParticle* part = dynamic_cast<PParticle*>(fGenParticles->At(p));
@@ -189,8 +192,10 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
             final_particles++;
 
+            fSimParticles.push_back(part);
+
         } else if ( part->ID() == 14001 ) {  // beam particle
-            fBeamLorentzVec = part->Vect4();
+            fBeamLorentzVec = part->Vect4();    //TODO: FIX
         }
     }
 

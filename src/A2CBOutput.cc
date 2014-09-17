@@ -1,6 +1,7 @@
 #include "A2CBOutput.hh"
 #include "G4RunManager.hh"
 #include "TClonesArray.h"
+#include <list>
 
 #define MAX_NPART 100
 
@@ -39,7 +40,6 @@ A2CBOutput::A2CBOutput(){
 
 }
 A2CBOutput::~A2CBOutput(){
-	// for(Int_t i=0;i<fnpart;i++) delete fdircos[i];
 	if(fTree)delete fTree;
 }
 //Float_t dircos[4][3];
@@ -179,14 +179,45 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 
 }
 void A2CBOutput::WriteGenInput(){
-    fnpart=fPGA->GetNGenParticles()-1; //-1 for beam
+
+    std::list<PParticle*>* simp = fPGA->SimParticles();
+
+    fnpart = simp->size();
+
 	//Note fvertex is already the pointer to fPGA::fGenPosition 
 	//Get the generated input info to be written to output 
-	TVector3 vec=fBeamLorentzVec->Vect().Unit();
+
+    TVector3 vec=fBeamLorentzVec->Vect().Unit();
 	fbeam[0]=vec.X();
 	fbeam[1]=vec.Y();
 	fbeam[2]=vec.Z();
     fbeam[3]=fBeamLorentzVec->Rho()/GeV;
 	fbeam[4]=fBeamLorentzVec->E()/GeV;
+
+
+    std::list<PParticle*>::iterator p;
+
+    int i =0;
+    for(  p=simp->begin(); p != simp->end(); ++p, ++i ){
+
+        PParticle* part = *p;
+
+        //vec = fGenLorentzVec[i]->Vect().Unit();
+        vec = part->Vect().Unit();
+
+        fdircos[i][0]=static_cast<Float_t>(vec.X());
+        fdircos[i][1]=static_cast<Float_t>(vec.Y());
+        fdircos[i][2]=static_cast<Float_t>(vec.Z());
+
+
+        //felab[i]=fGenLorentzVec[i+1]->E()/GeV;
+        felab[i]=part->E();
+
+        //fplab[i]=fGenLorentzVec[i+1]->Rho()/GeV;
+        fplab[i]=part->P();
+
+        //fidpart[i]=fGenPartType[i+1];
+        fidpart[i] = part->ID(); //TODO: convert to geant3 ID
+      }
 
 }
