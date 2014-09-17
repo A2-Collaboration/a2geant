@@ -64,40 +64,40 @@ void A2CBOutput::SetBranches(){
   }
   Int_t basket =64000;
 
-  fTree->Branch("nhits",&fnhits,"fnhits/I",basket);
-  fTree->Branch("npart",&fnpart,"fnpart/I",basket);
-  fTree->Branch("ntaps",&fntaps,"fntaps/I",basket);
-  fTree->Branch("nvtaps",&fnvtaps,"fnvtaps/I",basket);
-  fTree->Branch("vhits",&fvhits,"fvhits/I",basket);
-  fTree->Branch("plab",fplab,"fplab[fnpart]/F",basket);
-  fTree->Branch("tctaps",ftctaps,"ftctaps[fntaps]/F",basket);
-  fTree->Branch("vertex",fvertex,"fvertex[3]/F",basket);
-  fTree->Branch("beam",fbeam,"fbeam[5]/F",basket);
-  fTree->Branch("dircos",fdircos,"fdircos[fnpart][3]/F",basket);
-  fTree->Branch("ecryst",fecryst,"fecryst[fnhits]/F",basket);
-  fTree->Branch("tcryst",ftcryst,"ftcryst[fnhits]/F",basket);
-  fTree->Branch("ectapfs",fectapfs,"fectapfs[fntaps]/F",basket);
-  fTree->Branch("ectapsl",fectapsl,"fectapsl[fntaps]/F",basket);
-  fTree->Branch("elab",felab,"felab[fnpart]/F",basket);
-  fTree->Branch("eleak",&feleak,"feleak/F",basket);
-  fTree->Branch("enai",&fenai,"fenai/F",basket);
-  fTree->Branch("etot",&fetot,"fetot/F",basket);
-  fTree->Branch("eveto",feveto,"feveto[fvhits]/F",basket);
-  fTree->Branch("tveto",ftveto,"ftveto[fvhits]/F",basket);
-  fTree->Branch("evtaps",fevtaps,"fevtaps[fnvtaps]/F",basket);
-  fTree->Branch("icryst",ficryst,"ficryst[fnhits]/I",basket);
-  fTree->Branch("ictaps",fictaps,"fictaps[fntaps]/I",basket);
-  fTree->Branch("ivtaps",fivtaps,"fictaps[fnvtaps]/I",basket);
-  fTree->Branch("idpart",fidpart,"fidpart[fnpart]/I",basket);
-  fTree->Branch("iveto",fiveto,"fiveto[fvhits]/I",basket);
-  fTree->Branch("nmwpc",&fnmwpc,"fnmwpc/I",basket);
-  fTree->Branch("imwpc",fimwpc,"fimwpc[fnmwpc]/I",basket);
-  fTree->Branch("mposx",fmposx,"fmposx[fnmwpc]/F",basket);
-  fTree->Branch("mposy",fmposy,"fmposy[fnmwpc]/F",basket);
-  fTree->Branch("mposz",fmposz,"fmposz[fnmwpc]/F",basket);
-  fTree->Branch("emwpc",femwpc,"femwpc[fnmwpc]/F",basket);
+  fTree->Branch("nhits",&fnhits,"fnhits/I",basket);                 //g4
+  fTree->Branch("npart",&fnpart,"fnpart/I",basket);                 //true info: number of true particles
+  fTree->Branch("ntaps",&fntaps,"fntaps/I",basket);                 //g4
+  fTree->Branch("nvtaps",&fnvtaps,"fnvtaps/I",basket);              //g4
+  fTree->Branch("vhits",&fvhits,"fvhits/I",basket);                 //g4
+  fTree->Branch("plab",fplab,"fplab[fnpart]/F",basket);             //true info(Impulse? TLorentzVector::Rho() )
+  fTree->Branch("tctaps",ftctaps,"ftctaps[fntaps]/F",basket);       //g4
+  fTree->Branch("vertex",fvertex,"fvertex[3]/F",basket);            //vertex position
+  fTree->Branch("beam",fbeam,"fbeam[5]/F",basket);                  //true info: Beam parameters (x,y,z) of uni, Rho E
+  fTree->Branch("dircos",fdircos,"fdircos[fnpart][3]/F",basket);    //true info (3vector unit)
+  fTree->Branch("ecryst",fecryst,"fecryst[fnhits]/F",basket);       //g4
+  fTree->Branch("tcryst",ftcryst,"ftcryst[fnhits]/F",basket);       //g4
+  fTree->Branch("ectapfs",fectapfs,"fectapfs[fntaps]/F",basket);    //NOT IMPLELEMTED
+  fTree->Branch("ectapsl",fectapsl,"fectapsl[fntaps]/F",basket);    //g4
+  fTree->Branch("elab",felab,"felab[fnpart]/F",basket);             //true info (E)
+  fTree->Branch("eleak",&feleak,"feleak/F",basket);                 //NOT IMPLEMENTED
+  fTree->Branch("enai",&fenai,"fenai/F",basket);                    //NOT IMPLEMENTED??
+  fTree->Branch("etot",&fetot,"fetot/F",basket);                    //g4
+  fTree->Branch("eveto",feveto,"feveto[fvhits]/F",basket);          //g4
+  fTree->Branch("tveto",ftveto,"ftveto[fvhits]/F",basket);          //g4
+  fTree->Branch("evtaps",fevtaps,"fevtaps[fnvtaps]/F",basket);      //g4
+  fTree->Branch("icryst",ficryst,"ficryst[fnhits]/I",basket);       //g4
+  fTree->Branch("ictaps",fictaps,"fictaps[fntaps]/I",basket);       //g4
+  fTree->Branch("ivtaps",fivtaps,"fictaps[fnvtaps]/I",basket);      //g4
+  fTree->Branch("idpart",fidpart,"fidpart[fnpart]/I",basket);       //true info (G3 Particle ID)
+  fTree->Branch("iveto",fiveto,"fiveto[fvhits]/I",basket);          //g4
+  fTree->Branch("nmwpc",&fnmwpc,"fnmwpc/I",basket);                 //g4
+  fTree->Branch("imwpc",fimwpc,"fimwpc[fnmwpc]/I",basket);          //g4
+  fTree->Branch("mposx",fmposx,"fmposx[fnmwpc]/F",basket);          //g4
+  fTree->Branch("mposy",fmposy,"fmposy[fnmwpc]/F",basket);          //g4
+  fTree->Branch("mposz",fmposz,"fmposz[fnmwpc]/F",basket);          //g4
+  fTree->Branch("emwpc",femwpc,"femwpc[fnmwpc]/F",basket);          //g4
   //tof stuff
-  if(fToFTot>0){
+  if(fToFTot>0){                                                    //g4: tof is all from g4
     fTree->Branch("ntof",&fntof,"fntof/I",basket);
     fTree->Branch("tofi",ftofi,"ftofi[fntof]/I",basket);
     fTree->Branch("tofe",ftofe,"ftofe[fntof]/F",basket);
