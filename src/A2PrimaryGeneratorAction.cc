@@ -194,8 +194,11 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
             fSimParticles.push_back(part);
 
-        } else if ( part->ID() == 14001 ) {  // beam particle
-            fBeamLorentzVec = part->Vect4();    //TODO: FIX
+        } else if ( part->ID() == 14001 ) {  // beam particle, compound of beam photon and tagert proton
+
+            const double Eg = part->E() - 0.938272; // subtract proton mass
+
+            fBeamLorentzVec = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
         }
     }
 
