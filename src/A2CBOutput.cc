@@ -180,7 +180,7 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 }
 void A2CBOutput::WriteGenInput(){
 
-    std::list<PParticle*>* simp = fPGA->SimParticles();
+    A2PrimaryGeneratorAction::ParticleList* simp = fPGA->SimParticles();
 
     fnpart = simp->size();
 

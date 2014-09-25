@@ -42,6 +42,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		A2PrimaryGeneratorAction();    
 		~A2PrimaryGeneratorAction();
 
+        typedef std::list<PParticle*> ParticleList;
+
 	public:
 		void GeneratePrimaries(G4Event*);
 
@@ -76,7 +78,12 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 			return (vol->GetLogicalVolume()->GetMaterial()==fDetCon->GetTargetMaterial());
 		}
 
-        std::list<PParticle*>* SimParticles() { return &fSimParticles; }
+        // Using std::list here, bacause unlcear what TClonesArray does to the PParticle pointers on Clear().
+        // Don't want to delete the particle objects
+
+
+
+        ParticleList* SimParticles() { return &fSimParticles; }
 
 	private:
 		G4ParticleGun*  fParticleGun;    //pointer to particle gun
@@ -90,8 +97,9 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		TString fInFileName;  //Name of input file
 		TFile* fGeneratedFile;       //Root file with input events ntuple produced bt mkin or MCGenerator
 		TTree* fGenTree;  //Tree of input events stored in fGeneratedFile
+
         TClonesArray* fGenParticles;  // List of Pluto particles
-        std::list<PParticle*> fSimParticles;  // List of Pluto particles that went into geant
+        ParticleList fSimParticles;  // List of Pluto particles that went into geant
 
 		Int_t fNGenBranches;      //Total number of branches in ntuple
 		Int_t fNGenParticles;     //Number of particles in ntuple
