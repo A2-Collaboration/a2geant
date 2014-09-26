@@ -171,6 +171,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //Loop over tracked particles, set particle gun and create vertex for each particle
 
     int final_particles = 0;
+    bool beam_found = false;
 
     fSimParticles.clear();
 
@@ -196,14 +197,22 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         } else if ( part->ID() == 14001 ) {  // beam particle, compound of beam photon and tagert proton
 
+            if( beam_found )
+                G4cerr << "Warning: Multiple Beam Particles in Event" << G4endl;
+
             const double Eg = part->E() - 0.938272; // subtract proton mass
 
             fBeamLorentzVec = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
+            beam_found = true;
         }
     }
 
     fNGenParticles = final_particles;
-//    G4cout << fNGenParticles << " particles in event" << G4endl;
+
+    if( !beam_found ) {
+        G4cerr << "Warning: Beam Particle not found! No Photon information." << G4endl;
+    }
+
 }
 
 void A2PrimaryGeneratorAction::SetUpROOTInput(){

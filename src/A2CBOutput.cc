@@ -191,11 +191,11 @@ void A2CBOutput::WriteGenInput(){
 	fbeam[0]=vec.X();
 	fbeam[1]=vec.Y();
 	fbeam[2]=vec.Z();
-    fbeam[3]=fBeamLorentzVec->Rho()/GeV;
-	fbeam[4]=fBeamLorentzVec->E()/GeV;
+    fbeam[3]=fBeamLorentzVec->Rho();    // pluto already uses GeV internally
+    fbeam[4]=fBeamLorentzVec->E();
 
 
-    std::list<PParticle*>::iterator p;
+    A2PrimaryGeneratorAction::ParticleList::iterator p;
 
     int i =0;
     for(  p=simp->begin(); p != simp->end(); ++p, ++i ){
