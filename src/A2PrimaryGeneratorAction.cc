@@ -18,6 +18,8 @@
 #include "TClonesArray.h"
 #include "TLorentzVector.h"
 
+
+
 //String that converts g3 particle number into a G4 particle name
 //const G4String G3ParticleType[]={"nothing","gamma","e+","e-","nu_e","mu+","mu-","pi0","pi+","pi-","kaon0L","kaon+","kaon-","neutron","proton","anti_proton","kaon0S","eta","lambda","sigma+","sigma0","sigma-","xi0","xi-","omega","anti_neutron","anti_lambda","anti_sigma-","anti_sigma0","anti_sigma+","anti_xi0","anti_xi+","GenericIon","","","","","","","","","","","","","deuteron","triton","","","He3","","","","","","","","","","","","","deuteron","triton","","","He3","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","deuteron"};
 
@@ -115,6 +117,8 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
              << " = " << it->second->GetParticleName() << G4endl;
     }
 
+    fMCEvtID = 0;
+
 }
 
 
@@ -157,6 +161,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 
     //Get the event from input tree
+    fMCEvtID = fNevent;
     fGenTree->GetEntry(fNevent++);
 
     //Set vertex position

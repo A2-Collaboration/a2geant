@@ -96,6 +96,8 @@ void A2CBOutput::SetBranches(){
     fTree->Branch("tofy",ftofy,"ftofy[fntof]/F",basket);
     fTree->Branch("tofz",ftofz,"ftofz[fntof]/F",basket);
   }
+  fTree->Branch("mc_evt_id", fPGA->MCEvtIDPtr(),"mc_evt_id/I",basket);
+
 }
 void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
     fnpart=fPGA->GetNGenParticles()-1; //-1 for beam
