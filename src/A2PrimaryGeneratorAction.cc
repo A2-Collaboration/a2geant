@@ -184,9 +184,15 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         PParticle* part = dynamic_cast<PParticle*>(fGenParticles->At(p));
 
-        if( part->ID() < 1000 || part->GetDaughterIndex() == -1 ) {
+        if( part->ID() < 1000 && part->GetDaughterIndex() == -1 ) {
 
-            fParticleGun->SetParticleDefinition( PlutoIDToGeant( part->ID() ));
+            try {
+                fParticleGun->SetParticleDefinition( PlutoIDToGeant( part->ID() ));
+            } catch (...) {
+                G4cerr << "Can't find G4 particle ID for " << part->Name() << G4endl;
+                fParticleGun->SetParticleDefinition( 0 );
+            }
+
             fParticleGun->SetParticleMomentumDirection(
                         G4ThreeVector(
                             part->Px()*GeV,
