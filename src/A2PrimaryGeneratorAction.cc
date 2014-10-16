@@ -221,7 +221,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fNGenParticles = final_particles;
 
     if( !beam_found ) {
-        G4cerr << "Warning: Beam Particle not found! No Photon information." << G4endl;
+        fBeamLorentzVec = TLorentzVector(0,0,0,0);
     }
 
 }
