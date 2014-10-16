@@ -232,8 +232,8 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     fGeneratedFile = new TFile(fInFileName, "read");
 
     if(!fGeneratedFile || !(fGeneratedFile->IsOpen())) {
-		G4cerr<<"G4int A2PrimaryGeneratorAction::SetUpRootInput() - Didn't find filename fInFileName"<<G4endl;
-		G4cerr<<"Need to call /A2/generator/InputFile or use --if=filename option on command line"<<G4endl;
+        G4cerr << "Cannot open input file '" << fInFileName << "'" << G4endl;
+        G4cerr << "Need to call /A2/generator/InputFile or use --if=filename option on command line." << G4endl;
 		exit(1);
 	}
 
@@ -247,10 +247,8 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     }
 
     if( 0 != fGenTree->SetBranchAddress("Particles", &fGenParticles)) {
-        G4cerr << "Can't set branch address for 'Particles'." << G4endl;
+        G4cerr << "Can't set branch address for branch 'Particles' in TTree 'data' in file '" << fInFileName << "'" << G4endl;
         exit(1);
-    } else {
-        G4cout << " Found particle branch!" << G4endl;
     }
 
     G4cout << "Found " << fGenTree->GetEntries() << " PLUTO events in file." << G4endl;
