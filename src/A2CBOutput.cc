@@ -96,7 +96,8 @@ void A2CBOutput::SetBranches(){
     fTree->Branch("tofy",ftofy,"ftofy[fntof]/F",basket);
     fTree->Branch("tofz",ftofz,"ftofz[fntof]/F",basket);
   }
-  fTree->Branch("mc_evt_id", fPGA->MCEvtIDPtr(),"mc_evt_id/I",basket);
+  fTree->Branch("mc_evt_id", fPGA->MCEvtIDPtr(),"mc_evt_id/L",basket);
+  fTree->Branch("mc_rnd_id", fPGA->MCRndIDPtr(),"mc_evt_id/L",basket);
 
 }
 void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){

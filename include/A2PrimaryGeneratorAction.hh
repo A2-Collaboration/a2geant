@@ -45,7 +45,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         typedef std::list<PParticle*> ParticleList;
 
     private:
-         Int_t fMCEvtID;    // Monte Carlo Event ID
+         Long64_t fMCEvtID;    // Monte Carlo Event ID
+         Long64_t fMCRndID;    // Monte Carlo Random ID
 
 	public:
 		void GeneratePrimaries(G4Event*);
@@ -88,7 +89,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
         ParticleList* SimParticles() { return &fSimParticles; }
 
-        Int_t * MCEvtIDPtr() { return &fMCEvtID; }
+        Long64_t * MCEvtIDPtr() { return &fMCEvtID; }
+        Long64_t * MCRndIDPtr() { return &fMCRndID; }
 
 	private:
 		G4ParticleGun*  fParticleGun;    //pointer to particle gun

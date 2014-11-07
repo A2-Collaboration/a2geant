@@ -161,7 +161,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 
     //Get the event from input tree
-    fMCEvtID = fNevent;
+    //fMCEvtID = fNevent;
     fGenTree->GetEntry(fNevent++);
 
     //Set vertex position
@@ -249,6 +249,14 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     if( 0 != fGenTree->SetBranchAddress("Particles", &fGenParticles)) {
         G4cerr << "Can't set branch address for branch 'Particles' in TTree 'data' in file '" << fInFileName << "'" << G4endl;
         exit(1);
+    }
+
+    if( 0 != fGenTree->SetBranchAddress("plutoID", &fMCEvtID)) {
+        G4cerr << "Can't set branch address for branch 'plutoID' in TTree 'data' in file '" << fInFileName << "'" << G4endl;
+    }
+
+    if( 0 != fGenTree->SetBranchAddress("plutoRandomID", &fMCRndID)) {
+        G4cerr << "Can't set branch address for branch 'plutoRandomID' in TTree 'data' in file '" << fInFileName << "'" << G4endl;
     }
 
     G4cout << "Found " << fGenTree->GetEntries() << " PLUTO events in file." << G4endl;
