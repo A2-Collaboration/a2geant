@@ -28,6 +28,7 @@ static Int_t numEvents = 1000;
 static string reactonString = "p omega";
 static string prefix = "pluto_";
 static string suffix = "00";
+static string outfile = "";
 
 static const Double_t me = 0.000510999;  // mass electron [GeV]
 
@@ -81,6 +82,7 @@ void ReadCmdline(int argc, char** argv ) {
      opt.setOption("prefix");
      opt.setOption("suffix");
      opt.setOption("reaction");
+     opt.setOption("Output");
 
      opt.setFlag("help",'h');
 
@@ -110,6 +112,9 @@ void ReadCmdline(int argc, char** argv ) {
 
      if ( opt.getValue("Emax") )
          Egmax = atof(opt.getValue("Emax"));
+     if ( opt.getValue("Output") )
+         outfile = opt.getValue("Output");
+
 
      saveIntermediate = ( NULL != opt.getValue("saveIntermediate") );
      enableBulk = ( NULL != opt.getValue("enableBulk") );
@@ -157,9 +162,12 @@ int main( int argc, char** argv ) {
     PStaticData* sdata = makeStaticData();
     sdata->AddDecay("w --> eta + g", "w", "eta,g", 4.6E-4);
 
+    if( outfile.empty() )
+        outfile = generateFilename();
+
     // PReaction constructor requires non-const char*. so... make copies... ARGH!
     char* rs = strdup(reactonString.c_str());
-    char* gf = strdup(generateFilename().c_str());
+    char* gf = strdup(outfile.c_str());
 
     cout << "filename " << gf << endl;
 
