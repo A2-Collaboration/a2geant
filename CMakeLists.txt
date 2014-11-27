@@ -77,3 +77,7 @@ set(anyoption src/anyoption.cpp include/anyoption.h)
 # a2Pluto 
 add_executable(a2pluto src/a2pluto.cpp ${anyoption})
 target_link_libraries(a2pluto ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+
+# split_pluto_events
+add_executable(split_pluto_events src/split_pluto_events.cpp ${anyoption})
+target_link_libraries(split_pluto_events ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
