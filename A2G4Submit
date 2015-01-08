@@ -1,0 +1,138 @@
+#!/bin/bash
+
+# A shell script to submit farm jobs
+
+# 1st version Ken Livingston, Nov 2007
+# Modified from Jlab auger to pbs / torque - Ken Livingston Feb 2014
+
+# function defs first,  main script below that.
+
+
+exe=`basename $0`
+print_usage()
+{
+    echo
+    echo "Description: A shell script to submit jobs to a pbs / torque batch farm queue."
+    echo
+    echo "Usage: $exe [-r] [-s sleep] [-m <maxjobs>] <jobdir>|<jobfile>"
+    echo
+    echo "Options:"
+    echo "  -m <maxjobs>   Set the maximum no of user owned jobs on the farm (default = 500)"
+    echo "  -s <sleep>     Sleep time(s) between submitting jobs (default = 5s)"
+    echo "  -r             Submit jobs in reverse order to their directory listing in <jobdir> "
+
+    echo "Attempts to run qsub to submit <jobfile>, or all the *.sub files in <jobdir>"
+    echo "For each jobfile, a test is made to see if jobfile.done exists. If so, the assumption is"
+    echo "that the file has already been submitted. To allow resubmission, the .done file must be removed manually" 
+    echo "The log of the each jsub command is put in <jobfile>.done"
+    echo "Furthermore, no jsub commands will be executed until there are less than <maxjobs> jobs pending" 
+    echo "or running on the farm (counted using the jobstat comand)"
+    echo "The maximum no of jobs can be adjusted using the -m option. (default = 500)"
+    echo "If there are more than <maxjobs>, the script will loop, testing every hour until it is able to"
+    echo "submit another job."
+    echo 
+    echo "Examples:"
+    echo
+    echo "$exe jobs/g13/pass0/v7/batch1/runs53764-53783.sub"
+    echo "Submits  jobs/g13/pass0/v7/batch1/runs53764-53783.sub with result in jobs/g13/pass0/v7/batch1/runs53764-53783.sub.done"
+    echo
+    echo "$exe -m 1000 jobs/g13/pass0/v7/batch1"
+    echo "Submits all .sub files in jobs/g13/pass0/v7/batch1, with logs in corresponding .done files,"
+    echo "also increasing the maximum no of jobs to 1000." 
+    echo 
+    exit;
+}
+
+init_values()
+{
+#set the defaults
+    sleeptime=5
+    default_maxq="500";
+    rev="";
+    maxq="${default_maxq}";
+}
+
+#  Function to set the command line options
+function set_option {
+ 	case $1 in
+	    m)
+	    maxq="${OPTARG}" ;;
+	    s)
+	    sleeptime="${OPTARG}" ;;
+	    r)
+	    rev="-r" ;;
+            *)
+	    print_usage ;;
+	esac
+    shift $[OPTIND-1]
+} 
+
+################################################################################################
+#MAIN SCRIPT STARTS HERE
+
+if [ $# -lt 1 ]; then
+     print_usage;
+fi
+
+init_values;
+
+#parse the command options and set variables accordingly
+while getopts "rm:" opt ; do 
+    set_option $opt  
+done
+shift $[$OPTIND-1]
+
+#work out if we have a file or directory ( or neither)
+if [ -f "$1" ]; then
+    #make a filelist with a single file, for consistency
+    dir=`dirname $1`
+    rm -f ${dir}/allsubs.dat
+    echo $1 > ${dir}/allsubs.dat
+else
+    dir=$1
+    if [ -d "$dir" ]; then
+	#make a filelist of all files
+	rm -f ${dir}/allsubs.dat
+	ls $rev $dir/*.sub > ${dir}/allsubs.dat
+    else
+	echo "Fatel Error: $1 doesn't seem to exist"
+	print_usage
+    fi
+fi
+
+#loop over all files in ${dir}/allsubs.dat
+
+while read subfile
+do
+    #if not already submitted (ie no .done file)
+    if [ ! -f "${subfile}.done" ]; then
+	
+	#count no of jobs already queued on farm
+	jobcount=`qstat -u ${USER} | gawk '{if(($10=="Q")||($10=="H")) print $0}' | wc -l`
+
+	#go if less than the (self imposed) maximum
+	jobgo=`echo $jobcount | gawk -v maxq=$maxq '{if ($1>maxq){print"wait"}else{print"go"}}'`
+
+	if [ "$jobgo" = "wait" ]; then
+	    while [ "$jobgo" = "wait" ]; do
+	        jobcount=`qstat -u ${USER} | gawk '{if(($10=="Q")||($10=="H")) print $0}' | wc -l`
+		echo "There are aleady $jobcount jobs queued. Waiting until it drops below $maxq. Trying again in 1hr"
+		jobgo=`echo $jobcount | gawk -v maxq=$maxq '{if ($1>maxq){print"wait"}else{print"go"}}'`
+		sleep 5m
+##		sleep 10
+	    done
+	fi
+
+	#OK to go
+        #echo "$jobcount jobs on already in the queue, submitting $subfile "
+	echo "qsub $subfile >&  ${subfile}.done"
+	qsub $subfile >&  ${subfile}.done
+	sleep $sleeptime
+    else
+	echo "$subfile was submitted previously."
+    fi
+
+done < ${dir}/allsubs.dat
+
+
+exit;

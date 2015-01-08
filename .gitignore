@@ -36,4 +36,4 @@ G4History.macro
 # some typical names for output folders
 # you can also use symlinks to your "real" folders
 /scratch
-
+/jobs

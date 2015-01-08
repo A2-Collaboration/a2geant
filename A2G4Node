@@ -1,0 +1,42 @@
+#!/bin/sh
+#This is called from the when a farm job is submitted to a node.
+#It cannot take arguments, rather it pick up environmental variables 
+#
+#Currently expecting the following to be set up in the submission script.
+#A2G4_MAINDIR:   Top level directory for A2 Geant4 simulation
+#A2G4_MACROFILE: Top level Geant4 macro file
+#A2G4_NODEDIR:   Temp location of output files
+#A2G4_OUTPUTDIR:    Where to put the output files on /local/raid
+ 
+cd $A2G4_MAINDIR
+
+tag=`basename ${A2G4_MACROFILE} .mac`
+
+#make these in case they don't exist
+mkdir -p ${A2G4_NODEDIR}
+mkdir -p ${A2G4_OUTPUTDIR}
+mkdir -p "${A2G4_OUTPUTDIR}/log"
+mkdir -p "${A2G4_OUTPUTDIR}/root"
+
+LogFile="${A2G4_OUTPUTDIR}/log/${tag}.log"
+
+#Now run Geant4
+echo "./A2 $A2G4_MACROFILE &> $LogFile"
+./A2 $A2G4_MACROFILE &> $LogFile
+
+#list all the files in the output directory                                     
+echo
+echo "List all the files in the output directory:"
+echo "ls -lrt ${A2G4_NODEDIR}"
+ls -lrt ${A2G4_NODEDIR}
+echo "Copying all the files from temporary directory $directory to ${A2G4_OUTPUTDIR}"
+echo "cp ${A2G4_NODEDIR}*.root ${A2G4_OUTPUTDIR}/root"
+cp ${A2G4_NODEDIR}/*.root ${A2G4_OUTPUTDIR}/root
+
+echo "deleting temporary directory ${A2G4_NODEDIR}"
+echo "/bin/rm -f  ${A2G4_NODE}/*.*"
+/bin/rm -f ${A2G4_NODEDIR}/*.*
+echo "rmdir ${A2G4_NODEDIR}"
+rmdir ${A2G4_NODEDIR}
+
+exit 0;

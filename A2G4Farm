@@ -1,0 +1,145 @@
+#!/bin/sh
+#Give the args some sensible names
+MacroBase=$1
+JobName=$2
+FileList=$3
+
+
+####################################################
+###### Beginning of section requiring editing ######
+####################################################
+
+#Location and suffix for input files
+InputDir="/local/raid0/work/${USER}/MC/g-C12_pi0-C12_thr"
+InputPre="EventGen_"
+
+#Location and suffix for output files
+OutputDir="/local/raid1/work/${USER}/analysis/${JobName}"
+OutputPre="A2G4_"
+
+#Who'll get the emails from the farm
+MailAddress="martel@kph.uni-mainz.de"
+
+####################################################
+###### End of section requiring editing ############
+####################################################
+
+
+#get the name of this executable
+exe=`basename $0`
+
+#the maximum time the job will be allowed HH:MM:SS
+#This is the max allowed on the batch_x86 queue.
+#Set high in case 
+WALLTIME=6:00:00
+
+print_usage(){
+    echo
+    echo "Usage:"
+    echo "$exe <Geant4Macro> <JobName> <FileList>"
+    echo
+    echo "<Geant4Macro>:   Top level Geant4 macro file"
+    echo "<JobName>:       A directory jobs/<JobName> will be created"
+    echo "                 if it doesn't exist and scripts put there"
+    echo "<FileList>:      (Optional) list of files to run, otherwise"
+    echo "                 run all files in input directory"
+    echo "Examples: "
+    echo "$exe macros/doCompton.mac myjob ComptonFiles.dat"
+    echo "$exe macros/doCompton.mac myjob"
+}
+
+#check that we have all the args, otherwise print use
+if [ $# -lt 2 ]; then
+    print_usage;
+    exit 0;
+fi
+
+#if there's no file list specified, then scan input directory into temp
+if [ $# -lt 3 ]; then
+    FileList="TempList.dat"
+    ls -1 $InputDir/${InputPre}*.root | xargs -n1 basename > $FileList
+fi
+
+MainDir=`pwd`
+
+#make some subdirectories for job and setup files
+JobDir="jobs/$JobName"
+mkdir -p $JobDir
+mkdir -p "$JobDir/jobfiles"
+
+MacroDir="${JobDir}/macrofiles"
+mkdir -p $MacroDir
+
+mkdir -p $OutputDir
+mkdir -p "${OutputDir}/root"
+mkdir -p "${OutputDir}/log"
+
+#Make a macro file template with all non-comment
+#lines except the input and output file lines
+Template="${MacroDir}/A2G4Template.dat"
+echo "#Geant4 setup file created automatically using A2G4Farm with $MacroBase as basis." > $Template
+echo "#All comments are stripped out"  >> $Template
+gawk '{if(($1!~"#")&&($1!~"/A2/generator/InputFile")&&($1!~"/A2/event/setOutputFile"))print $0}' $MacroBase >> $Template
+
+#Loop over each line and create the job files
+while read line           
+do
+
+    echo "Making a job for Files: $line";
+        
+    #strip off the .root, and any directory paths
+    BaseName=`basename $line .root | sed "s/${InputPre}//"`
+    JobFile="${JobDir}/jobfiles/${BaseName}.sub"
+    MacroFile="${MacroDir}/${BaseName}.mac"
+    NodeDir="/scratch/${USER}/${BaseName}"
+
+    #write the macro file by copying the template and
+    #tagging on lines for the input and output files
+    cp $Template $MacroFile
+
+    echo "/A2/generator/InputFile $InputDir/$line" >> $MacroFile
+    echo "/A2/event/setOutputFile $NodeDir/${OutputPre}${BaseName}.root" >> $MacroFile
+
+    #now make the job file
+    echo "#!/bin/sh" > $JobFile;
+    echo "#PBS -N A2G4_${USER}" >> $JobFile;
+    echo "#PBS -m abe" >> $JobFile;
+    echo "#PBS -M $MailAddress"  >> $JobFile;
+    echo "#PBS -V"  >> $JobFile;
+    echo "#PBS -lwalltime=${WALLTIME}" >> $JobFile;
+    echo "#PBS -e ${JobDir}/jobfiles"  >> $JobFile;
+    echo "#PBS -o ${JobDir}/jobfiles"  >> $JobFile;
+    echo "#PBS -q batch_x86_64" >> $JobFile;
+    echo "#"  >> $JobFile;
+#    echo "#InputDir: ${InputDir}" >> $JobFile; 
+    echo "#InputFiles: $line"   >> $JobFile;
+    echo "#"  >> $JobFile;
+    echo "export A2G4_MAINDIR=\"$MainDir\""  >> $JobFile;
+    echo "export A2G4_MACROFILE=\"$MacroFile\""  >> $JobFile;
+    echo "export A2G4_NODEDIR=\"$NodeDir\""  >> $JobFile;
+    echo "export A2G4_OUTPUTDIR=\"$OutputDir\""  >> $JobFile;
+    echo "#"  >> $JobFile;
+    echo "#This is the executable that gets run on the node"  >> $JobFile;
+    echo "A2G4Node"  >> $JobFile;
+    echo "#"  >> $JobFile;
+    echo "exit 0"  >> $JobFile;
+    echo "##end of job script"  >> $JobFile;
+
+    chmod +x $JobFile;
+
+done < $FileList
+
+topFile=`ls -1 -r ${MacroDir}/*.mac | tail -1`
+topJob=`ls -1 -r ${JobDir}/jobfiles/*.sub | tail -1`
+
+echo
+echo "Job submission scripts are in ${JobDir}/jobfiles."
+echo "Geant4 macro files are in ${MacroDir}"
+echo 
+echo "Here's the corrseponding job submission script:"
+echo "cat $topJob"
+echo
+cat $topJob
+
+echo
+echo
