@@ -14,8 +14,11 @@
 // ROOT
 #include "TClonesArray.h"
 #include "TMath.h"
+#include "TRandom.h"
 
 #include "anyoption.h"
+
+
 
 using namespace std;
 
@@ -142,6 +145,8 @@ void PrintConfig() {
 }
 
 int main( int argc, char** argv ) {
+
+    gRandom->SetSeed(); // Initialize ROOT's internal rng. Used for TF1s.
 
     ReadCmdline( argc, argv );
     PrintConfig();
