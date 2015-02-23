@@ -176,23 +176,26 @@ int main( int argc, char** argv ) {
 
     cout << "filename " << gf << endl;
 
-    PReaction reactrion(Egmax, "g", "p", rs, gf, saveIntermediate, 0, 0, 0);
+    PReaction* reactrion = new PReaction(Egmax, "g", "p", rs, gf, saveIntermediate, 0, 0, 0);
 
     if( enableBulk ) {
         PPlutoBulkDecay* p1 = new PPlutoBulkDecay();
         p1->SetRecursiveMode(1);
         p1->SetTauMax(0.001);
-        reactrion.AddBulk(p1);
+        reactrion->AddBulk(p1);
     }
 
-    reactrion.Print();   //The "Print()" statement is optional
+    reactrion->Print();   //The "Print()" statement is optional
 
-    reactrion.Loop(numEvents);
+    reactrion->Loop(numEvents);
 
     cout << "Simulation finished." << endl;
 
     free(rs);
     free(gf);
+
+    // Do not delete the reaction, otherwise: infinite loop somewhere in ROOT...
+    //delete reactrion;
 
     return 0;
 }
