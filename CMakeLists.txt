@@ -81,3 +81,6 @@ target_link_libraries(a2pluto ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
 # split_pluto_events
 add_executable(split_pluto_events src/split_pluto_events.cpp ${anyoption})
 target_link_libraries(split_pluto_events ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+
+add_executable(random_pluto_gun src/random_pluto_gun.cpp)
+target_link_libraries(random_pluto_gun ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
