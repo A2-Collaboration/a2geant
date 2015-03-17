@@ -53,7 +53,7 @@ int main( int argc, char** argv) {
 
     tree->Branch("Particles", particles);
 
-    rnd.SetSeed(123);
+    rnd.SetSeed();
 
     for( UInt_t i=0; i< nevents; ++i ) {
 
