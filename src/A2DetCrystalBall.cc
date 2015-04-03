@@ -128,12 +128,8 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   // Changed back on 17/3/11
 
   //Actually not needed as it is only used to hold the exit tunnel
-  G4double tunl_rin=10.3*cm;
-  G4double tunl_rout = tunl_rin + 2.5/16*inch;
-
   G4double ccut_rin=0;
-  //  G4double ccut_rout=10.3*cm+1.0/16*inch;
-  G4double ccut_rout=tunl_rout+1*mm; //cut at the tunnel outer radius + small distance to avoid overlap
+  G4double ccut_rout=10.3*cm+1.0/16*inch;
   // G4double ccut_rout=8.95*cm;
   G4double ccut_z=44*cm; //half lenght in z
   G4double ccut_phlow=0;
@@ -145,6 +141,8 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  steel tubes, 10.3 cm in inner diameter, 1/16" thick, and 11.5 cm
   //  wide, one around each beam opening.
   // S.P. version of TUNL
+  G4double tunl_rin=10.3*cm;
+  G4double tunl_rout = tunl_rin + 2.5/16*inch;
   G4double tunl_z = 11*cm/2; //half length in z
   G4double tunl_phlow=0*deg;
   G4double tunl_phdelta=180*deg;
@@ -210,9 +208,8 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   //  with the inner radius equal inner radius of the inner `can` around the CB and
   //  with out radius equal outer radius of the outer shell of the CB.
 
-  //June 2012 thcikness changed to 0.063inch, note this also needs changed in the crystal postioning...
-  //  G4double btmthnss= 0.076*cm;
-  G4double btmthnss= 0.063*inch;
+ 
+  G4double btmthnss= 0.076*cm;
   // G4double gap1  = 0.05*cm + btmthnss;
   // G4double gap2  = 0.05*cm + btmthnss;
   G4double gap1  = fGap.x() + btmthnss;
@@ -226,9 +223,9 @@ void A2DetCrystalBall::MakeOther1(){//please read note above
   fBTMMLogic=new G4LogicalVolume(fBTMM,fNistManager->FindOrBuildMaterial("G4_Fe"),"BTMM");
   fBTMMLogic->SetVisAttributes(CBVisAtt);
   fBTMMPhysi[0]=new G4PVPlacement(fRot[25],G4ThreeVector(0,gap1-btmthnss/2,0),fBTMMLogic,"BTMM",fMotherLogic,false,1);
-  fBTMMPhysi[1]=new G4PVPlacement(fRot[25],G4ThreeVector(0,-gap2+btmthnss/2,0),fBTMMLogic,"BTMM",fMotherLogic,false,2);
+  fBTMMPhysi[1]=new G4PVPlacement(fRot[25],G4ThreeVector(0,-gap2+btmthnss,0),fBTMMLogic,"BTMM",fMotherLogic,false,2);
   fBTMMPhysi[2]=new G4PVPlacement(fRot[98],G4ThreeVector(0,gap1-btmthnss/2,0),fBTMMLogic,"BTMM",fMotherLogic,false,3);
-  fBTMMPhysi[3]=new G4PVPlacement(fRot[98],G4ThreeVector(0,-gap2+btmthnss/2,0),fBTMMLogic,"BTMM",fMotherLogic,false,4);
+  fBTMMPhysi[3]=new G4PVPlacement(fRot[98],G4ThreeVector(0,-gap2+btmthnss,0),fBTMMLogic,"BTMM",fMotherLogic,false,4);
   //The skirting as designed by Viktor Kashevarov
   //Numbers copied straight from crystalball.C file
   //note arguemnts for ROOT trd1 are dx1, dx2, dy and dz
@@ -563,7 +560,6 @@ void A2DetCrystalBall::MakeBall(){
    CBVisAtt->SetVisibility(true);
    if(fCrystVisAtt==NULL) fCrystVisAtt= new G4VisAttributes(G4Colour(1,0.9,0.9));
 
-  const G4double inch=1.0/0.393700787*cm;
  
   //In GEANT3 the ball was constructed in two hemispheres CBLU and CBLD
   //However these hemispheres were actually spheres and therefore gave
@@ -674,8 +670,8 @@ void A2DetCrystalBall::MakeBall(){
 	  G4Transform3D trans=G4Transform3D(fRot[CrystRTindex[mint][icryst]]->inverse(),fTrans[CrystRTindex[mint][icryst]]); //position in minor
 	  trans=G4Transform3D(fRot[MinRTindex[majt][imin]]->inverse(),fTrans[MinRTindex[majt][imin]])*trans;//position in major
 	  trans=G4Transform3D(fRot[MajRTindex[ihemi][imaj]]->inverse(),fTrans[MajRTindex[ihemi][imaj]])*trans;//position in hemisphere
-	  if(ihemi==0)trans=G4Transform3D(fRot[25]->inverse(),G4ThreeVector(0,fGap.x()+0.063*inch,0))*trans;//position in lab
-	  if(ihemi==1)trans=G4Transform3D(fRot[25]->inverse(),-G4ThreeVector(0,fGap.y()+0.063*inch,0))*trans;//position in lab
+	  if(ihemi==0)trans=G4Transform3D(fRot[25]->inverse(),G4ThreeVector(0,fGap.x()+0.076*cm,0))*trans;//position in lab
+	  if(ihemi==1)trans=G4Transform3D(fRot[25]->inverse(),-G4ThreeVector(0,fGap.y()+0.076*cm,0))*trans;//position in lab
 	  copy=36*(MajCopy[ihemi][imaj]-1)+9*(MinCopy[majt][imin]-1)+CrystCopy[mint][icryst]-1;//calculate copy number so can convert to AcquRoot number in sensitive detector
 	  sprintf(crystname,"CRYSTAL_%d",copy);
 	  if(fIsInteractive==1){
