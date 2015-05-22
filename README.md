@@ -1,15 +1,15 @@
 A2 GEANT4 SIMULATION
 ==================
 
-works with GEANT4.10.00.p01
+works with GEANT4.10.00.p03
 
 Prerequisites
 -------------
-* CERN ROOT  (tested at now with version ROOT 5.34/12)
+* CERN ROOT  (tested at now with version ROOT 5.34/23)
 * git
 * XercesC
 * CLHEP
-* GEANT4.10.00p01
+* GEANT4.10.00p03
 * For polarised targets the magnetic field map (transverse only) is here ( http://www.ph.ed.ac.uk/nuclear/G4/wouter_field_map.dat  ).
 
 Installation

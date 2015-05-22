@@ -35,10 +35,10 @@
 //#include "LHEP_BIC.hh"
 
 #include <getopt.h>
-#include <CMakeG4Env.hh>
+//#include <CMakeG4Env.hh>
 
 int main(int argc,char** argv) {
-  SET_G4_ENV_BY_CMAKE();
+  //  SET_G4_ENV_BY_CMAKE();
 
   // Define options
   const char *optsShort = "hm:i:o:n:d:";
