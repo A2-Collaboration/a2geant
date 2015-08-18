@@ -6,6 +6,8 @@
 #include "TClonesArray.h"
 #include "PParticle.h"
 #include "TRandom2.h"
+#include "TVector3.h"
+#include <limits>
 
 using namespace std;
 
@@ -27,8 +29,8 @@ int GetRandomID() {
 
 int main( int argc, char** argv) {
 
-    if( argc != 6 ) {
-        cerr << argv[0] << " <outfile> <#events> <#particles> <PID (-1==random)> <Emax>" << endl;
+    if( argc < 6 ) {
+        cerr << argv[0] << " <outfile> <#events> <#particles> <PID (-1==random)> <Emax> [theta max (deg)]" << endl;
         exit(1);
     }
 
@@ -39,6 +41,8 @@ int main( int argc, char** argv) {
     const UInt_t nparts = atoi(argv[3]);
     const int id = atoi(argv[4]);
     const double Emax = atof(argv[5]);
+
+    const double max_theta = (argc==7) ? atof(argv[6]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
 
     file = new TFile( outfile.c_str(), "recreate");
     if( ! file || !file->IsOpen() ) {
@@ -78,7 +82,9 @@ int main( int argc, char** argv) {
             double p = sqrt(E*E-m*m);
 
             TVector3 dir;
-            rnd.Sphere(dir[0], dir[1], dir[2], p);
+            do {
+                rnd.Sphere(dir[0], dir[1], dir[2], p);
+            } while (dir.Theta() > max_theta);
 
             PParticle* part = new PParticle( pID, dir);
 
