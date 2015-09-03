@@ -30,7 +30,7 @@ int GetRandomID() {
 int main( int argc, char** argv) {
 
     if( argc < 6 ) {
-        cerr << argv[0] << " <outfile> <#events> <#particles> <PID (-1==random)> <Emax> [theta max (deg)]" << endl;
+        cerr << argv[0] << " <outfile> <#events> <#particles> <PID (-1==random)> <Emax> [theta max (deg)] [theta min (deg)]" << endl;
         exit(1);
     }
 
@@ -42,7 +42,8 @@ int main( int argc, char** argv) {
     const int id = atoi(argv[4]);
     const double Emax = atof(argv[5]);
 
-    const double max_theta = (argc==7) ? atof(argv[6]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
+    const double max_theta = (argc>=7) ? atof(argv[6]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
+    const double min_theta = (argc>=8) ? atof(argv[7]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
 
     file = new TFile( outfile.c_str(), "recreate");
     if( ! file || !file->IsOpen() ) {
@@ -84,7 +85,7 @@ int main( int argc, char** argv) {
             TVector3 dir;
             do {
                 rnd.Sphere(dir[0], dir[1], dir[2], p);
-            } while (dir.Theta() > max_theta);
+            } while (dir.Theta() > max_theta || dir.Theta() < min_theta);
 
             PParticle* part = new PParticle( pID, dir);
 
