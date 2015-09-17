@@ -43,7 +43,7 @@ int main( int argc, char** argv) {
     const double Emax = atof(argv[5]);
 
     const double max_theta = (argc>=7) ? atof(argv[6]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
-    const double min_theta = (argc>=8) ? atof(argv[7]) * TMath::DegToRad() : std::numeric_limits<double>::infinity();
+    const double min_theta = (argc>=8) ? atof(argv[7]) * TMath::DegToRad() : 0.0;
 
     file = new TFile( outfile.c_str(), "recreate");
     if( ! file || !file->IsOpen() ) {
