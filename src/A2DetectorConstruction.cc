@@ -257,6 +257,11 @@ void A2DetectorConstruction::DefineMaterials()
  plastic->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
  //NistManager->RegisterMaterial(plastic);
 
+ // Hydrogen with denisty of plastic (To test scattering off carbon/hydrogen in PID)
+ G4Marerial *HydrogenPlastic=new G4Material("A2_HydrogenPlastic", density=1.19*CLHEP::g/CLHEP::cm3, ncomponents=1);
+ HydrogenPlastic->AddElement(NistManager->FindOrBuildElement(1), fractionmass=1);
+ //NistManager->RegisterMaterial(HydrogenPlastic);
+
  //Base material. From cbsim
  G4Material *basemat=new G4Material("A2_BASEMAT",density=2.26*CLHEP::g/CLHEP::cm3, ncomponents=2);
  basemat->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);

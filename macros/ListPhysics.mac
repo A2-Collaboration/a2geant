@@ -1,0 +1,5 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#####Pre-Initialisation
+/A2/physics/ListPhysics
