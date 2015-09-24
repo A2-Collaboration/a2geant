@@ -3,6 +3,8 @@
 #include "TClonesArray.h"
 #include <list>
 
+#include "TIDhack.h"
+
 #define MAX_NPART 100
 
 A2CBOutput::A2CBOutput(){
@@ -99,7 +101,26 @@ void A2CBOutput::SetBranches(){
   fTree->Branch("mc_evt_id", fPGA->MCEvtIDPtr(),"mc_evt_id/L",basket);
   fTree->Branch("mc_rnd_id", fPGA->MCRndIDPtr(),"mc_evt_id/L",basket);
 
+
+
 }
+
+void A2CBOutput::CopyTIDTree() {
+
+    TTree* tid_tree = TIDMessage::tidtree;
+
+    if(tid_tree) {
+        //fFile->cd();
+        tid_tree->SetBranchStatus("tid", 1);
+        TTree* clone = tid_tree->CloneTree(-1,"fast SortBasketsByBranch");
+        clone->SetName("h12_tid");
+        clone->Write();
+        cout << "Copied TID Tree" << endl;
+    } else {
+        cout << "TID Tree not found!" << endl;
+    }
+}
+
 void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
     fnpart=fPGA->GetNGenParticles()-1; //-1 for beam
 	G4int CollSize=HitsColl->GetNumberOfCollections();

@@ -52,7 +52,7 @@ add_executable(A2 src/A2.cc
   src/A2PrimaryGeneratorAction.cc src/A2PrimaryGeneratorMessenger.cc
   src/A2RunAction.cc src/A2SD.cc src/A2SolidTarget.cc src/A2SteppingAction.cc
   src/A2SteppingVerbose.cc src/A2Target.cc src/A2VisCBSD.cc src/A2VisHit.cc
-  src/A2VisSD.cc src/A2WCSD.cc)
+  src/A2VisSD.cc src/A2WCSD.cc src/TIDhack.cc include/TIDhack.h)
 target_link_libraries(A2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
 
 

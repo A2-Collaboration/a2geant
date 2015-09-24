@@ -95,6 +95,8 @@ public:
   void WriteTree(){fTree->Write();}
   void WriteHit(G4HCofThisEvent* );
   void WriteGenInput();
+
+  void CopyTIDTree();
 };
 
 

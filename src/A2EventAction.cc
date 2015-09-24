@@ -214,6 +214,8 @@ G4int A2EventAction::PrepareOutput(){
 }
 void  A2EventAction::CloseOutput(){
   if(!fCBOut) return;
+  fOutFile->cd();
+  fCBOut->CopyTIDTree();
   fCBOut->WriteTree();
   delete fCBOut;
   fOutFile->Close();

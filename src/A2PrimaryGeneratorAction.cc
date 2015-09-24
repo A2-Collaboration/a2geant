@@ -18,6 +18,8 @@
 #include "TClonesArray.h"
 #include "TLorentzVector.h"
 
+#include "TIDhack.h"
+
 
 
 //String that converts g3 particle number into a G4 particle name
@@ -260,4 +262,8 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     }
 
     G4cout << "Found " << fGenTree->GetEntries() << " PLUTO events in file." << G4endl;
+
+    /// look for TID tree
+    fGeneratedFile->GetObject("data_tid",TIDMessage::tidtree);
+
 }
