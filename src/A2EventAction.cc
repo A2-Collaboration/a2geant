@@ -19,6 +19,8 @@
 #include <iomanip>
 
 
+#include "Compression.h"
+
 
 A2EventAction::A2EventAction(A2RunAction* run)
 :frunAct(run),fdrawFlag("all"),fprintModulo(1),feventMessenger(0)
@@ -187,6 +189,8 @@ G4int A2EventAction::PrepareOutput(){
     //    fOutFileName.Insert(fOutFileName.Index(".root"),"_1");   
     G4cout<<"A2EventAction::PrepareOutput() Output File already exists will save to "<<fOutFileName<<G4endl;
     fOutFile=new TFile(fOutFileName,"CREATE");
+    fOutFile->SetCompressionAlgorithm(ROOT::kLZMA);
+    fOutFile->SetCompressionLevel(5);
     
   }
   //  while (!fOutFile->IsOpen()){
