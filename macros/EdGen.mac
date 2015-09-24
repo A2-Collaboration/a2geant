@@ -3,13 +3,13 @@
 # when running in interactive mode
 #####Pre-Initialisation
 #Choose a physics list, for a full listing type /A2/physics/ListPhysics
-/A2/physics/Physics QGSP_BERT_HP
+/A2/physics/Physics QGSP_BIC_HP
 
 ####Initialise
 /run/initialize
 
 ##the initial random number seed
-/A2/generator/Seed 1111116
+/A2/generator/Seed 11111123
 
 #Set the number of particles to be tracked from the input ntuple
 /A2/generator/NToBeTracked 2
@@ -18,8 +18,8 @@
 /A2/generator/Track 1
 /A2/generator/Track 2
 #Open the file and set up the ntuple for reading
-/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/EdGen10e7A2.root
+/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/PN_100_1557_10e7A2.root
 
 #####Output
 #Open the output file for writing
-/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant_10e7_6_12_08_15.root
+/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant_Polarimeter_NP_100_1557_10e7_NoPolarisation.root

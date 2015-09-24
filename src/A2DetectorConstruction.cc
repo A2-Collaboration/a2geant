@@ -181,6 +181,35 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     }
     fTarget->Construct(fWorldLogic);
   }
+
+  //Polarimeter
+  //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
+  G4double  Xoff=0*CLHEP::mm;
+  // G4double  Yoff=7.8*mm;
+  G4double  Yoff=0*CLHEP::mm;     //original
+  //G4double  Yoff=5*mm;        //shift graphite
+  //********forward cap
+  G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+  G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
+  // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
+  G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
+
+  //**********orange support tube
+  G4Tubs* nptube=new G4Tubs("NPTUBE",195./2*CLHEP::mm,200*CLHEP::mm/2,280./2*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);   
+  G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
+  G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);     
+ 
+  //*************carbon cylinder
+  G4double tubez=200*CLHEP::mm;
+  G4double tubez0=-10*CLHEP::mm+tubez/2;
+  G4Tubs* npol2=new G4Tubs("NPOL2",140./2*CLHEP::mm,92.5*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+  G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
+  G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);  
+
+  G4cout<<"Weight of Disc "<<npolLogic->GetMass()/CLHEP::kg<<G4endl;  
+  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;  
+  G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
+
   //                                        
   // Visualization attributes
   //
@@ -256,11 +285,6 @@ void A2DetectorConstruction::DefineMaterials()
  plastic->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);
  plastic->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
  //NistManager->RegisterMaterial(plastic);
-
- // Hydrogen with denisty of plastic (To test scattering off carbon/hydrogen in PID)
- G4Marerial *HydrogenPlastic=new G4Material("A2_HydrogenPlastic", density=1.19*CLHEP::g/CLHEP::cm3, ncomponents=1);
- HydrogenPlastic->AddElement(NistManager->FindOrBuildElement(1), fractionmass=1);
- //NistManager->RegisterMaterial(HydrogenPlastic);
 
  //Base material. From cbsim
  G4Material *basemat=new G4Material("A2_BASEMAT",density=2.26*CLHEP::g/CLHEP::cm3, ncomponents=2);
@@ -350,6 +374,8 @@ void A2DetectorConstruction::DefineMaterials()
   A2_Epoxy->AddMaterial(A2_Resin, fractionmass=0.8);
   A2_Epoxy->AddMaterial(A2_13BAC, fractionmass=0.2);
 
+  //polarimeter
+  new G4Material("A2_G348GRAPHITE", z=6., a= 12.01*CLHEP::g/CLHEP::mole, density= 1.92*CLHEP::g/CLHEP::cm3);
 
   /*Now useG4NistManager
  //This function illustrates the possible ways to define materials
