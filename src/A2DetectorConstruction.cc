@@ -232,7 +232,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
 void A2DetectorConstruction::UpdateGeometry()
 {
-
   G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 

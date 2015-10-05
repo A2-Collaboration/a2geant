@@ -7,20 +7,18 @@
 
 ####Initialise
 /run/initialize
-#/geometry/test/grid_test
 
 ##the initial random number seed
-/A2/generator/Seed 11111123
+/A2/generator/Seed 1111
 
 #Set the number of particles to be tracked from the input ntuple
-/A2/generator/NToBeTracked 2
+/A2/generator/NToBeTracked 1
 #give the indexes of the particles to be tracked
 #(have a look at the branch names in the input file)
 /A2/generator/Track 1
-/A2/generator/Track 2
 #Open the file and set up the ntuple for reading
-/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/PN_100_1557_10e7A2.root
+/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/N_100_1557_pi0_10e7A2.root
 
 #####Output
 #Open the output file for writing
-/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Test.root
+/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant_Polarimeter_N_100_1557_pi0_10e7.root

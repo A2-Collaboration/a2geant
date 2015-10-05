@@ -1,11 +1,11 @@
 ####Use the crystal ball?
-/A2/det/useCB 1
+/A2/det/useCB 0
 #if the 3rd number in the next line is negative use old geometry,
 # if positive use new Prakhov geometry
 #the first two numbers give the upper and lower air gap between hemispheres
 /A2/det/setHemiGap 0.4 0.4 -1 cm
 #####Use TAPS?
-/A2/det/useTAPS 1
+/A2/det/useTAPS 0
 ####Configure TAPS
 #/A2/det/setTAPSFile taps.dat
 #/A2/det/setTAPSZ 175 cm
@@ -19,7 +19,7 @@
 /A2/det/setPIDZ 0. cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
-/A2/det/useMWPC 1
+/A2/det/useMWPC 2
 
 ####Use Cherenkov?
 /A2/det/useCherenkov 0
