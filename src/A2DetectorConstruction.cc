@@ -63,6 +63,8 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   //default settings for PID
   fPIDZ=0.;
+  //default offset for MWPC
+  fMWPCZ=0.;
   //has to be done here in case use new material for target
   DefineMaterials();
 
@@ -72,9 +74,6 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 A2DetectorConstruction::~A2DetectorConstruction(){
  delete fDetMessenger;
 }
-
-
-
 
 G4VPhysicalVolume* A2DetectorConstruction::Construct()
 {
@@ -130,6 +129,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fCrystalBall->SetGap(fHemiGap);
     fCrystalBall->Construct(fWorldLogic);
   }
+
   if(fUseTAPS){
     G4cout<<"A2DetectorConstruction::Construct() Turn on the taps"<<G4endl;
     G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl;
@@ -138,6 +138,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fTAPS->SetIsInteractive(fIsInteractive);
     fTAPS->Construct(fWorldLogic);
   }
+
   if(fUsePID){
     G4cout<<"A2DetectorConstruction::Construct() Take the pid "<< fUsePID<<G4endl;
     fPID=new A2DetPID();
@@ -152,20 +153,24 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUseMWPC==2)G4cout<<"With the anode wires created"<<G4endl;
     fMWPC = new A2DetMWPC();
     if(fUseMWPC==2)fMWPC->UseAnodes(true);
-    fMWPC ->Construct(fWorldLogic);
+    fMWPC ->ConstructMWPC(fWorldLogic, fMWPCZ);
+    G4cout << fMWPCZ << G4endl;
   }
+
   if(fUseTOF){
     G4cout<<"A2DetectorConstruction::Construct() ToF time!"<<G4endl;
     fTOF=new A2DetTOF();
     fTOF->ReadParameters(fTOFparFile);
     fTOF->Construct(fWorldLogic);
   }
+
   if(fUseCherenkov){
     G4cout<<"A2DetectorConstruction::Construct() Make the Cherenkov"<<G4endl;
     fCherenkov=new A2DetCherenkov();
     fCherenkov->SetIsInteractive(fIsInteractive);
     fCherenkov->Construct(fWorldLogic);
   }
+
   //if(fUsePolarimeter){ //Check to see if Polarimeter is to be constructed or not
   //  G4cout<<"A2DetectorConstruction::Construct() Make the Polarimeter"<<G4endl;
   //  fPolarimeter = new A2DetPol();
@@ -232,10 +237,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 //   BeamLogic->SetVisAttributes(beamAtt);
   return fWorldPhysi;
 }
-
-
-
-
 
 #include "G4RunManager.hh"
 

@@ -19,7 +19,9 @@
 /A2/det/setPIDZ 0. cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
-/A2/det/useMWPC 0
+#For Phase 2 polarimeter set MWPCZ to be -5cm
+/A2/det/useMWPC 2
+/A2/det/setMWPCZ 5. cm
 
 ####Use Cherenkov?
 /A2/det/useCherenkov 0
