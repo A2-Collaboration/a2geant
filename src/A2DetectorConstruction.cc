@@ -39,6 +39,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
+  //fUsePolarimeter=0;
 
   fCrystalBall=NULL;
   fTAPS=NULL;
@@ -86,7 +87,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   fUseCherenkov=0;
 
   // read the set up file DetectorSetup.mac
-  // get the pointer to the User Interface manager 
+  // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
@@ -102,16 +103,16 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  //     
+  //
   // World
   //
   fWorldSolid = new G4Box("World",				//its name
 			  20*CLHEP::m,20*CLHEP::m,20*CLHEP::m);	//its size
-                         
+
   fWorldLogic = new G4LogicalVolume(fWorldSolid,		//its solid
 				    G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR"),	//its material
                                    "World");		//its name
-                                   
+
   fWorldPhysi = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
                                  fWorldLogic,		//its logical volume
@@ -131,7 +132,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
   if(fUseTAPS){
     G4cout<<"A2DetectorConstruction::Construct() Turn on the taps"<<G4endl;
-    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl; 
+    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl;
     fTAPS=new A2DetTAPS(fTAPSSetupFile,fTAPSN,fNPbWO4,fTAPSZ);
     //fTAPS=new A2DetTAPS();
     fTAPS->SetIsInteractive(fIsInteractive);
@@ -142,7 +143,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fPID=new A2DetPID();
     if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
     else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 2 possible PIDS, please set UsePID to be 1 (2003) or 2 (2007)"<<G4endl; exit(1);}
+    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
+    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016)"<<G4endl; exit(1);}
   }
 
   if(fUseMWPC){
@@ -150,7 +152,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUseMWPC==2)G4cout<<"With the anode wires created"<<G4endl;
     fMWPC = new A2DetMWPC();
     if(fUseMWPC==2)fMWPC->UseAnodes(true);
-    fMWPC ->Construct(fWorldLogic); 
+    fMWPC ->Construct(fWorldLogic);
   }
   if(fUseTOF){
     G4cout<<"A2DetectorConstruction::Construct() ToF time!"<<G4endl;
@@ -158,12 +160,19 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fTOF->ReadParameters(fTOFparFile);
     fTOF->Construct(fWorldLogic);
   }
- if(fUseCherenkov){
+  if(fUseCherenkov){
     G4cout<<"A2DetectorConstruction::Construct() Make the Cherenkov"<<G4endl;
     fCherenkov=new A2DetCherenkov();
     fCherenkov->SetIsInteractive(fIsInteractive);
     fCherenkov->Construct(fWorldLogic);
- }
+  }
+  //if(fUsePolarimeter){ //Check to see if Polarimeter is to be constructed or not
+  //  G4cout<<"A2DetectorConstruction::Construct() Make the Polarimeter"<<G4endl;
+  //  fPolarimeter = new A2DetPol();
+  //  if(fUsePol==1) fPolarimeter->Construct1(fWorldLogic);
+  // else if (fUsePol==2) fPolarimeter->Construct2(fWorldLogic);
+  //  else {G4cerr<<"There are 2 possible PIDS, please set UsePID to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
+  // }
   if(fUseTarget!=G4String("NO")){
     G4cout<<"A2DetectorConstruction::Construct() Fill the "<<fUseTarget<<" with "<<fTargetMaterial->GetName()<<G4endl;
     if(fUseTarget=="Cryo") fTarget=static_cast<A2Target*>(new A2CryoTarget());
@@ -184,33 +193,33 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
   //Polarimeter
   //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
-  G4double  Xoff=0*CLHEP::mm;
+  //G4double  Xoff=0*CLHEP::mm;
   // G4double  Yoff=7.8*mm;
-  G4double  Yoff=0*CLHEP::mm;     //original
+  //G4double  Yoff=0*CLHEP::mm;     //original
   //G4double  Yoff=5*mm;        //shift graphite
   //********forward cap
-  G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
-  G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
+  //G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+  //G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
   // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
-  G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
+  //G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
 
   //**********orange support tube
-  G4Tubs* nptube=new G4Tubs("NPTUBE",195./2*CLHEP::mm,200*CLHEP::mm/2,280./2*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);   
-  G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
-  G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);     
- 
+  //G4Tubs* nptube=new G4Tubs("NPTUBE",195./2*CLHEP::mm,200*CLHEP::mm/2,280./2*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);
+  //G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
+  //G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);
+
   //*************carbon cylinder
-  G4double tubez=200*CLHEP::mm;
-  G4double tubez0=-10*CLHEP::mm+tubez/2;
-  G4Tubs* npol2=new G4Tubs("NPOL2",140./2*CLHEP::mm,92.5*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
-  G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-  G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);  
+ // G4double tubez=207.5*CLHEP::mm;
+  //G4double tubez0=-10*CLHEP::mm+tubez/2;
+  //G4Tubs* npol2=new G4Tubs("NPOL2",69.5*CLHEP::mm,92.5*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+  //G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
+  //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
 
-  G4cout<<"Weight of Disc "<<npolLogic->GetMass()/CLHEP::kg<<G4endl;  
-  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;  
-  G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
+  //G4cout<<"Weight of Disc "<<npolLogic->GetMass()/CLHEP::kg<<G4endl;
+  //G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
+  //G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
 
-  //                                        
+  //
   // Visualization attributes
   //
   fWorldLogic->SetVisAttributes (G4VisAttributes::Invisible);
@@ -237,7 +246,7 @@ void A2DetectorConstruction::UpdateGeometry()
 
 
 void A2DetectorConstruction::DefineMaterials()
-{ 
+{
   G4double density,z,a,fractionmass;
   G4int ncomponents;
 
@@ -245,7 +254,7 @@ void A2DetectorConstruction::DefineMaterials()
   G4NistManager* NistManager=G4NistManager::Instance();
 
   //Rohacell. From cbsim.  The formula is (C4 H7 N 0)n. Density is 0.057 g/CLHEP::cm3.  (V.K)
- G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*CLHEP::g/CLHEP::cm3, ncomponents=4);  
+ G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*CLHEP::g/CLHEP::cm3, ncomponents=4);
  Roha->AddElement(NistManager->FindOrBuildElement(6),4);
  Roha->AddElement(NistManager->FindOrBuildElement(1),7);
  Roha->AddElement(NistManager->FindOrBuildElement(7),1);
@@ -279,7 +288,7 @@ void A2DetectorConstruction::DefineMaterials()
  fglass->AddElement(NistManager->FindOrBuildElement(3),fractionmass=0.2320000E-02);
  //NistManager->RegisterMaterial(fglass);
 
- //Plastic. From cbsim 
+ //Plastic. From cbsim
  G4Material *plastic=new G4Material("A2_PLASTIC",density=1.19*CLHEP::g/CLHEP::cm3, ncomponents=2);
  plastic->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);
  plastic->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
@@ -315,9 +324,9 @@ void A2DetectorConstruction::DefineMaterials()
 //////////
 //Materials for Polarized Target:
 //////////
- 
-  G4String symbol;             
-  G4int iz, n;                 //iz=number of protons  in an isotope; 
+
+  G4String symbol;
+  G4int iz, n;                 //iz=number of protons  in an isotope;
                                // n=number of nucleons in an isotope;
   G4int natoms;
   G4double abundance;
@@ -343,7 +352,7 @@ void A2DetectorConstruction::DefineMaterials()
   G4Material* A2_HeButanol=new G4Material("A2_HeButanol", density=0.6*CLHEP::g/CLHEP::cm3, ncomponents=2);
   A2_HeButanol->AddMaterial(A2_HeMix, fractionmass=0.094);
   A2_HeButanol->AddMaterial(A2_Butanol, fractionmass=0.906);
-  
+
 //Stainless steel (18% Cr, 10% Ni, 72% Fe):
   G4Material* A2_SS=new G4Material("A2_SS", density=8000.*CLHEP::kg/CLHEP::m3, ncomponents=3);
   A2_SS->AddElement(NistManager->FindOrBuildElement(24), fractionmass=0.18);
@@ -378,12 +387,12 @@ void A2DetectorConstruction::DefineMaterials()
 
   /*Now useG4NistManager
  //This function illustrates the possible ways to define materials
- 
+
   G4String symbol;             //a=mass of a mole;
-  G4double a, z, density;      //z=mean number of protons;  
-  G4int iz, n;                 //iz=number of protons  in an isotope; 
+  G4double a, z, density;      //z=mean number of protons;
+  G4int iz, n;                 //iz=number of protons  in an isotope;
                              // n=number of nucleons in an isotope;
-  
+
   G4int ncomponents, natoms;
   G4double abundance, fractionmass;
 
@@ -416,7 +425,7 @@ G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*CLHEP::g/m
  new G4Material("Iron", z=26., a=55.85*CLHEP::g/mole, density=7.87*CLHEP::g/cm3);
  new G4Material("liquidArgon", z=18., a= 39.95*CLHEP::g/mole, density= 1.390*CLHEP::g/cm3);
  new G4Material("Lead"     , z=82., a= 207.19*CLHEP::g/mole, density= 11.35*CLHEP::g/cm3);
- new G4Material("Graphite"     , z=6., a= 12.01*CLHEP::g/mole, density= 2.267*CLHEP::g/cm3);//Note cbsim had rho=1.70?? 
+ new G4Material("Graphite"     , z=6., a= 12.01*CLHEP::g/mole, density= 2.267*CLHEP::g/cm3);//Note cbsim had rho=1.70??
  new G4Material("Copper"     , z=29, a= 63.546*CLHEP::g/mole, density= 8.96*CLHEP::g/cm3);
  //Targets
  new G4Material("LH2"     , z=1., a= 1.00794*CLHEP::g/mole, density= 0.0708*CLHEP::g/cm3);
@@ -429,14 +438,14 @@ G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*CLHEP::g/m
 // define a material from elements.   case 1: chemical molecule
 //
 
-G4Material* H2O = 
+G4Material* H2O =
 new G4Material("Water", density= 1.000*CLHEP::g/cm3, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
-// overwrite computed meanExcitationEnergy with ICRU recommended value 
+// overwrite computed meanExcitationEnergy with ICRU recommended value
 H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-G4Material* Sci = 
+G4Material* Sci =
 new G4Material("Scintillator", density= 1.032*CLHEP::g/cm3, ncomponents=2);
 Sci->AddElement(C, natoms=9);
 Sci->AddElement(H, natoms=10);
@@ -445,13 +454,13 @@ G4Material* NaI=new G4Material("NaI", density= 3.67*CLHEP::g/cm3, ncomponents=2)
 NaI->AddElement(Na, fractionmass=0.1533733);
 NaI->AddElement(I, fractionmass=0.8466268);
 
-G4Material* Myl = 
+G4Material* Myl =
 new G4Material("Mylar", density= 1.397*CLHEP::g/cm3, ncomponents=3);
 Myl->AddElement(C, natoms=10);
 Myl->AddElement(H, natoms= 8);
 Myl->AddElement(O, natoms= 4);
 
-G4Material* SiO2 = 
+G4Material* SiO2 =
 new G4Material("quartz",density= 2.200*CLHEP::g/cm3, ncomponents=2);
 SiO2->AddElement(Si, natoms=1);
 SiO2->AddElement(O , natoms=2);
@@ -460,7 +469,7 @@ SiO2->AddElement(O , natoms=2);
 // define a material from elements.   case 2: mixture by fractional mass
 //
 
-G4Material* Air = 
+G4Material* Air =
 new G4Material("Air"  , density= 1.290*CLHEP::mg/cm3, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
@@ -506,7 +515,7 @@ Air->AddElement(O, fractionmass=0.3);
 // define a material from elements and/or others materials (mixture of mixtures)
 //
 
-G4Material* Aerog = 
+G4Material* Aerog =
 new G4Material("Aerogel", density= 0.200*CLHEP::g/cm3, ncomponents=3);
 Aerog->AddMaterial(SiO2, fractionmass=62.5*perCent);
 Aerog->AddMaterial(H2O , fractionmass=37.4*perCent);
@@ -516,13 +525,13 @@ Aerog->AddElement (C   , fractionmass= 0.1*perCent);
 // examples of gas in non STP conditions
 //
 
-G4Material* CO2 = 
+G4Material* CO2 =
 new G4Material("CarbonicGas", density= 27.*CLHEP::mg/cm3, ncomponents=2,
                               kStateGas, 325.*kelvin, 50.*atmosphere);
 CO2->AddElement(C, natoms=1);
 CO2->AddElement(O, natoms=2);
- 
-G4Material* steam = 
+
+G4Material* steam =
 new G4Material("WaterSteam", density= 0.3*CLHEP::mg/cm3, ncomponents=1,
                              kStateGas, 500.*kelvin, 2.*atmosphere);
 steam->AddMaterial(H2O, fractionmass=1.);
@@ -535,7 +544,7 @@ G4Material* Vacuum =
 new G4Material("Vacuum", z=1., a=1.01*CLHEP::g/mole,density= universe_mean_density,
                            kStateGas, 2.73*kelvin, 3.e-18*pascal);
 
-G4Material* beam = 
+G4Material* beam =
 new G4Material("Beam", density= 1.e-5*CLHEP::g/cm3, ncomponents=1,
                        kStateGas, STP_Temperature, 2.e-2*bar);
 beam->AddMaterial(Air, fractionmass=1.);

@@ -7,7 +7,7 @@
 
 ####Initialise
 /run/initialize
-#/geometry/test/grid_test
+geometry/test/grid_test
 
 ##the initial random number seed
 /A2/generator/Seed 11111123

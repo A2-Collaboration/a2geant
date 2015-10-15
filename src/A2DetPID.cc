@@ -29,18 +29,19 @@ A2DetPID::A2DetPID(){
   fUPS3Logic=NULL;
   fPMTRLogic=NULL;
   fBRTULogic=NULL;
-    
+
   fPIDSD=NULL;
 }
 
 A2DetPID::~A2DetPID(){
   //delete Rot;
 }
+
 G4VPhysicalVolume* A2DetPID::Construct1(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the original PID from 2003
 
   fMotherLogic=MotherLogical;
-  
+
   //some parameters
   //Note it is full length not half length for this constructor!
   fzpos=0*CLHEP::cm;
@@ -76,9 +77,10 @@ G4VPhysicalVolume* A2DetPID::Construct1(G4LogicalVolume* MotherLogical,G4double 
   MakeDetector();
 
   fMyLogic->SetVisAttributes (G4VisAttributes::GetInvisible());
- 
+
   return fMyPhysi;
 }
+
 G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new PID for 2007
 
@@ -94,7 +96,6 @@ G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double 
   fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short lenght
   fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
 
- 
   //Make the light guide shape
   MakeLightGuide();
   MakePhotomultipliers();
@@ -127,6 +128,55 @@ G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
   return fMyPhysi;
 }
+
+G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
+  //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
+
+  fMotherLogic=MotherLogical;
+  //some parameters
+  //Note it is full length not half length for this G4Trd constructor!
+  fzpos=0*CLHEP::cm;
+  fpid_z=50.00*CLHEP::cm;
+  fpid_rin=4.75*CLHEP::cm;
+  fpid_thick=0.4*CLHEP::cm;
+  fpid_rout=fpid_rin+fpid_thick;
+  fpid_theta=360*CLHEP::deg/fNPids;
+  fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short lenght
+  fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
+
+  //Make the light guide shape
+  MakeLightGuide();
+  MakePhotomultipliers(); // This is unchanged since last two PIDs
+  //Make a single scint. detector
+  MakeSingleDetector();
+  MakeSupports3(); // New support structure
+
+  //Make PID Logical Volume
+  //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
+  // G4double moth_rin=fpid_rin+fpid_thick/2-8*mm;
+  G4double moth_rin=47.5-0.1*CLHEP::mm; //aliminium ring
+  //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
+  G4double moth_rout=59.61*CLHEP::mm; //aliminium ring chnaged dglazier 26/01/09
+  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm;//extra 6mm for supports
+  fzpos=(fpid_z-moth_z)/2+6*CLHEP::mm;//zposition of centre of pid relative to mother, 3mm is for support ring
+  fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
+  G4RotationMatrix *Mrot=new G4RotationMatrix();
+  Mrot->rotateY(180*CLHEP::deg);//pid3 is positioned in same orientation as PID II
+  G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin,moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
+  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
+  //Note here position is +fzpos beause of rotation
+  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
+  MakeDetector();
+  G4VisAttributes* visatt=new G4VisAttributes();
+  visatt->SetColor(G4Color(0.5,0.5,1,1));
+  visatt->SetForceWireframe(true);
+  fMyLogic->SetVisAttributes(visatt);
+
+  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
+
+  return fMyPhysi;
+}
+
 void A2DetPID::MakeDetector(){
  G4RotationMatrix** Rot=new G4RotationMatrix*[fNPids];;
  G4RotationMatrix** RotPMTR=new G4RotationMatrix*[fNPids];
@@ -141,7 +191,7 @@ void A2DetPID::MakeDetector(){
     G4ThreeVector dpos1(xpos,ypos,fzpos);
     dpos1.rotateZ(fpid_theta/2); //rotate so flat at top
                  //this matches the pid positions with PID_MC.dat
-    //Check the hit positions, should collate with AcquRoot setup 
+    //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
     fPIDPhysi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID",fMyLogic,false,i+1);
      fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
@@ -151,15 +201,16 @@ void A2DetPID::MakeDetector(){
     RotPMTR[i]=new G4RotationMatrix();
     RotPMTR[i]->rotateZ(pid_angle);
     new G4PVPlacement(RotPMTR[i],G4ThreeVector(0,0,fpmtr_z),fPMTRLogic,"PMTR",fMyLogic,false,i);
-    
+
  }
-  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2-3/2*CLHEP::mm)),fUPS1Logic,"UPS1",fMyLogic,false,101); 
-  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2+3/2*CLHEP::mm)),fUPS2Logic,"UPS2",fMyLogic,false,102); 
+  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2-3/2*CLHEP::mm)),fUPS1Logic,"UPS1",fMyLogic,false,101);
+  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2+3/2*CLHEP::mm)),fUPS2Logic,"UPS2",fMyLogic,false,102);
   new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2+3*CLHEP::mm)),fUPS3Logic,"UPS3",fMyLogic,false,103);
   //only place brass tube for old pid
-  if(fBRTULogic) new G4PVPlacement(0,G4ThreeVector(0,0,-19.575*CLHEP::cm),fBRTULogic,"UPS1",fMyLogic,false,104); 
+  if(fBRTULogic) new G4PVPlacement(0,G4ThreeVector(0,0,-19.575*CLHEP::cm),fBRTULogic,"UPS1",fMyLogic,false,104);
 
 }
+
 void A2DetPID::MakeSingleDetector(){
  //Constructor for right angular wedge!
   fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
@@ -167,7 +218,7 @@ void A2DetPID::MakeSingleDetector(){
   if(!fPIDSD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     fPIDSD = new A2SD("PIDSD",fNPids);
-    SDman->AddNewDetector( fPIDSD );		
+    SDman->AddNewDetector( fPIDSD );
   }
   fPIDLogic->SetSensitiveDetector(fPIDSD);
   fregionPID->AddRootLogicalVolume(fPIDLogic);
@@ -177,6 +228,7 @@ void A2DetPID::MakeSingleDetector(){
   //visatt->SetForceWireframe(true);
   fPIDLogic->SetVisAttributes(visatt);
 }
+
 void A2DetPID::MakePhotomultipliers(){
 
   //note sasha uses fglass with an inner radius of 0.24CLHEP::cm
@@ -205,6 +257,7 @@ void A2DetPID::MakePhotomultipliers(){
   fTPMTLogic->SetVisAttributes(visatt);
 
 }
+
 void A2DetPID::MakeLightGuide(){
 
   //Made up of 3 wedges and a tub
@@ -246,26 +299,25 @@ void A2DetPID::MakeLightGuide(){
   fLGLogic->SetVisAttributes(lg_visatt);
 }
 
-
 void A2DetPID::MakeSupports1(){
   //c Brass tube at upstream end
   // note only for PID1
   G4Tubs* BRTU=new G4Tubs("BRTU",5.455*CLHEP::cm,5.550*CLHEP::cm,77.5/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
   fBRTULogic=new G4LogicalVolume(BRTU,fNistManager->FindOrBuildMaterial("A2_BRASS"),"BRTU");
 
-  //c Aluminium ring at upstream end, 
-  //c Note UPS1 should have a more complex, 24 sided outer structure 
-  //c to match the shape of the inside of the PMT barrel.  The thickest 
-  //c part of this structure would however only be 2.04mm and therefore 
-  //c the extra complexity would add little to the accuracy and also would 
-  //c complicate the tracking.  
+  //c Aluminium ring at upstream end,
+  //c Note UPS1 should have a more complex, 24 sided outer structure
+  //c to match the shape of the inside of the PMT barrel.  The thickest
+  //c part of this structure would however only be 2.04mm and therefore
+  //c the extra complexity would add little to the accuracy and also would
+  //c complicate the tracking.
   G4Tubs* UPS1=new G4Tubs("UPS1",4.585*CLHEP::cm,4.785*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
   fUPS1Logic=new G4LogicalVolume(UPS1,fNistManager->FindOrBuildMaterial("G4_Al"),"UPS1");
   //c UPS2 is the central part of the aluminium upstream support ring (with
   //c the largest diameter) which holds it in place in the brass tube.
    G4Tubs* UPS2=new G4Tubs("UPS2",4.585*CLHEP::cm,5.35*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
    fUPS2Logic=new G4LogicalVolume(UPS2,fNistManager->FindOrBuildMaterial("G4_Al"),"UPS2");
-  //c UPS3 is the sloping edge of the upstream aluminium support ring 
+  //c UPS3 is the sloping edge of the upstream aluminium support ring
   //c which allows us to locate it easily into the brass tube.
    G4Cons* UPS3=new G4Cons("UPS3",4.585*CLHEP::cm,5.05*CLHEP::cm,4.585*CLHEP::cm,5.35*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
     fUPS3Logic=new G4LogicalVolume(UPS3,fNistManager->FindOrBuildMaterial("G4_Al"),"UPS3");
@@ -284,23 +336,23 @@ void A2DetPID::MakeSupports1(){
   fUPS3Logic->SetVisAttributes(SupVisAtt);
   fPMTRLogic->SetVisAttributes(SupVisAtt);
 
-
 }
+
 void A2DetPID::MakeSupports2(){
- 
-  //c Aluminium ring at upstream end, 
-  //c Note UPS1 should have a more complex, 24 sided outer structure 
-  //c to match the shape of the inside of the PMT barrel.  The thickest 
-  //c part of this structure would however only be 2.04mm and therefore 
-  //c the extra complexity would add little to the accuracy and also would 
-  //c complicate the tracking.  
+
+  //c Aluminium ring at upstream end,
+  //c Note UPS1 should have a more complex, 24 sided outer structure
+  //c to match the shape of the inside of the PMT barrel.  The thickest
+  //c part of this structure would however only be 2.04mm and therefore
+  //c the extra complexity would add little to the accuracy and also would
+  //c complicate the tracking.
   G4Tubs* UPS1=new G4Tubs("UPS1",5.625*CLHEP::cm,5.825*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
   fUPS1Logic=new G4LogicalVolume(UPS1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS1");
   //c UPS2 is the central part of the aluminium upstream support ring (with
   //c the largest diameter) which holds it in place in the brass tube.
    G4Tubs* UPS2=new G4Tubs("UPS2",5.625*CLHEP::cm,6.39*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
    fUPS2Logic=new G4LogicalVolume(UPS2,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS2");
-  //c UPS3 is the sloping edge of the upstream aluminium support ring 
+  //c UPS3 is the sloping edge of the upstream aluminium support ring
   //c which allows us to locate it easily into the brass tube.
    G4Cons* UPS3=new G4Cons("UPS3",5.625*CLHEP::cm,6.09*CLHEP::cm,5.625*CLHEP::cm,6.39*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
     fUPS3Logic=new G4LogicalVolume(UPS3,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS3");
@@ -319,5 +371,39 @@ void A2DetPID::MakeSupports2(){
   fUPS3Logic->SetVisAttributes(SupVisAtt);
   fPMTRLogic->SetVisAttributes(SupVisAtt);
 
+}
+
+void A2DetPID::MakeSupports3(){
+
+  //c Aluminium ring at upstream end,
+  //c Note UPS1 should have a more complex, 24 sided outer structure
+  //c to match the shape of the inside of the PMT barrel.  The thickest
+  //c part of this structure would however only be 2.04mm and therefore
+  //c the extra complexity would add little to the accuracy and also would
+  //c complicate the tracking.
+  G4Tubs* UPS1=new G4Tubs("UPS1",4.55*CLHEP::cm,4.75*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+  fUPS1Logic=new G4LogicalVolume(UPS1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS1");
+  //c UPS2 is the central part of the aluminium upstream support ring (with
+  //c the largest diameter) which holds it in place in the brass tube.
+   G4Tubs* UPS2=new G4Tubs("UPS2",4.55*CLHEP::cm,5.961*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+   fUPS2Logic=new G4LogicalVolume(UPS2,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS2");
+  //c UPS3 is the sloping edge of the upstream aluminium support ring
+  //c which allows us to locate it easily into the brass tube.
+   G4Cons* UPS3=new G4Cons("UPS3",4.55*CLHEP::cm,5.661*CLHEP::cm,4.55*CLHEP::cm,5.961*CLHEP::cm,3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+    fUPS3Logic=new G4LogicalVolume(UPS3,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS3");
+    //c Aluminium ring for holding PMTs at the downstream end of the detector.
+    G4Tubs* solidPMTR=new G4Tubs("solidPMTR",43.5*CLHEP::mm,61.961*CLHEP::mm,5.*CLHEP::mm,0*CLHEP::deg,fpid_theta);
+    G4Tubs* subPMTR=new G4Tubs("subPMTR",0*CLHEP::mm,11/2*CLHEP::mm,5*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+    G4double R=fpid_rin+fpid_thick/2;
+    G4SubtractionSolid *PMTR=new G4SubtractionSolid("PMTR",solidPMTR,subPMTR,new G4RotationMatrix(),G4ThreeVector(R*cos(fpid_theta/2),R*sin(fpid_theta/2),0*CLHEP::cm));
+    fPMTRLogic=new G4LogicalVolume(PMTR,fNistManager->FindOrBuildMaterial("G4_Al"),"PMTR");
+    //rest Done in MakeDetector so can subtract off the holes!
+
+  G4VisAttributes* SupVisAtt= new G4VisAttributes(G4Colour(0.7,0.4,0.6));
+  //CBVisAtt->SetVisibility(false);
+  fUPS1Logic->SetVisAttributes(SupVisAtt);
+  fUPS2Logic->SetVisAttributes(SupVisAtt);
+  fUPS3Logic->SetVisAttributes(SupVisAtt);
+  fPMTRLogic->SetVisAttributes(SupVisAtt);
 
 }

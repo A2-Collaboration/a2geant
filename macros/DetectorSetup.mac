@@ -15,11 +15,11 @@
 /A2/det/setTAPSN 384
 /A2/det/setTAPSPbWO4Rings 2
 ####Use the PID
-/A2/det/usePID 2
+/A2/det/usePID 3
 /A2/det/setPIDZ 0. cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
-/A2/det/useMWPC 2
+/A2/det/useMWPC 0
 
 ####Use Cherenkov?
 /A2/det/useCherenkov 0
