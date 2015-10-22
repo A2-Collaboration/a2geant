@@ -570,8 +570,6 @@ void A2DetMWPC::MakeDetector() {
 
 }
 
-
-
 //Electronics
 
 //Sensitive Detector

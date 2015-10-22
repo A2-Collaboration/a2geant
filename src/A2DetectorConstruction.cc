@@ -145,7 +145,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
     else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
     else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016)"<<G4endl; exit(1);}
+    else if(fUsePID==4) fPID->Construct4(fWorldLogic,fPIDZ);
+    else {G4cerr<<"There are 4 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1) or 4 (2015/2016 Option 2, add offset too!) "<<G4endl; exit(1);}
   }
 
   if(fUseMWPC){

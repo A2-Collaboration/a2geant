@@ -28,6 +28,7 @@ public:
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic,G4double Z0);
   G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic,G4double Z0);
   G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0);
+  G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic,G4double Z0);
 
 
   void MakeDetector();
@@ -36,7 +37,9 @@ public:
   void MakePhotomultipliers();
   void MakeSupports1(); //for PID1
   void MakeSupports2(); //for PID2
-  void MakeSupports3(); //for PID3
+  void MakeSupports3(); //for PID3 option 1
+  void MakeSupports4(); //for PID3 option 2
+
 
 private:
   G4int fNPids;  //Number of Pid scintillators

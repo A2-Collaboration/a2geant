@@ -12,7 +12,7 @@ A2CryoTarget::A2CryoTarget()
 }
 A2CryoTarget::~A2CryoTarget()
 {
- 
+
 }
 
 
@@ -60,9 +60,9 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
   //c Parameters for the kapton exit window
   G4double r_kapd = r_lD2B;
   G4double t_KAPT = 0.0125*CLHEP::cm;//   ! Valid for all kapton parts
-  
+
   G4double tm = -l_trgt/2. + l_CU64 + l_cell/2.;// ! Middle of target cell
-      
+
   //Construct the volumes
   /////////////////////////
   //Target Mother Volume
@@ -136,7 +136,7 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
     G4LogicalVolume* LD2DLogic=new G4LogicalVolume(LD2D,fMaterial,"LD2D");
     new G4PVPlacement(0,G4ThreeVector(0,0,l_lD2D/2. - l_trgt/2.),LD2DLogic,"LD2D",fMyLogic,false,11);
 
-    
+
   G4VisAttributes* LD2VisAtt= new G4VisAttributes(G4Colour(1.0,.0,0.0));
   LD2VisAtt->SetForceSolid(true);
   LD2ALogic->SetVisAttributes(LD2VisAtt);
