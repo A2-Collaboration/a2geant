@@ -198,31 +198,25 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
 
   //Polarimeter
-  //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
-  //G4double  Xoff=0*CLHEP::mm;
-  // G4double  Yoff=7.8*mm;
-  //G4double  Yoff=0*CLHEP::mm;     //original
-  //G4double  Yoff=5*mm;        //shift graphite
-  //********forward cap
-  //G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
-  //G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
-  // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
-  //G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
+  //G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg); // Keep out
+  G4double  Xoff=0*CLHEP::mm;
+  //G4double  Yoff=7.8*mm; // Keep out
+  G4double  Yoff=0*CLHEP::mm;     //original
+  //G4double  Yoff=5*mm;        //shift graphite // keep out
 
-  //**********orange support tube
+  //**********orange support tube // Need to decide on new support structure
   //G4Tubs* nptube=new G4Tubs("NPTUBE",195./2*CLHEP::mm,200*CLHEP::mm/2,280./2*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);
   //G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
   //G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);
 
   //*************carbon cylinder
- // G4double tubez=207.5*CLHEP::mm;
-  //G4double tubez0=-10*CLHEP::mm+tubez/2;
-  //G4Tubs* npol2=new G4Tubs("NPOL2",69.5*CLHEP::mm,92.5*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
-  //G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-  //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
+   G4double tubez=500*CLHEP::mm;
+  //G4double tubez0=-10*CLHEP::mm+tubez/2; //keep out
+   G4Tubs* npol2=new G4Tubs("NPOL2", 51*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
+   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,0),npolLogic2,"NPOL2",fWorldLogic,false,998);
 
-  //G4cout<<"Weight of Disc "<<npolLogic->GetMass()/CLHEP::kg<<G4endl;
-  //G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
+  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
   //G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
 
   //
