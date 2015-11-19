@@ -43,7 +43,7 @@ void A2PolarizedTarget::SetMagneticField(G4String &nameFileFieldMap)
   }
 }
 
-G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
+G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0)
 {
 
 //   //Magnetic field moved from A2DetectorConstruction dglazier

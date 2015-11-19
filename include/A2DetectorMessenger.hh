@@ -47,6 +47,7 @@ class A2DetectorMessenger: public G4UImessenger
     G4UIcmdWithoutParameter*   fUpdateCmd;
     G4UIcmdWithADoubleAndUnit* fPIDZCmd;
     G4UIcmdWithADoubleAndUnit* fMWPCZCmd;
+    G4UIcmdWithADoubleAndUnit* fTargetZCmd;
  };
 
 #endif

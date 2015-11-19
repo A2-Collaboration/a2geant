@@ -16,7 +16,7 @@ A2SolidTarget::~A2SolidTarget()
  
 }
 
-G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic){
+G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0){
   fMotherLogic=MotherLogic;
   //Parameters taken from ugeom_solid_target.F
   G4double zm = 20.*CLHEP::cm;   //      ! z for mother volume 

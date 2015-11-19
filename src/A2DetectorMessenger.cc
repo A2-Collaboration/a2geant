@@ -117,6 +117,12 @@ A2DetectorMessenger::A2DetectorMessenger(
   fMWPCZCmd->SetUnitCategory("Length");
   fMWPCZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fTargetZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetZ",this);
+  fTargetZCmd->SetGuidance("Set distance of Target from centre of ball");
+  fTargetZCmd->SetParameterName("TargetZ",false);
+  fTargetZCmd->SetUnitCategory("Length");
+  fTargetZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   fUpdateCmd = new G4UIcmdWithoutParameter("/A2/det/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
@@ -225,6 +231,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fMWPCZCmd )
     { fA2Detector->SetMWPCZ(fMWPCZCmd->GetNewDoubleValue(newValue));}
+
+  if( command == fTargetZCmd )
+    { fA2Detector->SetTargetZ(fTargetZCmd->GetNewDoubleValue(newValue));}
 
   if( command == fTOFFileCmd )
     { fA2Detector->SetTOFFile(newValue);}

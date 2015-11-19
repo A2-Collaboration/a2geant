@@ -179,6 +179,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   // else if (fUsePol==2) fPolarimeter->Construct2(fWorldLogic);
   //  else {G4cerr<<"There are 2 possible PIDS, please set UsePID to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
   // }
+
   if(fUseTarget!=G4String("NO")){
     G4cout<<"A2DetectorConstruction::Construct() Fill the "<<fUseTarget<<" with "<<fTargetMaterial->GetName()<<G4endl;
     if(fUseTarget=="Cryo") fTarget=static_cast<A2Target*>(new A2CryoTarget());
@@ -194,7 +195,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticField(fNameFileFieldMap);
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticCoils(fTypeMagneticCoils);
     }
-    fTarget->Construct(fWorldLogic);
+    fTarget->Construct(fWorldLogic, fTargetZ);
+    G4cout << fTargetZ << G4endl;
   }
 
   //Polarimeter

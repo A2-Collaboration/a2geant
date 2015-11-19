@@ -62,6 +62,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
+  void SetTargetZ(G4double zz){fTargetZ=zz;}
 
   A2Target* GetTarget(){return fTarget;}
 
@@ -130,6 +131,9 @@ public:
 
   //MWPC setup
   G4double fMWPCZ;
+
+  //Target setup
+  G4double fTargetZ;
 
 private:
 
