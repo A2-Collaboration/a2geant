@@ -1,11 +1,11 @@
 ####Use the crystal ball?
-/A2/det/useCB 1
+/A2/det/useCB 0
 #if the 3rd number in the next line is negative use old geometry,
 # if positive use new Prakhov geometry
 #the first two numbers give the upper and lower air gap between hemispheres
 /A2/det/setHemiGap 0.4 0.4 -1 cm
 #####Use TAPS?
-/A2/det/useTAPS 1
+/A2/det/useTAPS 0
 ####Configure TAPS
 #/A2/det/setTAPSFile taps.dat
 #/A2/det/setTAPSZ 175 cm
@@ -37,7 +37,7 @@
 /A2/det/setTargetLength 10. cm
 #Set target z position if offset desired, +ve is towards TAPS, -ve away
 #Only works for Cryo target currently since I don't care about the other 2!
-/A2/det/setTargetZ -2.5 cm
+/A2/det/setTargetZ -0. cm
 ####Solid targets : G4_Li, G4_GRAPHITE, G4_Ca, G4_Pb###
 #/A2/det/useTarget Solid
 #/A2/det/targetMaterial G4_Pb

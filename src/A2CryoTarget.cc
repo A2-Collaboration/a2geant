@@ -21,7 +21,7 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic, G4doubl
   //c Target volume parameters
   //All parameters copied directly from ugeom_target.F
   G4double l_trgt = (14.63 + 4 + 9.721)*CLHEP::cm; //! See target manual
-  G4double r_trgt = 4.1*CLHEP::cm;
+  G4double r_trgt = 3.1*CLHEP::cm; // NB 4.1cm is the standard target length! Add in an option for this new smaller 3.1cm target later
   //c Outer flange parameters
   G4double l_flangeo = 0.26*CLHEP::cm;
   G4double t_flangeo = 1.1*CLHEP::cm;
