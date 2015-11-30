@@ -8,9 +8,9 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
-A2DetPID::A2DetPol(){
-  fregionPol=NULL;
-  fregionPol=new G4Region("Pol");//allows seperate cuts to be defined for crystal
+A2DetPol::A2DetPol(){
+  //fregionPol=NULL;
+  //fregionPol=new G4Region("Pol");
   //Polarimeter
   //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
   G4double  Xoff=0*CLHEP::mm;
@@ -21,7 +21,7 @@ A2DetPID::A2DetPol(){
 
 }
 
-A2DetPID::~A2DetPol(){
+A2DetPol::~A2DetPol(){
   //delete Rot;
 }
 
@@ -72,17 +72,17 @@ void A2DetPol::MakeTube(){
   G4double tubez0=-10*CLHEP::mm+fPol_Z/2;
   G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-  G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
+  //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
 }
 
 void A2DetPol::MakeCap(){
   // Make cap for polarimeter
 
   //********forward cap
-  G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
-  G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
+  //G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
+  // G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
   // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
-  G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
+  // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
 
 }
 

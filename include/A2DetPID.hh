@@ -33,7 +33,8 @@ public:
 
   void MakeDetector();
   void MakeSingleDetector();
-  void MakeLightGuide();
+  void MakeLightGuide1();
+  void MakeLightGuide2();
   void MakePhotomultipliers();
   void MakeSupports1(); //for PID1
   void MakeSupports2(); //for PID2

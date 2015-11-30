@@ -28,13 +28,11 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseTAPSCmd->SetRange("UseTAPS=0 don't build TAPS or UseTAPS!=0 build TAPS");
   fUseTAPSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-
   fUseCBCmd = new G4UIcmdWithAnInteger("/A2/det/useCB",this);
   fUseCBCmd->SetGuidance("Construct CB");
   fUseCBCmd->SetParameterName("UseCB",false);
   //fUseCBCmd->SetRange("UseCB=0 don't build CB or UseCB!=0 build CB");
   fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
 
   fUsePIDCmd = new G4UIcmdWithAnInteger("/A2/det/usePID",this);
   fUsePIDCmd->SetGuidance("Construct PID");
@@ -52,6 +50,11 @@ A2DetectorMessenger::A2DetectorMessenger(
   fUseTargetCmd->SetGuidance("Either Cryo or Solid");
   fUseTargetCmd->SetParameterName("UseTarget",false);
   fUseTargetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUseCryoTgtCmd = new G4UIcmdWithAnInteger("/A2/det/useCryoTgt",this);
+  fUseCryoTgtCmd->SetGuidance("Construct Cryo target version");
+  fUseCryoTgtCmd->SetParameterName("UseCryoTgt",false);
+  fUseCryoTgtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fTargetMatCmd=new G4UIcmdWithAString("/A2/det/targetMaterial",this);
   fTargetMatCmd->SetGuidance("Select the target material");
@@ -156,6 +159,8 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fUseCBCmd;
   delete fUsePIDCmd;
   delete fUseTargetCmd;
+  delete fUseCryoTgtCmd;
+  delete fTargetZCmd;
   delete fTargetMatCmd;
   delete fTargetMagneticCoilsCmd;
   delete fUpdateCmd;
@@ -197,6 +202,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fUseTargetCmd )
     { fA2Detector->SetUseTarget(newValue);}
+
+  if (command == fUseCryoTgtCmd)
+    { fA2Detector->SetUseCryoTgt(fUseCryoTgtCmd->GetNewIntValue(newValue));}
 
   if( command == fTargetMatCmd )
     { fA2Detector->SetTargetMaterial(newValue);}

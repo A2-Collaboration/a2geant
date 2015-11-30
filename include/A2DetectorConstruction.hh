@@ -46,6 +46,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUsePID(G4int use){fUsePID=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
+  void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
   //void SetUsePolarimeter(G4int use){fUsePolarimeter=use;}
 
   void SetUseTarget(G4String use){fUseTarget=use;}
@@ -133,6 +134,7 @@ public:
   G4double fMWPCZ;
 
   //Target setup
+  G4int fUseCryoTgt;
   G4double fTargetZ;
 
 private:

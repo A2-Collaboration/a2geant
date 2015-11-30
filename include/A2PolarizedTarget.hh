@@ -13,10 +13,12 @@ public:
   ~A2PolarizedTarget();
 
   virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic, G4double Z0);
-  
+  virtual G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0);
+  virtual G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
+
   // Set magnetic field according to the field map
   virtual void SetMagneticField(G4String&);
-  
+
   // Set magnetic coils type (solenoidal/saddle)
   virtual void SetMagneticCoils(G4String &type) { fTypeMagneticCoils = type; }
 

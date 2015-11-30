@@ -39,6 +39,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
+  fUseCryoTgt=0;
   //fUsePolarimeter=0;
 
   fCrystalBall=NULL;
@@ -195,7 +196,13 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticField(fNameFileFieldMap);
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticCoils(fTypeMagneticCoils);
     }
-    fTarget->Construct(fWorldLogic, fTargetZ);
+    if(fUseTarget=="Cryo") {
+        if (fUseCryoTgt == 1) fTarget->Construct1(fWorldLogic, fTargetZ);
+        else if (fUseCryoTgt == 2) fTarget->Construct2(fWorldLogic, fTargetZ);
+        else fTarget->Construct(fWorldLogic,fTargetZ);
+    }
+    else fTarget->Construct(fWorldLogic, fTargetZ);
+    G4cout << "Use cryo target version " << fUseCryoTgt << G4endl;
     G4cout << fTargetZ << G4endl;
   }
 
@@ -211,12 +218,14 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   //G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
   //G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);
 
+  // Need to adjust the shape of this so that it is a cone at thicker end of target
+  // For now it is same lenght as PID
   //*************carbon cylinder
-   G4double tubez=500*CLHEP::mm;
+   G4double tubez=400*CLHEP::mm;
   //G4double tubez0=-10*CLHEP::mm+tubez/2; //keep out
-   G4Tubs* npol2=new G4Tubs("NPOL2", 51*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+   G4Tubs* npol2=new G4Tubs("NPOL2", 41*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
    G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,0),npolLogic2,"NPOL2",fWorldLogic,false,998);
+   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,5.4*CLHEP::cm),npolLogic2,"NPOL2",fWorldLogic,false,998);
 
   G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
   //G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;

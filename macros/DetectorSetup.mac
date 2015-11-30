@@ -15,14 +15,14 @@
 /A2/det/setTAPSN 384
 /A2/det/setTAPSPbWO4Rings 2
 ####Use the PID
-#### 1 = PID I, 2 = PID II, 3 = PID III Option 1 (50cm @ rin = 4.2cm), 4 = PID III Option 2 (40cm @ rin = 3cm)
-#### Using option 4 also requires an offset or a smaller target! ( ~ -6.5cm)
-/A2/det/usePID 3
-/A2/det/setPIDZ 0. cm
+#### 1 = PID I, 2 = PID II, 3 = PID III Option 1 (50cm @ rin = 4.2cm), 4 = PID III Option 2 (40cm @ rin = 3.3cm)
+#### Option 4 requires PIDZ offset of 5.4cm to fit in new lightguides
+/A2/det/usePID 4
+/A2/det/setPIDZ 5.4 cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
 #Phase 2 polarimeter proposal had MWPCZ offset of -5cm (why?)
-/A2/det/useMWPC 2
+/A2/det/useMWPC 0
 /A2/det/setMWPCZ 0. cm
 
 ####Use Cherenkov?
@@ -32,6 +32,9 @@
 /A2/det/setTOFFile TOF.par
 ##Set the target
 /A2/det/useTarget Cryo
+## If using Cryo select target version
+## 1 for old 4.1cm radius target, 2 for new 3.1cm radius target
+/A2/det/useCryoTgt 2
 ###Cryo targets : G4_lH2, A2_lD2###
 /A2/det/targetMaterial A2_lD2
 /A2/det/setTargetLength 10. cm
