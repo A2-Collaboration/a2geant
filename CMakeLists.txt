@@ -53,7 +53,7 @@ add_executable(A2 src/A2.cc
   src/A2RunAction.cc src/A2SD.cc src/A2SolidTarget.cc src/A2SteppingAction.cc
   src/A2SteppingVerbose.cc src/A2Target.cc src/A2VisCBSD.cc src/A2VisHit.cc
   src/A2VisSD.cc src/A2WCSD.cc src/TIDhack.cc include/TIDhack.h)
-target_link_libraries(A2 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+target_link_libraries(A2 ${Geant4_LIBRARIES} ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
 
 
 # build the pluto2mkin tool
@@ -76,11 +76,11 @@ set(anyoption src/anyoption.cpp include/anyoption.h)
 
 # a2Pluto 
 add_executable(a2pluto src/a2pluto.cpp ${anyoption})
-target_link_libraries(a2pluto ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+target_link_libraries(a2pluto ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
 
 # split_pluto_events
 add_executable(split_pluto_events src/split_pluto_events.cpp ${anyoption})
-target_link_libraries(split_pluto_events ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+target_link_libraries(split_pluto_events ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
 
 add_executable(random_pluto_gun src/random_pluto_gun.cpp)
-target_link_libraries(random_pluto_gun ${ROOT_LIBRARIES} ${PLUTO_LIBRARY})
+target_link_libraries(random_pluto_gun ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
