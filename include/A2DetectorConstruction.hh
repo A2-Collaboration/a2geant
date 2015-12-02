@@ -16,7 +16,7 @@
 #include "A2Target.hh"
 #include "A2DetMWPC.hh"
 #include "A2DetCherenkov.hh"
-//#include "A2DetPol.hh"
+#include "A2DetPol.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -47,7 +47,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
-  //void SetUsePolarimeter(G4int use){fUsePolarimeter=use;}
+  void SetUsePol(G4int use){fUsePol=use;}
 
   void SetUseTarget(G4String use){fUseTarget=use;}
   void SetTargetMaterial(G4String mat){fTargetMaterial=G4NistManager::Instance()->FindOrBuildMaterial(mat);}
@@ -63,6 +63,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
+  void SetPolZ(G4double zz){fPolZ=zz;}
   void SetTargetZ(G4double zz){fTargetZ=zz;}
 
   A2Target* GetTarget(){return fTarget;}
@@ -95,7 +96,7 @@ public:
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
   A2DetCherenkov* fCherenkov; //Cherenkov detector
-  //A2DetPol* fPolarimeter; // Polarimeter
+  A2DetPol* fPol; // Polarimeter
 
   G4ThreeVector fHemiGap;
   A2Target* fTarget;
@@ -115,7 +116,7 @@ public:
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov
-  //G4int fUsePolarimeter; //Build the polarimeter
+  G4int fUsePol; //Build the polarimeter
 
   G4String fTOFparFile; //TOF setup configuration
 
@@ -132,6 +133,9 @@ public:
 
   //MWPC setup
   G4double fMWPCZ;
+
+  //Polarimeter Setup
+  G4double fPolZ;
 
   //Target setup
   G4int fUseCryoTgt;

@@ -10,8 +10,6 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ThreeVector.hh"
 
-
-
 A2DetectorMessenger::A2DetectorMessenger(
                                            A2DetectorConstruction* A2Det)
 :fA2Detector(A2Det)
@@ -44,6 +42,11 @@ A2DetectorMessenger::A2DetectorMessenger(
   fUseMWPCCmd->SetGuidance("Construct MWPC");
   fUseMWPCCmd->SetParameterName("UseMWPC",false);
   fUseMWPCCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUsePolCmd = new G4UIcmdWithAnInteger("/A2/det/usePol", this);
+  fUsePolCmd->SetGuidance("Construct Pol");
+  fUsePolCmd->SetParameterName("UsePol", false);
+  fUsePolCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   fUseTargetCmd=new G4UIcmdWithAString("/A2/det/useTarget",this);
   fUseTargetCmd->SetGuidance("Select the type of target");
@@ -120,6 +123,12 @@ A2DetectorMessenger::A2DetectorMessenger(
   fMWPCZCmd->SetUnitCategory("Length");
   fMWPCZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fPolZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/SetPolZ", this);
+  fPolZCmd->SetGuidance("Set distance of polarimeter from centre of ball");
+  fPolZCmd->SetParameterName("PolZ", false);
+  fPolZCmd->SetUnitCategory("Length");
+  fPolZCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   fTargetZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetZ",this);
   fTargetZCmd->SetGuidance("Set distance of Target from centre of ball");
   fTargetZCmd->SetParameterName("TargetZ",false);
@@ -151,13 +160,13 @@ A2DetectorMessenger::A2DetectorMessenger(
 
 }
 
-
-
 A2DetectorMessenger::~A2DetectorMessenger()
 {
   delete fUseTAPSCmd;
   delete fUseCBCmd;
   delete fUsePIDCmd;
+  delete fUsePolCmd;
+  delete fPolZCmd;
   delete fUseTargetCmd;
   delete fUseCryoTgtCmd;
   delete fTargetZCmd;
@@ -193,6 +202,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fUseMWPCCmd )
     { fA2Detector->SetUseMWPC(fUseMWPCCmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePolCmd)
+    { fA2Detector->SetUsePol(fUsePolCmd->GetNewIntValue(newValue));}
 
   if( command == fUseCherenkovCmd )
     { fA2Detector->SetUseCherenkov(fUseCherenkovCmd->GetNewIntValue(newValue));}
@@ -239,6 +251,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fMWPCZCmd )
     { fA2Detector->SetMWPCZ(fMWPCZCmd->GetNewDoubleValue(newValue));}
+
+  if( command ==fPolZCmd )
+    { fA2Detector->SetPolZ(fPolZCmd->GetNewDoubleValue(newValue));}
 
   if( command == fTargetZCmd )
     { fA2Detector->SetTargetZ(fTargetZCmd->GetNewDoubleValue(newValue));}

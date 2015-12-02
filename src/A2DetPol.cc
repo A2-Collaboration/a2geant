@@ -40,8 +40,7 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
   MakeCap();
   //MakeSupports1();
 
-  fMyPhysi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fMyLogic, "MWPC", fMotherLogic, false, 1);
-
+  G4cout<<"Made Polarimeter I (2009)"<<G4endl;
 
   return fMyPhysi;
 }
@@ -51,14 +50,16 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
   fMotherLogic=MotherLogical;
   //some parameters
-  fPol_Z = 207.5*CLHEP::mm;
-  fPol_rin = 69.5*CLHEP::mm;
-  fPol_rout = 92.5*CLHEP::mm;
+  fPol_Z = 400*CLHEP::mm;
+  fPol_rin = 41*CLHEP::mm;
+  fPol_rout = 66*CLHEP::mm;
 
   //Make the polarimeter shape
   MakeTube();
   MakeCap();
   // MakeSupports2();
+
+  G4cout<<"Made Polarimeter II (2015)"<<G4endl;
 
   //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
 
@@ -73,6 +74,7 @@ void A2DetPol::MakeTube(){
   G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
   //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
+  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<"kg"<<G4endl;
 }
 
 void A2DetPol::MakeCap(){
@@ -80,10 +82,10 @@ void A2DetPol::MakeCap(){
 
   //********forward cap
   //G4Tubs* npol=new G4Tubs("NPOL",40./2*CLHEP::mm,190*CLHEP::mm/2,70./2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
-  // G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
+  //G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
   // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
-  // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
-
+  //G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fWorldLogic,false,999);     //put this one back
+  //G4cout<<"Weight of cap "<<npolLogic->GetMass()/CLHEP::kg<<"kg"<<G4endl;
 }
 
 

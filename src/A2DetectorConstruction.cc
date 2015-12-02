@@ -7,7 +7,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-
 #include "G4VVisManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -40,12 +39,13 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseTOF=0;
   fUseCherenkov=0;
   fUseCryoTgt=0;
-  //fUsePolarimeter=0;
+  fUsePol=0;
 
   fCrystalBall=NULL;
   fTAPS=NULL;
   fPID=NULL;
   fMWPC=NULL;
+  fPol=NULL;
   fTOF=NULL;
   fWorldSolid=NULL;
   fWorldLogic=NULL;
@@ -66,6 +66,10 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fPIDZ=0.;
   //default offset for MWPC
   fMWPCZ=0.;
+  //default offset for Polarimeter
+  fPolZ=0;
+  //default offset for target
+  fTargetZ=0;
   //has to be done here in case use new material for target
   DefineMaterials();
 
@@ -85,13 +89,14 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
+  fUsePol=0;
 
   // read the set up file DetectorSetup.mac
   // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
-  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
+  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
     G4cout<<"G4VPhysicalVolume* A2DetectorConstruction::Construct() Don't seem to be simulating any detectors, please check you are using an appopriate detector setup. I tried the file "<<fDetectorSetup<< " I will exit here before the computer explodes"<<G4endl;
     exit(0);
   }
@@ -173,13 +178,13 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fCherenkov->Construct(fWorldLogic);
   }
 
-  //if(fUsePolarimeter){ //Check to see if Polarimeter is to be constructed or not
-  //  G4cout<<"A2DetectorConstruction::Construct() Make the Polarimeter"<<G4endl;
-  //  fPolarimeter = new A2DetPol();
-  //  if(fUsePol==1) fPolarimeter->Construct1(fWorldLogic);
-  // else if (fUsePol==2) fPolarimeter->Construct2(fWorldLogic);
-  //  else {G4cerr<<"There are 2 possible PIDS, please set UsePID to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
-  // }
+  if(fUsePol){ //Check to see if Polarimeter is to be constructed or not
+    G4cout<<"A2DetectorConstruction::Construct() Make the Polarimeter"<<G4endl;
+    fPol = new A2DetPol();
+    if(fUsePol==1) fPol->Construct1(fWorldLogic, fPolZ);
+    else if (fUsePol==2) fPol->Construct2(fWorldLogic,fPolZ);
+    else {G4cerr<<"There are 2 possible polarimeters, please set UsePol to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
+  }
 
   if(fUseTarget!=G4String("NO")){
     G4cout<<"A2DetectorConstruction::Construct() Fill the "<<fUseTarget<<" with "<<fTargetMaterial->GetName()<<G4endl;
@@ -221,13 +226,13 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   // Need to adjust the shape of this so that it is a cone at thicker end of target
   // For now it is same lenght as PID
   //*************carbon cylinder
-   G4double tubez=400*CLHEP::mm;
+  //G4double tubez=400*CLHEP::mm;
   //G4double tubez0=-10*CLHEP::mm+tubez/2; //keep out
-   G4Tubs* npol2=new G4Tubs("NPOL2", 41*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
-   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,5.4*CLHEP::cm),npolLogic2,"NPOL2",fWorldLogic,false,998);
+  //G4Tubs* npol2=new G4Tubs("NPOL2", 41*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+   //G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
+   //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,5.4*CLHEP::cm),npolLogic2,"NPOL2",fWorldLogic,false,998);
 
-  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
+   //  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
   //G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
 
   //
