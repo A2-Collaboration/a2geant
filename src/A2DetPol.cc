@@ -13,10 +13,6 @@ A2DetPol::A2DetPol(){
   //fregionPol=new G4Region("Pol");
   //Polarimeter
   //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
-  G4double  Xoff=0*CLHEP::mm;
-  // G4double  Yoff=7.8*mm;
-  G4double  Yoff=0*CLHEP::mm;     //original
-  //G4double  Yoff=5*mm;        //shift graphite
   // fZ0=0*cm;
 
 }
@@ -31,6 +27,8 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
   fMotherLogic=MotherLogical;
 
   //some parameters
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original                                                                                                
   fPol_Z = 207.5*CLHEP::mm;
   fPol_rin = 69.5*CLHEP::mm;
   fPol_rout = 92.5*CLHEP::mm;
@@ -50,6 +48,8 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
   fMotherLogic=MotherLogical;
   //some parameters
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original
   fPol_Z = 400*CLHEP::mm;
   fPol_rin = 41*CLHEP::mm;
   fPol_rout = 66*CLHEP::mm;
@@ -73,7 +73,7 @@ void A2DetPol::MakeTube(){
   G4double tubez0=-10*CLHEP::mm+fPol_Z/2;
   G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-  //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fWorldLogic,false,998);
+  G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fMotherLogic,false,998);
   G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<"kg"<<G4endl;
 }
 

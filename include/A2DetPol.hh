@@ -39,6 +39,8 @@ private:
   G4LogicalVolume *fPolarimeterLogic;
   G4VPhysicalVolume** fPolarimeterPhysi;
 
+  G4double Xoff;
+  G4double Yoff;
   G4double fPol_Z;
   G4double fPol_rin;
   G4double fPol_rout;
