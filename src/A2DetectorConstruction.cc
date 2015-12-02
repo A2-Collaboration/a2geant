@@ -143,13 +143,14 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
 
   if(fUsePID){
-    G4cout<<"A2DetectorConstruction::Construct() Take the pid "<< fUsePID<<G4endl;
+    G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
     fPID=new A2DetPID();
     if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
     else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
     else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
     else if(fUsePID==4) fPID->Construct4(fWorldLogic,fPIDZ);
     else {G4cerr<<"There are 4 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1) or 4 (2015/2016 Option 2, add offset too!) "<<G4endl; exit(1);}
+    G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
   if(fUseMWPC){
@@ -158,7 +159,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fMWPC = new A2DetMWPC();
     if(fUseMWPC==2)fMWPC->UseAnodes(true);
     fMWPC ->ConstructMWPC(fWorldLogic, fMWPCZ);
-    G4cout << fMWPCZ << G4endl;
+    G4cout << "MWPC Z displaced by " << fMWPCZ/CLHEP::cm << "cm" << G4endl;
   }
 
   if(fUseTOF){
@@ -176,11 +177,12 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
 
   if(fUsePol){ //Check to see if Polarimeter is to be constructed or not
-    G4cout<<"A2DetectorConstruction::Construct() Make the Polarimeter"<<G4endl;
+    G4cout<<"A2DetectorConstruction::Construct() Make Polarimeter option "<< fUsePol <<G4endl;
     fPol = new A2DetPol();
     if(fUsePol==1) fPol->Construct1(fWorldLogic, fPolZ);
     else if (fUsePol==2) fPol->Construct2(fWorldLogic,fPolZ);
     else {G4cerr<<"There are 2 possible polarimeters, please set UsePol to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
+    G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
   }
 
   if(fUseTarget!=G4String("NO")){
@@ -205,7 +207,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     }
     else fTarget->Construct(fWorldLogic, fTargetZ);
     G4cout << "Use cryo target version " << fUseCryoTgt << G4endl;
-    G4cout << fTargetZ << G4endl;
+    G4cout << "Target Z displaced by " << fTargetZ/CLHEP::cm << "cm" << G4endl;
   }
 
   //Polarimeter

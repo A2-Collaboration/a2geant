@@ -21,12 +21,12 @@
 /A2/det/setPIDZ 5.4 cm
 ####Use the Polarimeter
 ####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016)
-/A2/det/usePol 2
-/A2/Det/SetPolZ 0. cm
+/A2/det/usePol 1
+/A2/det/setPolZ 0. cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
 #Phase 2 polarimeter proposal had MWPCZ offset of -5cm (why?)
-/A2/det/useMWPC 0
+/A2/det/useMWPC 2
 /A2/det/setMWPCZ 0. cm
 
 ####Use Cherenkov?

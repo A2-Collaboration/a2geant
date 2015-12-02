@@ -123,7 +123,7 @@ A2DetectorMessenger::A2DetectorMessenger(
   fMWPCZCmd->SetUnitCategory("Length");
   fMWPCZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fPolZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/SetPolZ", this);
+  fPolZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setPolZ", this);
   fPolZCmd->SetGuidance("Set distance of polarimeter from centre of ball");
   fPolZCmd->SetParameterName("PolZ", false);
   fPolZCmd->SetUnitCategory("Length");

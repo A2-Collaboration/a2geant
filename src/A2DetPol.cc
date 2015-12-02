@@ -38,7 +38,7 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
   MakeCap();
   //MakeSupports1();
 
-  G4cout<<"Made Polarimeter I (2009)"<<G4endl;
+  G4cout<<"Made Phase I Polarimeter (2009)"<<G4endl;
 
   return fMyPhysi;
 }
@@ -59,7 +59,7 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
   MakeCap();
   // MakeSupports2();
 
-  G4cout<<"Made Polarimeter II (2015)"<<G4endl;
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 1"<<G4endl;
 
   //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
 
@@ -74,7 +74,7 @@ void A2DetPol::MakeTube(){
   G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fMotherLogic,false,998);
-  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<"kg"<<G4endl;
+  G4cout<<"Weight of tube "<<npolLogic2->GetMass()/CLHEP::kg<<"kg"<<G4endl;
 }
 
 void A2DetPol::MakeCap(){
