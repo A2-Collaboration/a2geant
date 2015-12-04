@@ -20,8 +20,8 @@
 /A2/det/usePID 4
 /A2/det/setPIDZ 5.4 cm
 ####Use the Polarimeter
-####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016)
-/A2/det/usePol 1
+####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016) option 1 (2.5cm), 3 = Use Phase II (2015/2016) option 2 (2cm)
+/A2/det/usePol 3
 /A2/det/setPolZ 0. cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires

@@ -44,7 +44,7 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
 }
 
 G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double Z0){
-  //Build the phase 2 polarimeter (2015/2016)
+  //Build the phase 2 polarimeter (2015/2016) 2.5 cm thick
 
   fMotherLogic=MotherLogical;
   //some parameters
@@ -56,7 +56,6 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
   //Make the polarimeter shape
   MakeTube();
-  MakeCap();
   // MakeSupports2();
 
   G4cout<<"Made Phase II Polarimeter (2015/2016) option 1"<<G4endl;
@@ -65,6 +64,29 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
   return fMyPhysi; // Need to define this, what is it and why does it matter?
 }
+
+G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
+  //Build the phase 2 polarimeter (2015/2016) 2cm thick                                                                                                
+
+  fMotherLogic=MotherLogical;
+  //some parameters                                                                                                                          
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original                                                                                                           
+  fPol_Z = 400*CLHEP::mm;
+  fPol_rin = 45*CLHEP::mm;
+  fPol_rout = 66*CLHEP::mm;
+
+  //Make the polarimeter shape                                                                                                               
+  MakeTube();
+  // MakeSupports3();                                                                                                                        
+
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 2"<<G4endl;
+
+  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);                                                                               
+
+  return fMyPhysi; // Need to define this, what is it and why does it matter?                                                                
+}
+
 
 void A2DetPol::MakeTube(){
   // Make polarimeter tube

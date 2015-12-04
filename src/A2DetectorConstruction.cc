@@ -181,7 +181,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fPol = new A2DetPol();
     if(fUsePol==1) fPol->Construct1(fWorldLogic, fPolZ);
     else if (fUsePol==2) fPol->Construct2(fWorldLogic,fPolZ);
-    else {G4cerr<<"There are 2 possible polarimeters, please set UsePol to be 1 (2009) or 2 (2015/2016)"<<G4endl; exit(1);}
+    else if (fUsePol==3) fPol->Construct3(fWorldLogic, fPolZ);
+    else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 2.5cm or 3 (2015/2016) 2cm"<<G4endl; exit(1);}
     G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
   }
 

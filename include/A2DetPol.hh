@@ -27,6 +27,7 @@ public:
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic,G4double Z0);
   G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic,G4double Z0);
+  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0);
 
   void MakeTube();
   void MakeCap();
