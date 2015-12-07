@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 if [ $# -lt 2 ]; then
     echo "Usage: ${0} <pluto-file.root> <output-file.root> [optional other paramters of A2 geant]"
