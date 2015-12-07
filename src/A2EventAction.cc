@@ -156,64 +156,32 @@ void A2EventAction::EndOfEventAction(const G4Event* evt)
 
 G4int A2EventAction::PrepareOutput(){
   //If no filename don't save output
-  //  fOutFileName=TString("test.root");
-  if(fOutFileName==TString("")) {
+
+  if(fOutFileName == "") {
     G4cout<<"G4int A2EventAction::PrepareOutput() no out put file to be written"<<G4endl;
     G4cout<<"Please supply filename if output required, try :"<<G4endl;
     G4cout<<"/A2/event/SetOutputFile XXX.root"<<G4endl;
     return 0;
   }
-  //if filename try to open the file
-  fOutFile=new TFile(fOutFileName,"CREATE");
+
+  fOutFile=new TFile(fOutFileName,"RECREATE");
   //if file aready exists make a new name by adding XXXA2copy#.root
-  while (!fOutFile->IsOpen()){
-    int pos1=fOutFileName.Index("A2copy");
-    int pos2= fOutFileName.Index(".root");
- 
-    if(pos1>0){//already made a copy, make another and increment the counter
-      const int leng=pos2-pos1-6;//length of number, 6 digits in A2copy
-      TString numb=fOutFileName(pos1+6,leng);//get the number string
-      int numbi=numb.Atoi();//get number as integer
-      numbi++; //Add 1
-      char *newnumb=new char[leng];
-      sprintf(newnumb,"%d",numbi);
-      fOutFileName.Replace(pos1+6,leng,newnumb);
-    }
-    else if(pos2>0){//this is the first copy
-      fOutFileName.Insert(pos2,"A2copy1");
-    }
-    else {
-      G4cout<<"Input file is not .root, I will exit"<<G4endl;
-      exit(0);
-    }
-    //    fOutFileName.Insert(fOutFileName.Index(".root"),"_1");   
-    G4cout<<"A2EventAction::PrepareOutput() Output File already exists will save to "<<fOutFileName<<G4endl;
-    fOutFile=new TFile(fOutFileName,"CREATE");
-    fOutFile->SetCompressionAlgorithm(ROOT::kLZMA);
-    fOutFile->SetCompressionLevel(5);
-    
+  if(!fOutFile->IsOpen()) {
+      G4cerr << "unable to open output file " << fOutFileName << endl;
+      exit(1);
   }
-  //  while (!fOutFile->IsOpen()){
-  //   G4cout<<"A2EventAction::PrepareOutput() Output File already exists do you want to overwrite? y/n"<<G4endl;
-  //   G4String ans;
-  //   G4cin>>ans;
-  //   if(ans==G4String("y"))  fOutFile=new TFile(fOutFileName,"RECREATE");
-  //   else {
-  //     G4cout<<"You can give a new name or type n to exit A2 simulation:"<<G4endl;
-  //     G4cin>>ans;
-  //     if(ans=="n") exit(1);
-  //     else  {
-  // 	fOutFileName=ans;
-  // 	fOutFile=new TFile(fOutFileName,"CREATE");
-  //     }
-  //   }
-  // }
-  G4cout<<"A2EventAction::PrepareOutput() Output will be written to "<<fOutFileName<<G4endl;
+
+  fOutFile->SetCompressionAlgorithm(ROOT::kLZMA);
+  fOutFile->SetCompressionLevel(5);
+
+  G4cout<<"A2EventAction::PrepareOutput() Output will be written to " << fOutFileName << G4endl;
+
   //Create output tree
   //This is curently made in the same format as the cbsim output
-  fCBOut=new A2CBOutput();
+  fCBOut = new A2CBOutput();
   fCBOut->SetFile(fOutFile);
   fCBOut->SetBranches();
+
   return 1;
 }
 void  A2EventAction::CloseOutput(){
