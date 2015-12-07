@@ -44,6 +44,7 @@ A2EventAction::A2EventAction(A2RunAction* run)
 
 A2EventAction::~A2EventAction()
 {
+  CloseOutput();
   delete feventMessenger;
 }
 
@@ -184,12 +185,23 @@ G4int A2EventAction::PrepareOutput(){
 
   return 1;
 }
+
 void  A2EventAction::CloseOutput(){
-  if(!fCBOut) return;
-  fOutFile->cd();
-  fCBOut->CopyTIDTree();
-  fCBOut->WriteTree();
-  delete fCBOut;
-  fOutFile->Close();
-  if(fOutFile)delete fOutFile;
+
+    if(fCBOut) {
+
+        fOutFile->cd();
+        fCBOut->CopyTIDTree();
+        fCBOut->WriteTree();
+
+        delete fCBOut;
+        fCBOut=nullptr;
+    }
+
+    if(fOutFile) {
+        fOutFile->Close();
+        delete fOutFile;
+        fOutFile = nullptr;
+    }
+
 }
