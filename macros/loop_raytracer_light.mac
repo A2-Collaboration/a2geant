@@ -1,2 +1,0 @@
-/vis/rayTracer/lightDirection {xdir} {ydir} {zdir}
-/vis/rayTracer/trace prex_raytracer_{xpos}_{ypos}_{zpos}_{zdir}.jpeg

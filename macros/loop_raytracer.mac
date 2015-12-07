@@ -1,2 +1,0 @@
-/vis/rayTracer/eyePosition {xpos} {ypos} {zpos} cm
-/vis/rayTracer/trace prex_raytracer_{xpos}_{ypos}_{zpos}.jpeg
