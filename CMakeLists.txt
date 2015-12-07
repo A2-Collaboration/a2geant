@@ -55,21 +55,5 @@ add_executable(A2 src/A2.cc
   src/A2VisSD.cc src/A2WCSD.cc src/TIDhack.cc include/TIDhack.h)
 target_link_libraries(A2 ${Geant4_LIBRARIES} ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
 
-
-# build the pluto2mkin tool
-foreach(f TOGlobals TOMCMkinWriter TOMCParticle TOSUtils)
-  list(APPEND pluto2mkin_HEADERS "${CMAKE_SOURCE_DIR}/include/${f}.h")
-  list(APPEND pluto2mkin_SRCS "${CMAKE_SOURCE_DIR}/src/${f}.cxx")
-endforeach()
-set(pluto2mkin_DICT "${CMAKE_BINARY_DIR}/include/pluto2mkinDict.cc")
-
-ROOT_GENERATE_DICTIONARY(
-  "${pluto2mkin_HEADERS}"
-  "${CMAKE_SOURCE_DIR}/include/LinkDef.h"
-  "${pluto2mkin_DICT}"
-  "${ROOT_INCLUDES};${CMAKE_SOURCE_DIR}/include")
-add_executable(pluto2mkin src/MainPluto2Mkin.cxx ${pluto2mkin_SRCS} ${pluto2mkin_DICT})
-target_link_libraries(pluto2mkin ${ROOT_LIBRARIES})
-
 # anyoption dependencies
 set(anyoption src/anyoption.cpp include/anyoption.h)
