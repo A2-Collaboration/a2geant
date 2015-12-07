@@ -153,10 +153,15 @@ A2PrimaryGeneratorAction::~A2PrimaryGeneratorAction()
  * @return A point in the target
  */
 G4ThreeVector A2PrimaryGeneratorAction::GetRandomVertex() {
-    G4ThreeVector v;
-    v.setZ( fDetCon->GetTarget()->GetCenter().z() + fDetCon->GetTarget()->GetLength()/2 * (2*G4UniformRand()-1) );
-    v.setPerp( fDetCon->GetTarget()->GetRadius()*G4UniformRand() );
-    return v;
+
+    const double beamspotradius = 0.5 * cm;
+
+    const double z   = fDetCon->GetTarget()->GetCenter().z() + fDetCon->GetTarget()->GetLength()/2 * (2*G4UniformRand()-1);
+    const double phi = 2 * M_PI * G4UniformRand();
+    const double u   = G4UniformRand() + G4UniformRand();
+    const double r   = (u>1) ? 2-u : u;
+
+    return G4ThreeVector(beamspotradius * r * sin(phi), beamspotradius * r * cos(phi), z);
 }
 
 G4ParticleDefinition* A2PrimaryGeneratorAction::PlutoIDToGeant( int pluto_id ) {
