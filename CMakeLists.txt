@@ -42,18 +42,79 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PLUTO_INCLUDE_PATH})
 # create the "main" A2 executable, link it to Geant4 and ROOT
 # explicitly list all source files, this is recommended to detect
 # changes in the source file list by the build system!
-add_executable(A2 src/A2.cc
-  src/A2CBOutput.cc src/A2CBSD.cc src/A2CryoTarget.cc
-  src/A2DetCherenkov.cc src/A2DetCrystalBall.cc src/A2Detector.cc
-  src/A2DetectorConstruction.cc src/A2DetectorMessenger.cc src/A2DetMWPC.cc
-  src/A2DetPID.cc src/A2DetTAPS.cc src/A2DetTOF.cc src/A2EventAction.cc
-  src/A2EventActionMessenger.cc src/A2Hit.cc src/A2MagneticField.cc
-  src/A2PhysicsList.cc src/A2PhysicsListMessenger.cc src/A2PolarizedTarget.cc
-  src/A2PrimaryGeneratorAction.cc src/A2PrimaryGeneratorMessenger.cc
-  src/A2RunAction.cc src/A2SD.cc src/A2SolidTarget.cc src/A2SteppingAction.cc
-  src/A2SteppingVerbose.cc src/A2Target.cc src/A2VisCBSD.cc src/A2VisHit.cc
-  src/A2VisSD.cc src/A2WCSD.cc src/TIDhack.cc include/TIDhack.h)
-target_link_libraries(A2 ${Geant4_LIBRARIES} ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
+add_executable(A2
+  src/A2.cc
+  src/A2CBOutput.cc
+  src/A2CBSD.cc
+  src/A2CryoTarget.cc
+  src/A2DetCherenkov.cc
+  src/A2DetCrystalBall.cc
+  src/A2Detector.cc
+  src/A2DetectorConstruction.cc
+  src/A2DetectorMessenger.cc
+  src/A2DetMWPC.cc
+  src/A2DetPID.cc
+  src/A2DetTAPS.cc
+  src/A2DetTOF.cc
+  src/A2EventAction.cc
+  src/A2EventActionMessenger.cc
+  src/A2Hit.cc
+  src/A2MagneticField.cc
+  src/A2PhysicsList.cc
+  src/A2PhysicsListMessenger.cc
+  src/A2PolarizedTarget.cc
+  src/A2PrimaryGeneratorAction.cc
+  src/A2PrimaryGeneratorMessenger.cc
+  src/A2RunAction.cc
+  src/A2SD.cc
+  src/A2SolidTarget.cc
+  src/A2SteppingAction.cc
+  src/A2SteppingVerbose.cc
+  src/A2Target.cc src/A2VisCBSD.cc
+  src/A2VisHit.cc
+  src/A2VisSD.cc
+  src/A2WCSD.cc
+  src/TIDhack.cc
+  include/A2CBOutput.hh
+  include/A2CBSD.hh
+  include/A2CryoTarget.hh
+  include/A2DetCherenkov.hh
+  include/A2DetCrystalBall.hh
+  include/A2DetectorConstruction.hh
+  include/A2Detector.hh
+  include/A2DetectorMessenger.hh
+  include/A2DetMWPC.hh
+  include/A2DetPID.hh
+  include/A2DetTAPS.hh
+  include/A2DetTOF.hh
+  include/A2EventAction.hh
+  include/A2EventActionMessenger.hh
+  include/A2Hit.hh
+  include/A2MagneticField.hh
+  include/A2PhysicsList.hh
+  include/A2PhysicsListMessenger.hh
+  include/A2PolarizedTarget.hh
+  include/A2PrimaryGeneratorAction.hh
+  include/A2PrimaryGeneratorMessenger.hh
+  include/A2RunAction.hh
+  include/A2SD.hh
+  include/A2SolidTarget.hh
+  include/A2SteppingAction.hh
+  include/A2SteppingVerbose.hh
+  include/A2Target.hh
+  include/A2VisCBSD.hh
+  include/A2VisHit.hh
+  include/A2VisSD.hh
+  include/A2WCSD.hh
+  include/anyoption.h
+  include/LinkDef.h
+  include/MCNtuple.h
+  include/TIDhack.h
+  include/TIDhack.h)
+
+
+
+target_link_libraries(A2 ${Geant4_LIBRARIES}${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
 
 # anyoption dependencies
 set(anyoption src/anyoption.cpp include/anyoption.h)
