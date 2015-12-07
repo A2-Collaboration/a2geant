@@ -35,28 +35,32 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 	fGunMessenger = new A2PrimaryGeneratorMessenger(this);
 	//Get Particle table pointer
 	fParticleTable=G4ParticleTable::GetParticleTable();
-	fParticleDefinition=NULL;
+    fParticleDefinition=NULL;	//G4int setup=SetUpROOTInput("/scratch/crystalball/mc/kin_pi0p_100000.root");
 	//Set up ROOT input
 	fGeneratedFile=NULL;
 	fGenTree=NULL;
 
 	fThreeVector=G4ThreeVector(0,0,1);
+
 	//default phase space limits
-	fTmin=0;
-	fTmax=400*MeV;
-	fThetamin=0;
-	fThetamax=180*deg;
-	fBeamXSigma=0.5*cm;
-	fBeamYSigma=0.5*cm;
-	fTargetZ0=0*cm;
-	fTargetThick=5*cm;
-	fTargetRadius=2*cm;
+    fTmin         = 0;
+    fTmax         = 400*MeV;
+    fThetamin     = 0;
+    fThetamax     = 180*deg;
+    fBeamXSigma   = 0.5*cm;
+    fBeamYSigma   = 0.5*cm;
+    fTargetZ0     =   0*cm;
+    fTargetThick  =   5*cm;
+    fTargetRadius =   2*cm;
+
 	//overlap
 	fSplitTheta=0;
+
 	//default mode is g4 command line input
     fMode=EPGA_ROOT;
+
 	fTargetWarning=0;
-	//G4int setup=SetUpROOTInput("/scratch/crystalball/mc/kin_pi0p_100000.root");
+
 	fNevent=0;
     fNGenParticles=0;
 
@@ -65,11 +69,12 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 	fDetCon=NULL;
 	fInFileName="";
 
-    fGen4Vectors=new Float_t*[100];
-    fGenLorentzVec=new TLorentzVector*[100];
-    fParticleDefinition=new G4ParticleDefinition*[100];
-    fGenMass=new Float_t[100];
-    fGenPartType=new Int_t[100];
+    fGen4Vectors        = new Float_t*[100];
+    fGenLorentzVec      = new TLorentzVector*[100];
+    fParticleDefinition = new G4ParticleDefinition*[100];
+    fGenMass            = new Float_t[100];
+    fGenPartType        = new Int_t[100];
+
     for(Int_t i=0;i<100;i++){
         fGen4Vectors[i]=NULL;
         fGenLorentzVec[i]=NULL;
@@ -163,7 +168,6 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 
     //Get the event from input tree
-    //fMCEvtID = fNevent;
     fGenTree->GetEntry(fNevent++);
 
     //Set vertex position
