@@ -112,9 +112,4 @@ add_executable(A2
   include/TIDhack.h
   include/TIDhack.h)
 
-
-
-target_link_libraries(A2 ${Geant4_LIBRARIES}${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
-
-# anyoption dependencies
-set(anyoption src/anyoption.cpp include/anyoption.h)
+target_link_libraries(A2 ${Geant4_LIBRARIES} ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
