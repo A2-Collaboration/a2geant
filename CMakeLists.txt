@@ -73,8 +73,3 @@ target_link_libraries(pluto2mkin ${ROOT_LIBRARIES})
 
 # anyoption dependencies
 set(anyoption src/anyoption.cpp include/anyoption.h)
-
-# split_pluto_events
-add_executable(split_pluto_events src/split_pluto_events.cpp ${anyoption})
-target_link_libraries(split_pluto_events ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
-
