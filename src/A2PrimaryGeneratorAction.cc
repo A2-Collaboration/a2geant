@@ -154,7 +154,8 @@ A2PrimaryGeneratorAction::~A2PrimaryGeneratorAction()
  */
 G4ThreeVector A2PrimaryGeneratorAction::GetRandomVertex() {
 
-    const double beamspotradius = 0.5 * cm;
+    // beamspot at target for 4mm collimator
+    const double beamspotradius = 1.313 * cm;
 
     const double z   = fDetCon->GetTarget()->GetCenter().z() + fDetCon->GetTarget()->GetLength()/2 * (2*G4UniformRand()-1);
     const double phi = 2 * M_PI * G4UniformRand();
