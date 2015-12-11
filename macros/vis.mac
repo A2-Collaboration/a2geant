@@ -68,12 +68,12 @@
 /vis/scene/add/trajectories
 /vis/scene/add/hits
 /vis/scene/create 
-#/vis/viewer/set/style surface
+/vis/viewer/set/style surface
 /vis/drawVolume
 /vis/scene/endOfEventAction accumulate	
 /tracking/storeTrajectory 1
 #/vis/ogl/printEPS	
-#/vis/geometry/set/visibility CNIN 0 false
+/vis/geometry/set/visibility CNIN 0 false
 #/vis/geometry/set/forceAuxEdgeVisible World -1 true
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings

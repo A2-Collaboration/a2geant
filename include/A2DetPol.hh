@@ -30,6 +30,7 @@ public:
   G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0);
 
   void MakeTube();
+  void MakeTube2();
   void MakeCap();
   //void MakeSupports1(); //for Polarimeter 1
   //void MakeSupports2(); //for Polarimeter 2
@@ -45,6 +46,7 @@ private:
   G4double fPol_Z;
   G4double fPol_rin;
   G4double fPol_rout;
+  G4double fPol_Z0;
 
 } ;
 

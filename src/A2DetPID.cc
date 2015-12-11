@@ -188,7 +188,7 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
   //some parameters
   //Note it is full length not half length for this G4Trd constructor!
   fzpos= 0*CLHEP::cm;
-  fpid_z=40*CLHEP::cm; // Requires -6.5 cm displacement of PID!
+  fpid_z=40*CLHEP::cm; // Requires -8.4 cm displacement of PID! (Will change depending on LG) 40cm originally!!!
   fpid_rin=3.3*CLHEP::cm;
   fpid_thick=0.4*CLHEP::cm;
   fpid_rout=fpid_rin+fpid_thick;
@@ -284,7 +284,7 @@ void A2DetPID::MakeSingleDetector(){
 void A2DetPID::MakePhotomultipliers(){
 
   //note sasha uses fglass with an inner radius of 0.24CLHEP::cm
-  fpmt_z=2.315*CLHEP::cm;//half lenght
+  fpmt_z=2.315*CLHEP::cm;//half length
   G4double pmt_rin=0.44*CLHEP::cm;
   G4double pmt_rout=0.48*CLHEP::cm;
   fTPMT=new G4Tubs("TPMT",pmt_rin,pmt_rout,fpmt_z,0*CLHEP::deg,360*CLHEP::deg);
@@ -372,7 +372,7 @@ void A2DetPID::MakeLightGuide2(){
   //only approximate shape
   G4double lg3_z=0.15*CLHEP::cm;//half length for G4Trd constructor!
   G4double lg3_y=(fpid_thick+2*lg12_y)/2;
-  G4double lg3_xtop=0.485*CLHEP::cm;//also radius od tub
+  G4double lg3_xtop=0.485*CLHEP::cm;//also radius of tub
   G4double lg3_xbot=fpid_xl/2;
   //tub (LGTU)
   G4double lg4_z=0.1*CLHEP::cm;

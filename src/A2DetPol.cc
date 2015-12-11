@@ -28,10 +28,11 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
 
   //some parameters
   Xoff=0*CLHEP::mm;
-  Yoff=0*CLHEP::mm;     //original                                                                                                
+  Yoff=0*CLHEP::mm;     //original
   fPol_Z = 207.5*CLHEP::mm;
   fPol_rin = 69.5*CLHEP::mm;
   fPol_rout = 92.5*CLHEP::mm;
+  fPol_Z0 = Z0;
 
   //Make the polarimeter shape
   MakeTube();
@@ -53,12 +54,13 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
   fPol_Z = 400*CLHEP::mm;
   fPol_rin = 41*CLHEP::mm;
   fPol_rout = 66*CLHEP::mm;
+  fPol_Z0 = Z0;
 
   //Make the polarimeter shape
-  MakeTube();
+  MakeTube2();
   // MakeSupports2();
 
-  G4cout<<"Made Phase II Polarimeter (2015/2016) option 1"<<G4endl;
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 1 (2.5cm)"<<G4endl;
 
   //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
 
@@ -66,25 +68,26 @@ G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double 
 }
 
 G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
-  //Build the phase 2 polarimeter (2015/2016) 2cm thick                                                                                                
+  //Build the phase 2 polarimeter (2015/2016) 2cm thick
 
   fMotherLogic=MotherLogical;
-  //some parameters                                                                                                                          
+  //some parameters
   Xoff=0*CLHEP::mm;
-  Yoff=0*CLHEP::mm;     //original                                                                                                           
+  Yoff=0*CLHEP::mm;     //original
   fPol_Z = 400*CLHEP::mm;
   fPol_rin = 45*CLHEP::mm;
   fPol_rout = 66*CLHEP::mm;
+  fPol_Z0 = Z0;
 
-  //Make the polarimeter shape                                                                                                               
-  MakeTube();
-  // MakeSupports3();                                                                                                                        
+  //Make the polarimeter shape
+  MakeTube2();
+  // MakeSupports3();
 
-  G4cout<<"Made Phase II Polarimeter (2015/2016) option 2"<<G4endl;
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 2 (2cm)"<<G4endl;
 
-  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);                                                                               
+  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
 
-  return fMyPhysi; // Need to define this, what is it and why does it matter?                                                                
+  return fMyPhysi; // Need to define this, what is it and why does it matter?
 }
 
 
@@ -92,7 +95,18 @@ void A2DetPol::MakeTube(){
   // Make polarimeter tube
 
   //*************carbon cylinder
-  G4double tubez0=-10*CLHEP::mm+fPol_Z/2;
+  G4double tubez0= fPol_Z0-10*CLHEP::mm+fPol_Z/2;
+  G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
+  G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
+  G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fMotherLogic,false,998);
+  G4cout<<"Weight of tube "<<npolLogic2->GetMass()/CLHEP::kg<<"kg"<<G4endl;
+}
+
+void A2DetPol::MakeTube2(){
+  // Make polarimeter tube
+
+  //*************carbon cylinder
+  G4double tubez0= fPol_Z0;
   G4Tubs* npol2=new G4Tubs("NPOL2", fPol_rin, fPol_rout , fPol_Z/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
   G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
   G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,tubez0),npolLogic2,"NPOL2",fMotherLogic,false,998);
