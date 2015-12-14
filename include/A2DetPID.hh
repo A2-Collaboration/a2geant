@@ -9,6 +9,8 @@
 #include "G4Cons.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
 #include "G4UnionSolid.hh"
 #include "G4Polyhedra.hh"
 #include "G4LogicalVolume.hh"
@@ -31,7 +33,8 @@ public:
   G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic,G4double Z0);
 
 
-  void MakeDetector();
+  void MakeDetector1();
+  void MakeDetector2();
   void MakeSingleDetector();
   void MakeLightGuide1();
   void MakeLightGuide2();
@@ -56,6 +59,7 @@ private:
   G4Trap *fLGFI;  //part of light guide
   G4Trd *fLGFM;  //part of light guide
   G4Tubs *fLGTU;  //part of light guide
+  G4Para *fLGB1; //Part of bent LG
   G4UnionSolid *fLG1;  //part of light guide
   G4UnionSolid *fLG2;  //part of light guide
   G4UnionSolid *fLG3;  //part of light guide
