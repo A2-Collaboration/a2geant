@@ -97,6 +97,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //This function is called at the begining of event
   Float_t Mass;
   Float_t P;
+  Float_t r_v,x_v,y_v,test_v;
   G4ThreeVector pvec;
   switch(fMode){
   case EPGA_g4:
@@ -134,7 +135,15 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	G4cout<<"I have taken the liberty of choosing a new one inside!! see void A2PrimaryGeneratorAction::GeneratePrimaries"<<G4endl<<"I will not print this warning again, but will continue to move the vertex inside the target, to stop this please modify A2PrimaryGeneratorAction.cc around line 130"<<G4endl;
 	}
 	fThreeVector.setZ(fDetCon->GetTarget()->GetCenter().z()+fDetCon->GetTarget()->GetLength()/2*(2*G4UniformRand()-1));
-	fThreeVector.setPerp(fDetCon->GetTarget()->GetRadius()*G4UniformRand());
+	r_v=0.0;
+    	while(r_v == 0.0 ) {
+      	x_v = fDetCon->GetTarget()->GetRadius()*(2*G4UniformRand()-1);
+      	y_v = fDetCon->GetTarget()->GetRadius()*(2*G4UniformRand()-1);
+      	test_v = pow(x_v,2)+pow(y_v,2);
+      	if (test_v<pow(fDetCon->GetTarget()->GetRadius(),2)) r_v = test_v;
+    	}
+	fThreeVector.setX(x_v);
+	fThreeVector.setY(y_v);
 	if(fTargetWarning==0){G4cout<<fThreeVector<<" from "<<"("<<fGenPosition[0]*cm<<","<<fGenPosition[1]*cm<<","<<fGenPosition[2]*cm<<")*mm"<<G4endl;}
 	fGenPosition[0]=fThreeVector.x()/cm;
 	fGenPosition[1]=fThreeVector.y()/cm;
