@@ -68,7 +68,7 @@
 /vis/scene/add/trajectories
 /vis/scene/add/hits
 /vis/scene/create 
-#/vis/viewer/set/style surface
+/vis/viewer/set/style surface
 /vis/drawVolume
 /vis/scene/endOfEventAction accumulate	
 /tracking/storeTrajectory 1
