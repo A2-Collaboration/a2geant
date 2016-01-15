@@ -32,11 +32,11 @@ public:
   G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0);
   G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic,G4double Z0);
 
-
   void MakeDetector1();
   void MakeDetector2();
   void MakeDetector3();
-  void MakeSingleDetector();
+  void MakeSingleDetector1();
+  void MakeSingleDetector2();
   void MakeLightGuide1();
   void MakeLightGuide2();
   void MakeLightGuide3();
@@ -54,6 +54,7 @@ private:
   A2SD* fPIDSD;
 
   G4Trap *fPID;  //PID scintillator shape
+  G4Trap *fPIDEnd; // PID end for larger case
   G4LogicalVolume *fPIDLogic;
   G4VPhysicalVolume** fPIDPhysi;
 
@@ -65,6 +66,7 @@ private:
   G4UnionSolid *fLG1;  //part of light guide
   G4UnionSolid *fLG2;  //part of light guide
   G4UnionSolid *fLG3;  //part of light guide
+  G4UnionSolid *fPIDF; // Whole PID scintillator including bent end
   G4LogicalVolume *fLGLogic;
   G4VPhysicalVolume **fLGPhysi;
   G4LogicalVolume *fUPS1Logic;
@@ -87,12 +89,15 @@ private:
   //geometric parameters
   G4double fzpos;
   G4double fpid_z;
+  G4double fpidendL;
   G4double fpid_rin;
   G4double fpid_thick;
   G4double fpid_rout;
   G4double fpid_theta;
   G4double fpid_xs;
   G4double fpid_xl;
+  G4double fpid_xs2;
+  G4double fpid_xl2;
   G4double flg12_z;
   G4double flg_z;
   G4double fpmt_z;
