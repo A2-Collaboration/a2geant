@@ -19,7 +19,7 @@
 #### Option 3 requires PIDZ offset of 8.8cm to fit in new lightguides
 #### Option 4 requires PIDZ offset of 7.9cm to fit in new lightguides
 /A2/det/usePID 3
-/A2/det/setPIDZ 8.8 cm
+/A2/det/setPIDZ 8.8. cm
 ####Use the Polarimeter
 ####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016) option 1 (1.5cm), 3 = Use Phase II (2015/2016) option 2 (2.5cm)
 #### 30cm long polarimeter requires offset of 3.8 cm (PID option 3) or 2.9cm (PID option 4)
