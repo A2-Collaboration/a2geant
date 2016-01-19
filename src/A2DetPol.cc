@@ -8,6 +8,8 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
+// Need to update options 2-5 with new support structures once decided upon
+
 A2DetPol::A2DetPol(){
   //fregionPol=NULL;
   //fregionPol=new G4Region("Pol");

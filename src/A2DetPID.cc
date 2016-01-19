@@ -8,6 +8,8 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
+// Still to be done is the updated support structure for all of the PID III options (options 3-6)
+
 A2DetPID::A2DetPID(){
   fregionPID=NULL;
   fregionPID=new G4Region("PID");//allows seperate cuts to be defined for crystal
@@ -131,7 +133,7 @@ G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double 
 
 G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the first option for the polarimeter where the PID is 40cm long
+  //This is the first option for the phase 2 polarimeter where the PID is 40cm long with inner radius 4.3cm
   //This does not require a change to the target dimensions
 
   fMotherLogic=MotherLogical;
@@ -184,7 +186,7 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
 
 G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the second option for the polarimeter where the PID is shorter
+  //This is the second option for the phase 2 polarimeter where the PID is 40cm in length with inner radius 3.3cm
   //This option is displaced from the target center and will requires the use of the 3.1cm radius target
   //Need to alter support structure AND also add bent lightguides
 
@@ -238,7 +240,8 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
 
 G4VPhysicalVolume* A2DetPID::Construct5(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the first option for the polarimeter where the PID is 40cm long
+  //This is the third option for the phase 2 polarimeter where the PID is 25cm long with inner radius 4.3cm
+  //This allows for the use of an "end cap" on the polarimeter
   //This does not require a change to the target dimensions
 
   fMotherLogic=MotherLogical;
@@ -291,7 +294,8 @@ G4VPhysicalVolume* A2DetPID::Construct5(G4LogicalVolume* MotherLogical,G4double 
 
 G4VPhysicalVolume* A2DetPID::Construct6(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the second option for the polarimeter where the PID is shorter
+  //This is the fourth option for the phase 2 polarimeter where the PID is 25cm long with inner radius 3.3cm
+  //This allows for the use of an "end cap" on the polarimeter
   //This option is displaced from the target center and will requires the use of the 3.1cm radius target
   //Need to alter support structure AND also add bent lightguides
 
