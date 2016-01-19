@@ -90,6 +90,58 @@ G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double 
   return fMyPhysi; // Need to define this, what is it and why does it matter?
 }
 
+G4VPhysicalVolume* A2DetPol::Construct4(G4LogicalVolume* MotherLogical,G4double Z0){
+  //Build the phase 2 polarimeter (2015/2016) 1.5 cm thick with cap
+
+  fMotherLogic=MotherLogical;
+  //some parameters
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original
+  fPol_Z = 300*CLHEP::mm;
+  fPol_rin = 51*CLHEP::mm;
+  fPol_rout = 66*CLHEP::mm;
+  fCap_rin = 30*CLHEP::mm;
+  fPol_Thick = fPol_rout - fPol_rin;
+  fPol_Z0 = Z0;
+
+  //Make the polarimeter shape
+  MakeTube2();
+  MakeCap2();
+  // MakeSupports2();
+
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 1 (1.5cm) with cap"<<G4endl;
+
+  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
+
+  return fMyPhysi; // Need to define this, what is it and why does it matter?
+}
+
+G4VPhysicalVolume* A2DetPol::Construct5(G4LogicalVolume* MotherLogical,G4double Z0){
+  //Build the phase 2 polarimeter (2015/2016) 2.5cm thick with cap
+
+  fMotherLogic=MotherLogical;
+  //some parameters
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original
+  fPol_Z = 300*CLHEP::mm;
+  fPol_rin = 41*CLHEP::mm;
+  fPol_rout = 66*CLHEP::mm;
+  fCap_rin = 30*CLHEP::mm;
+  fPol_Thick = fPol_rout - fPol_rin;
+  fPol_Z0 = Z0;
+
+  //Make the polarimeter shape
+  MakeTube2();
+  MakeCap2();
+  // MakeSupports3();
+
+  G4cout<<"Made Phase II Polarimeter (2015/2016) option 2 (2.5cm) with cap"<<G4endl;
+
+  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
+
+  return fMyPhysi; // Need to define this, what is it and why does it matter?
+}
+
 
 void A2DetPol::MakeTube(){
   // Make polarimeter tube
@@ -103,7 +155,7 @@ void A2DetPol::MakeTube(){
 }
 
 void A2DetPol::MakeTube2(){
-  // Make polarimeter tube
+  // Make 2016 polarimeter tube
 
   //*************carbon cylinder
   G4double tubez0= fPol_Z0;
@@ -121,6 +173,17 @@ void A2DetPol::MakeCap(){
   G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
   // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
   G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,31.5*CLHEP::cm),npolLogic,"NPOL",fMotherLogic,false,999);     //put this one back
+  G4cout<<"Weight of cap "<<npolLogic->GetMass()/CLHEP::kg<<"kg"<<G4endl;
+}
+
+void A2DetPol::MakeCap2(){
+  // Make cap for 2016 polarimeter
+
+  //********forward cap
+  G4Tubs* npol=new G4Tubs("NPOL",fCap_rin,fPol_rout,fPol_Thick/2,0*CLHEP::deg,360*CLHEP::deg);
+  G4LogicalVolume* npolLogic=new G4LogicalVolume(npol,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL");
+  // G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,12*cm+40/2*mm),npolLogic,"NPOL",fWorldLogic,false,999);  //this stays commented out
+  G4VPhysicalVolume* npolPhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, ((fPol_Z0 + fPol_Z)/2) + fPol_Thick),npolLogic,"NPOL",fMotherLogic,false,999);     //put this one back
   G4cout<<"Weight of cap "<<npolLogic->GetMass()/CLHEP::kg<<"kg"<<G4endl;
 }
 

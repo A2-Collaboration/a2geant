@@ -31,6 +31,8 @@ public:
   G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
   G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0);
   G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic, G4double Z0);
+  G4VPhysicalVolume* Construct5(G4LogicalVolume *MotherLogic, G4double Z0);
+  G4VPhysicalVolume* Construct6(G4LogicalVolume *MotherLogic, G4double Z0);
 
   void MakeDetector1();
   void MakeDetector2();

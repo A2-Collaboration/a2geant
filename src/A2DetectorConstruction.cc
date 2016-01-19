@@ -149,7 +149,9 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
     else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
     else if(fUsePID==4) fPID->Construct4(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 4 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1 large Target, add offset too!) or 4 (2015/2016 Option 2 small target, add offset too!) "<<G4endl; exit(1);}
+    else if(fUsePID==5) fPID->Construct5(fWorldLogic,fPIDZ);
+    else if(fUsePID==6) fPID->Construct6(fWorldLogic,fPIDZ);
+    else {G4cerr<<"There are 6 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1 large Target, add offset too!), 4 (2015/2016 Option 2 small target, add offset too!),  "<<G4endl << "5 (shorter version of 3) or 6 (shorter version of 4)" << G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
@@ -182,7 +184,9 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUsePol==1) fPol->Construct1(fWorldLogic, fPolZ);
     else if (fUsePol==2) fPol->Construct2(fWorldLogic,fPolZ);
     else if (fUsePol==3) fPol->Construct3(fWorldLogic, fPolZ);
-    else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm. Don't forget to add an offset for options 2 and 3"<<G4endl; exit(1);}
+    else if (fUsePol==4) fPol->Construct4(fWorldLogic, fPolZ);
+    else if (fUsePol==5) fPol->Construct5(fWorldLogic, fPolZ);
+    else {G4cerr<<"There are 5 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  4 and 5 build options 2 and 3 but with a cap."<<G4endl << "Don't forget to add an offest for options 2-5, also options 4 and 5 require a shorter PID" << G4endl; exit(1);}
     G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
   }
 
