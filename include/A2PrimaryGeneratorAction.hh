@@ -71,7 +71,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 		Int_t* GetGenPartType(){return fGenPartType;}
 
         std::map<G4int, G4ParticleDefinition*> pluto2G4;
-        G4ParticleDefinition* PlutoIDToGeant( int pluto_id );
+        G4ParticleDefinition* PlutoIDToGeant( int pluto_id ) const;
 
 		void SetDetCon(A2DetectorConstruction* det){fDetCon=det;}
 		G4bool IsInTarget(G4ThreeVector vec){
@@ -91,6 +91,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
         Long64_t * MCEvtIDPtr() { return &fMCEvtID; }
         Long64_t * MCRndIDPtr() { return &fMCRndID; }
+
+        bool AllPIDsOK(TClonesArray* PlutoArray) const;
 
 	private:
 		G4ParticleGun*  fParticleGun;    //pointer to particle gun

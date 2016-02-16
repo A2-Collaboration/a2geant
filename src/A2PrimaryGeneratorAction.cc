@@ -20,6 +20,8 @@
 
 #include "TIDhack.h"
 
+#include "G4ios.hh"
+
 
 
 //String that converts g3 particle number into a G4 particle name
@@ -83,6 +85,7 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 
     G4ParticleTable* g4part = G4ParticleTable::GetParticleTable();
 
+    // only desitred final state particles here:
     pluto2G4[1] = g4part->FindParticle("gamma");
     pluto2G4[2] = g4part->FindParticle("e+");
     pluto2G4[3] = g4part->FindParticle("e-");
@@ -99,23 +102,8 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     pluto2G4[14] = g4part->FindParticle("proton");
     pluto2G4[15] = g4part->FindParticle("anti_proton");
     pluto2G4[16] = g4part->FindParticle("kaon0S");
-    pluto2G4[17] = g4part->FindParticle("eta");
-
     pluto2G4[25] = g4part->FindParticle("anti_neutron");
-
-    pluto2G4[41] = g4part->FindParticle("rho0");
-    pluto2G4[42] = g4part->FindParticle("rho+");
-    pluto2G4[43] = g4part->FindParticle("rho-");
-
     pluto2G4[45] = g4part->FindParticle("deuteron");
-    pluto2G4[46] = g4part->FindParticle("triton");
-    pluto2G4[47] = g4part->FindParticle("alpha");
-    pluto2G4[49] = g4part->FindParticle("He3");
-
-    pluto2G4[52] = g4part->FindParticle("omega");
-    pluto2G4[53] = g4part->FindParticle("eta_prime");
-    pluto2G4[55] = g4part->FindParticle("phi");
-    pluto2G4[67] = g4part->FindParticle("J/psi");
 
     G4cout << "Particle table for conversion Pluto <=> Geant4:" << G4endl;
     for (std::map<G4int,G4ParticleDefinition*>::iterator it = pluto2G4.begin();
@@ -165,16 +153,40 @@ G4ThreeVector A2PrimaryGeneratorAction::GetRandomVertex() {
     return G4ThreeVector(beamspotradius * r * sin(phi), beamspotradius * r * cos(phi), z);
 }
 
-G4ParticleDefinition* A2PrimaryGeneratorAction::PlutoIDToGeant( int pluto_id ) {
+G4ParticleDefinition* A2PrimaryGeneratorAction::PlutoIDToGeant( int pluto_id ) const {
     return pluto2G4.at(pluto_id);
 }
 
+bool A2PrimaryGeneratorAction::AllPIDsOK(TClonesArray* PlutoArray) const {
+
+    for( int p=0; p< PlutoArray->GetEntries(); ++p) {
+
+        PParticle* part = dynamic_cast<PParticle*>(PlutoArray->At(p));
+
+        if(!part) {
+            G4cerr << "Could not cast particle to TParticle. Is this a Pluto Tree??" << G4endl;
+            return false;
+        }
+
+        if(part->GetDaughterIndex() == -1) {
+
+            try {
+                PlutoIDToGeant( part->ID() );
+            } catch (...) {
+                G4cerr << "Can't find G4 particle ID for final state particle " << part->Name() << G4endl;
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
 
 void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
 
     //Get the event from input tree
-    fGenTree->GetEntry(fNevent++);
+    fGenTree->GetEntry(fNevent);
 
     //Set vertex position
     fThreeVector = GetRandomVertex();
@@ -190,44 +202,48 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     int final_particles = 0;
     bool beam_found = false;
 
-    fSimParticles.clear();
-
     for( int p=0; p< fGenParticles->GetEntries(); ++p) {
 
-        PParticle* part = dynamic_cast<PParticle*>(fGenParticles->At(p));
+    }
 
-        if( part->ID() < 1000 && part->GetDaughterIndex() == -1 ) {
+    fSimParticles.clear();
 
-            try {
+    if(AllPIDsOK(fGenParticles)) {
+
+        for( int p=0; p< fGenParticles->GetEntries(); ++p) {
+
+            PParticle* part = dynamic_cast<PParticle*>(fGenParticles->At(p));
+
+            if( part->ID() < 1000 && part->GetDaughterIndex() == -1 ) {
+
                 fParticleGun->SetParticleDefinition( PlutoIDToGeant( part->ID() ));
-            } catch (...) {
-                G4cerr << "Can't find G4 particle ID for " << part->Name() << G4endl;
-                fParticleGun->SetParticleDefinition( 0 );
+
+                fParticleGun->SetParticleMomentumDirection(
+                            G4ThreeVector(
+                                part->Px()*GeV,
+                                part->Py()*GeV,
+                                part->Pz()*GeV
+                        ).unit());
+                fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
+                fParticleGun->GeneratePrimaryVertex(anEvent);
+
+                final_particles++;
+
+                fSimParticles.push_back(part);
+
+            } else if ( part->ID() == 14001 ) {  // beam particle, compound of beam photon and tagert proton
+
+                if( beam_found )
+                    G4cerr << "Warning: Multiple Beam Particles in Event" << G4endl;
+
+                const double Eg = part->E() - 0.938272; // subtract proton mass
+
+                fBeamLorentzVec = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
+                beam_found = true;
             }
-
-            fParticleGun->SetParticleMomentumDirection(
-                        G4ThreeVector(
-                            part->Px()*GeV,
-                            part->Py()*GeV,
-                            part->Pz()*GeV
-                    ).unit());
-            fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
-            fParticleGun->GeneratePrimaryVertex(anEvent);
-
-            final_particles++;
-
-            fSimParticles.push_back(part);
-
-        } else if ( part->ID() == 14001 ) {  // beam particle, compound of beam photon and tagert proton
-
-            if( beam_found )
-                G4cerr << "Warning: Multiple Beam Particles in Event" << G4endl;
-
-            const double Eg = part->E() - 0.938272; // subtract proton mass
-
-            fBeamLorentzVec = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
-            beam_found = true;
         }
+    } else {
+        G4cerr << "Skipping Event " << fNevent << G4endl;
     }
 
     fNGenParticles = final_particles;
@@ -235,6 +251,8 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     if( !beam_found ) {
         fBeamLorentzVec = TLorentzVector(0,0,0,0);
     }
+
+    fNevent++;
 
 }
 
