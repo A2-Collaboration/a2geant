@@ -1,0 +1,7 @@
+In PolHadronElasticProcess.C
+Need to rotate the secondaries (surprised it works on hydrogen for charge exchange without this...?)
+
+      if(phiPol)pdir.rotate(phiPol, it);
+      else pdir.rotate(phi, it);
+      pdir.rotateUz(indir);
+

@@ -26,10 +26,8 @@ public:
 
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic,G4double Z0);
-  G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic,G4double Z0);
-  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0);
-  G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic,G4double Z0);
-  G4VPhysicalVolume* Construct5(G4LogicalVolume *MotherLogic,G4double Z0);
+  G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic,G4double Z0, G4int PCap);
+  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic,G4double Z0, G4int PCap);
 
   void MakeTube(); // Original
   void MakeTube2(); // 2016
@@ -52,6 +50,7 @@ private:
   G4double fCap_rin;
   G4double fPol_Thick;
   G4double fPol_Z0;
+  G4int fUseCap;
 
 } ;
 

@@ -1,0 +1,9 @@
+#run the patch for the G4 source
+#edit the file makePatch10.01.p02.csh for correct paths
+./makePatch10.01.p02.csh
+cd $G4SOURCE/***-build/
+make -jN where N= 4 or 5 or ...
+cd ****/npol/
+mkdir build
+cmake -DGeant4_DIR=$G4INSTALL ../
+make -jN

@@ -1,0 +1,57 @@
+#Choose a physics list, for a full listing type /A2/physics/ListPhysics
+#/npol/physics/Physics QGSP_BIC
+#/npol/physics/Physics npolNoProtonEm
+#/npol/physics/CutGamma 1 cm
+#/npol/physics/CutEl 1 cm
+#/npol/physics/CutPos 1 cm
+/Pol/physics/Physics  QGSP_BIC_POLQF
+
+####Initialise
+/run/initialize
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/set/viewpointThetaPhi 90 0 deg
+#/vis/viewer/set/lightsThetaPhi 90 50 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/flush
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+ 
+
+/Pol/pol/Ay-Process p-elastic
+/Pol/pol/Ay-Value 1
+/Pol/pol/Ay-Model McNaughton
+#/Pol/pol/SaveScat true
+/Pol/pol/Ay-Process n-elastic
+/Pol/pol/Ay-Value 1
+/Pol/pol/Ay-Model McNaughton
+#/Pol/pol/SaveScat true
+/Pol/pol/Ay-Process p-inelastic
+/Pol/pol/Ay-Value 1
+/Pol/pol/Ay-Model McNaughton
+#/Pol/pol/SaveScat true
+/Pol/pol/Ay-Process n-inelastic
+/Pol/pol/Ay-Value 1
+/Pol/pol/Ay-Model McNaughton
+#/Pol/pol/SaveScat true
+#/npol/pol/UseDetFrame true
+/gun/energy 400 MeV
+#/gun/energy  MeV
+#/gun/particle kaon+
+/gun/polarization 1 0 0
+#/gun/position 0 -20 -20 cm
+#/gun/direction 0 1 1 
+/gun/position 0 0 -20 cm
+/gun/direction 0 0.1 1
+/gun/particle proton
+/gun/polarization 1 0 0
+/run/beamOn 500000
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/set/viewpointThetaPhi 90 10 deg
+#/vis/viewer/set/lightsThetaPhi 90 50 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/flush
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+ 

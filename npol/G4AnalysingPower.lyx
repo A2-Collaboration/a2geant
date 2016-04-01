@@ -1,0 +1,559 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle empty
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Modelling nucleon-nucleus analysing powers with GEANT4
+\end_layout
+
+\begin_layout Author
+J.R.M.
+ Annand and D.I.
+ Glazier 
+\end_layout
+
+\begin_layout Standard
+This brief document outlines the main features of the polarised nucleon
+ scattering models implemented as an add-on to standard G4 nucleon reaction
+ processes.
+ 
+\end_layout
+
+\begin_layout Standard
+Installation instructions are given as an appendix.
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+When a polarised nucleon scatters off any nuclear target the spin-orbit
+ potential results in a so-called 
+\begin_inset Quotes eld
+\end_inset
+
+up-down
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+left-right
+\begin_inset Quotes erd
+\end_inset
+
+ asymmetry.
+ The former results from a nucleon polarised in the horisontal plance while
+ the latter the vertical plane.
+ More precisley the asymmetry takes the form of a 
+\begin_inset Formula $\cos\phi$
+\end_inset
+
+ distribution where 
+\begin_inset Formula $\phi$
+\end_inset
+
+ is the azimuthal angle of the scattered nucleon around the incident momentum
+ and with the zero of the distribution given by the incident polarisation
+ plane :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+N\left(\phi\right)=N_{0}\left(1+A_{p}P_{T}\cos\phi\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+here 
+\begin_inset Formula $A_{p}$
+\end_inset
+
+ is the 
+\begin_inset Quotes eld
+\end_inset
+
+analysing power
+\begin_inset Quotes erd
+\end_inset
+
+ of the interaction and it is dependent on the target species, nucleon momentum
+ and scattering angle.
+ 
+\begin_inset Formula $P_{T}$
+\end_inset
+
+ is the magnitude of the nucleon polarisation.
+ Often one desires to measure 
+\begin_inset Formula $P_{T}$
+\end_inset
+
+ from such scattering reactions.
+ To do so requires prior knowledge of 
+\begin_inset Formula $A_{p}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In reactions up to several GeV 
+\begin_inset Formula $A_{p}$
+\end_inset
+
+ is well determined for nucleon-nucleon scattering and there is a reasonable
+ database for inclusive  scattering on Carbon.
+ Everything else is not so well known.
+ Even in the case of protons scattering on carbon the results are not so
+ clear if the experiment is not measuring completely inclusive scattering
+ or if it is sensitve to charge exchange processes.
+ On the other hand what experimental evidence exists tends to suggest quasi-elas
+tic scattering plays a dominant role in reactions where the nucleus is changed.
+ This is particularly clear in charge exchange reactions where the scattered
+ nucleon must have interacted with a nucleon inside the nucleus to exchange
+ its charge with.
+ But would also be enhanced by for example neutron scattering in an active
+ scintillator, where the quasi-elastic scattering on the proton deposits
+ significnalty more energy than elastic scattering on carbon or quasi elastic
+ scattering on a neutron.
+\end_layout
+
+\begin_layout Standard
+Considering these factors it was decided to implement a quasi-elastic model
+ based on the well known free nucleon-nucleon analysing powers to capture
+ the main features of the reaction analysing power.
+ Clearly this does not encapsulate all of the physics and so at the same
+ time standard parameterisations usch as McNaughton have been implemented
+ and can be blended with the quasi-elastic model or used a comparative result.
+\end_layout
+
+\begin_layout Section
+Implementation
+\end_layout
+
+\begin_layout Standard
+The GEANT4 libraries provide state-of-the-art particle tracking algorithms.
+ The primary nucleon interaction models are based upon cascade processes
+ where the nucleon interacts in a series of steps inside the nucleus.
+ The resulting angular distribution was found to agree very well with data
+ in the Sikora analysis.
+ Such models do not consider the polarisation and hence it is necessary
+ to apply an azimuthal distribtution after the final state has been determined.
+ The analysing power for this comes from a parameterisation based on experimenta
+l data.
+\end_layout
+
+\begin_layout Standard
+The simplest case is for nucleon-nucleon scattering where the analysing
+ power is well determined by the SAID PWA we use parameterisations of their
+ results to determine the analysing power in these reactions.
+ (Note for charge exchange reactions, this is equivalent to the original
+ nucleon scattering backwards and so the analysing power for the forward
+ charge exchanged nucleon should be taken from backward angles 
+\begin_inset Formula $\left(180-\theta\right)$
+\end_inset
+
+then multiplied by -1.
+ In this way the charge exchange reaction will have the same sign as the
+ neutral exchange).
+\end_layout
+
+\begin_layout Standard
+For the quasi-elastic process the G4 inelastic model will in general produce
+ multiple nucleons in the final state.
+ We proceed by finding the two most energetic and assume these came from
+ teh quasi-elastic scatter.
+ Then the incident momentum and scatter angle of the most energetic nucleon
+ is used to find the analysing power from the same SAID parameterisations.
+ A new 
+\begin_inset Formula $\phi$
+\end_inset
+
+ angle is selected from the polarised distribution and the other reaction
+ products rotated accordingly.
+\end_layout
+
+\begin_layout Standard
+For elastic scattering off larger nuclei the quasi-free approach is not
+ effective and different parameterisatons are needed.
+ Currently we have several proton-Carbon analysing power paramterisations
+ which can be used, although these may include effect other than pure pC
+ elastic scattering.
+\end_layout
+
+\begin_layout Standard
+Similarily for inelastic scattering other paramterisation can be used instead
+ of the quasifree method, Sikora is the most up-to-date.
+\end_layout
+
+\begin_layout Standard
+Note care must be taken over reference frames.
+ The phi angle is selected in the reaction centre of momentum.
+ the z-axis is along the momentum direction, the y-axis momentum X labZ.
+ The user must define the polarisation of the neutron in this frame, so
+ be careful where z-lab is pointing.
+\end_layout
+
+\begin_layout Subsection
+Code
+\end_layout
+
+\begin_layout Standard
+The selection of the analysing power is handled by a new class PolNucleonRotate,
+ which has flags for the different parameterisations that have been coded.
+ This class returns the phi rotation required to put all of the particles
+ in the polarised frame after the scatter.
+\end_layout
+
+\begin_layout Standard
+In addition there is a PolNPRotate class which specifically handles nucleon-nucl
+eon elastic (and quasi) scattering.
+\end_layout
+
+\begin_layout Subsection
+Configuration
+\end_layout
+
+\begin_layout Standard
+There are 4 processes that have to be configured, proton or neutron - elastic
+ or inelastic scattering.
+ The models are setup via the npolPhysicsListMessanger in the run macro:
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Process p-elastic 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Value 0 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Model McNaughton 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Process n-elastic 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Value 0 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Model McNaughton
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Process p-inelastic 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Value 0
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Model McNaughton 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Process n-inelastic 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Value 0
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/pol/Ay-Model McNaughton 
+\end_layout
+
+\begin_layout Standard
+Although nucleon-nucleon (elastic) scattering is taken from SAID by default.
+ In the case you want to use the quasifree model (which will supercede the
+ above configuration options) for the nucleon-nuclear scattering you must
+ use the physics list :
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/physics/Physics QGSP_BIC_POLQF 
+\end_layout
+
+\begin_layout Standard
+rather than 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+/Pol/physics/Physics QGSP_BIC_POL
+\end_layout
+
+\begin_layout Standard
+Note, The Ay-value is used in regions the paramterisations are not valid.
+\end_layout
+
+\begin_layout Standard
+Possible paramterisations other than SAID are (see class NucleonPolRotate
+ for details):
+\end_layout
+
+\begin_layout Standard
+Null, Ladygin, Spinka, McNaughton, Glister, Azhgirey, Sikora
+\end_layout
+
+\begin_layout Section
+npol
+\end_layout
+
+\begin_layout Standard
+The example npol can be used to calculate analysing powers for basic polarimeter
+s.
+ The geoemtry consists of a wall of plastic.
+ The user can set the thickness at run time.
+ To run :
+\end_layout
+
+\begin_layout Standard
+npol macro rootfile targetthick(cm)
+\end_layout
+
+\begin_layout Standard
+macro is the setup macro which will be run and should contain the analysing
+ power configuration options outlined above.
+ targetthick is just the thicness of the plastic wall analyser.
+ rootfile is the name of an output file into which will be written a tree
+ containing the incident nucleon, scattered proton and scattered neutron
+ Lorentz vectors.
+ The incident vector is just taken from the particle gun.
+ The scattered vectors are recorded in the npolSteppingAction and they are
+ actualy the Lorentz vectors of the first proton and neutron to leave the
+ analyser (energy above 1MeV).
+\end_layout
+
+\begin_layout Standard
+The rootfile can be analysed to reconstruct the scattering angles and hence
+ the analysing power as a function of scattering angle (and potentially
+ incident momentum).
+ An example of how to do this is given in the ROOT macro Reconstruct.C.
+\end_layout
+
+\begin_layout Section
+Examples
+\end_layout
+
+\begin_layout Subsection
+Scattering in hydrogen target
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename plots/Neutron400_lH.gif
+	width 70page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Target geometry : 40cm long, 3cm radius, filled with liquid hydrogen.
+ Fire 2M neutrons, energy = 400 MeV, direction (0.2,0,1) polarisation (1,0,0)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename plots/Proton_lH.gif
+	width 70page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Target geometry : 40cm long, 3cm radius, filled with liquid hydrogen.
+ Fire 2M protons, energy = 200 (top) 400 (bot)MeV, direction (0.2,0,1) polarisati
+on (1,0,0)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename plots/Neutron400_Scint.gif
+	width 70page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Target geometry : 10cm thick plastic.
+ Fire 2M neutrons, energy = 400 MeV, direction (0.2,0,1) polarisation (1,0,0)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document

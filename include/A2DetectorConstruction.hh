@@ -48,6 +48,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
   void SetUsePol(G4int use){fUsePol=use;}
+  void SetUsePolCap(G4int use){fUsePolCap=use;}
 
   void SetUseTarget(G4String use){fUseTarget=use;}
   void SetTargetMaterial(G4String mat){fTargetMaterial=G4NistManager::Instance()->FindOrBuildMaterial(mat);}
@@ -117,6 +118,7 @@ public:
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov
   G4int fUsePol; //Build the polarimeter
+  G4int fUsePolCap; // Build the cap for the Phase 2 polarimeter
 
   G4String fTOFparFile; //TOF setup configuration
 

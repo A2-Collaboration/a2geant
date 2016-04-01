@@ -48,6 +48,11 @@ A2DetectorMessenger::A2DetectorMessenger(
   fUsePolCmd->SetParameterName("UsePol", false);
   fUsePolCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  fUsePolCapCmd = new G4UIcmdWithAnInteger("/A2/det/usePolCap", this);
+  fUsePolCapCmd->SetGuidance("Construct Pol Cap");
+  fUsePolCapCmd->SetParameterName("UsePolCap", false);
+  fUsePolCapCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   fUseTargetCmd=new G4UIcmdWithAString("/A2/det/useTarget",this);
   fUseTargetCmd->SetGuidance("Select the type of target");
   fUseTargetCmd->SetGuidance("Either Cryo or Solid");
@@ -166,6 +171,7 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fUseCBCmd;
   delete fUsePIDCmd;
   delete fUsePolCmd;
+  delete fUsePolCapCmd;
   delete fPolZCmd;
   delete fUseTargetCmd;
   delete fUseCryoTgtCmd;
@@ -205,6 +211,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fUsePolCmd)
     { fA2Detector->SetUsePol(fUsePolCmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePolCapCmd)
+    { fA2Detector->SetUsePolCap(fUsePolCapCmd->GetNewIntValue(newValue));}
 
   if( command == fUseCherenkovCmd )
     { fA2Detector->SetUseCherenkov(fUseCherenkovCmd->GetNewIntValue(newValue));}

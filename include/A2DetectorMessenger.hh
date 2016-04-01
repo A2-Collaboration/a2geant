@@ -32,6 +32,7 @@ class A2DetectorMessenger: public G4UImessenger
     G4UIcmdWithAnInteger*      fUsePIDCmd;
     G4UIcmdWithAnInteger*      fUseMWPCCmd;
     G4UIcmdWithAnInteger*      fUsePolCmd;
+    G4UIcmdWithAnInteger*      fUsePolCapCmd;
     G4UIcmdWithAnInteger*      fUseTOFCmd;
     G4UIcmdWithAnInteger*      fUseCherenkovCmd;
     G4UIcmdWithAString*      fTOFFileCmd;

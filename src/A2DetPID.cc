@@ -141,7 +141,7 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   //Note it is full length not half length for this G4Trd constructor!
   fzpos=0*CLHEP::cm;
   fpid_z=40.00*CLHEP::cm;
-  fpidendL = 3.64*CLHEP::cm; // Set to 0 for non bent ends, 3.64cm for bent ends
+  fpidendL = 6*CLHEP::cm; // Set to 0 for non bent ends, 3.64cm for bent ends
   fpid_rin=4.3*CLHEP::cm;
   fpid_thick=0.4*CLHEP::cm;
   fpid_rout=fpid_rin+fpid_thick;

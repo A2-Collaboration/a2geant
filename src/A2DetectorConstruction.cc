@@ -40,6 +40,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseCherenkov=0;
   fUseCryoTgt=0;
   fUsePol=0;
+  fUsePolCap=0;
 
   fCrystalBall=NULL;
   fTAPS=NULL;
@@ -89,6 +90,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   fUseTOF=0;
   fUseCherenkov=0;
   fUsePol=0;
+  fUsePolCap=0;
 
   // read the set up file DetectorSetup.mac
   // get the pointer to the User Interface manager
@@ -181,12 +183,19 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   if(fUsePol){ //Check to see if Polarimeter is to be constructed or not
     G4cout<<"A2DetectorConstruction::Construct() Make Polarimeter option "<< fUsePol <<G4endl;
     fPol = new A2DetPol();
-    if(fUsePol==1) fPol->Construct1(fWorldLogic, fPolZ);
-    else if (fUsePol==2) fPol->Construct2(fWorldLogic,fPolZ);
-    else if (fUsePol==3) fPol->Construct3(fWorldLogic, fPolZ);
-    else if (fUsePol==4) fPol->Construct4(fWorldLogic, fPolZ);
-    else if (fUsePol==5) fPol->Construct5(fWorldLogic, fPolZ);
-    else {G4cerr<<"There are 5 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  4 and 5 build options 2 and 3 but with a cap."<<G4endl << "Don't forget to add an offest for options 2-5, also options 4 and 5 require a shorter PID" << G4endl; exit(1);}
+    if(fUsePol==1) {
+        if (fUsePolCap==0) fPol->Construct1(fWorldLogic, fPolZ);
+        else if (fUsePolCap!=0) {G4cerr << "Error, please set UsePolCap to 0 if you wish to use the Phase 1 Polarimeter"<<G4endl;exit(1);}
+    }
+    else if (fUsePol==2) {
+        if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct2(fWorldLogic,fPolZ, fUsePolCap);
+        else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
+    }
+    else if (fUsePol==3) {
+        if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct3(fWorldLogic,fPolZ, fUsePolCap);
+        else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
+    }
+    else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  Set UsePolCap to 1 if you desire an end cap for options 2 or 3."<<G4endl << "Don't forget to add an offest for options 2-3, also a cap for versions 2 or 3 requires a shorter PID" << G4endl; exit(1);}
     G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
   }
 

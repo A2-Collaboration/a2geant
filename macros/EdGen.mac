@@ -9,17 +9,18 @@
 /run/initialize
 
 ##the initial random number seed
-/A2/generator/Seed 754629
+/A2/generator/Seed 14587
 
 #Set the number of particles to be tracked from the input ntuple
-/A2/generator/NToBeTracked 1
+/A2/generator/NToBeTracked 2
 #give the indexes of the particles to be tracked
 #(have a look at the branch names in the input file)
 /A2/generator/Track 1
+/A2/generator/Track 2
 
 #Open the file and set up the ntuple for reading
-/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/100_1557_10e6_BeamA2.root
+/A2/generator/InputFile  /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Phase_Space_Files/EdGen10e7_1A2.root
 
 #####Output
 #Open the output file for writing
-/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant10e6_Beam_100_1557_ExtremeBentPID.root
+/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/EdGenGeant10e7_12_19_02_16.root
