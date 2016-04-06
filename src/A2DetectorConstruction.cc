@@ -35,6 +35,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseCB=0;
   fUseTAPS=0;
   fUsePID=0;
+  fUsePIDEnd=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -86,6 +87,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
   fUseTAPS=0;
   fUsePID=0;
+  fUsePIDEnd=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -147,13 +149,31 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   if(fUsePID){
     G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
     fPID=new A2DetPID();
-    if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
-    else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
-    else if(fUsePID==4) fPID->Construct4(fWorldLogic,fPIDZ);
-    else if(fUsePID==5) fPID->Construct5(fWorldLogic,fPIDZ);
-    else if(fUsePID==6) fPID->Construct6(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 6 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1 large Target, add offset too!), 4 (2015/2016 Option 2 small target, add offset too!),  "<<G4endl << "5 (shorter version of 3) or 6 (shorter version of 4)" << G4endl; exit(1);}
+
+    if(fUsePID==1 || fUsePID ==2) {
+        if(fUsePIDEnd == 0){
+            if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
+            else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
+        }
+        else if (fUsePIDEnd != 0) {G4cerr << "Error, please set UsePIDEnd to 0 if you want to use PID I or PID II"<<G4endl;exit(1);}
+    }
+
+    else if(fUsePID==3) {
+        if (fUsePIDEnd == 0 || fUsePIDEnd == 1) fPID->Construct3(fWorldLogic,fPIDZ, fUsePIDEnd);
+        else {G4cerr << "Please set fUsePIDEnd to either 0 (no end pieces) or 1 (with end pieces)"<<G4endl;exit(1);}
+    }
+
+    else if(fUsePID==4) {
+        if (fUsePIDEnd == 0 || fUsePIDEnd == 1) fPID->Construct4(fWorldLogic,fPIDZ, fUsePIDEnd);
+        else {G4cerr << "Please set fUsePIDEnd to either 0 (no end pieces) or 1 (with end pieces)"<<G4endl;exit(1);}
+    }
+
+    if (fUsePID == 3 || fUsePID == 4){
+        if (fUsePIDEnd == 0) {G4cerr << "Without end pieces"<<G4endl;}
+        else if (fUsePIDEnd == 1) {G4cerr << "With end pieces"<<G4endl;}
+    }
+
+    else {G4cerr<<"There are 4 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1 large Target, add offset too!), 4 (2015/2016 Option 2 small target, add offset too!),  "<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
@@ -194,6 +214,10 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     else if (fUsePol==3) {
         if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct3(fWorldLogic,fPolZ, fUsePolCap);
         else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
+    }
+    if (fUsePol == 2 || fUsePol == 3){
+        if (fUsePolCap == 0) {G4cerr << "Without cap"<<G4endl;}
+        else if (fUsePolCap == 1) {G4cerr << "With cap"<<G4endl;}
     }
     else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  Set UsePolCap to 1 if you desire an end cap for options 2 or 3."<<G4endl << "Don't forget to add an offest for options 2-3, also a cap for versions 2 or 3 requires a shorter PID" << G4endl; exit(1);}
     G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;

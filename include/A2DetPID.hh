@@ -29,10 +29,8 @@ public:
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0);
   G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct5(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct6(G4LogicalVolume *MotherLogic, G4double Z0);
+  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0, G4int PIDEND);
+  G4VPhysicalVolume* Construct4(G4LogicalVolume *MotherLogic, G4double Z0, G4int PIDEND);
 
   void MakeDetector1();
   void MakeDetector2();
@@ -90,6 +88,7 @@ private:
   G4VPhysicalVolume **fMUMEPhysi;
   //geometric parameters
   G4double fzpos;
+  G4int fUseEnd;
   G4double fpid_z;
   G4double fpidendL;
   G4double fpid_rin;

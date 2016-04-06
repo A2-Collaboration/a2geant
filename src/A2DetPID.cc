@@ -131,17 +131,20 @@ G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double 
   return fMyPhysi;
 }
 
-G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
+G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0, G4int PIDEND){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the first option for the phase 2 polarimeter where the PID is 40cm long with inner radius 4.3cm
+  //This is the third option for the phase 2 polarimeter where the PID is 30cm long with inner radius 4.3cm
+  //This allows for the use of an "end cap" on the polarimeter
   //This does not require a change to the target dimensions
 
   fMotherLogic=MotherLogical;
   //some parameters
   //Note it is full length not half length for this G4Trd constructor!
+  fUseEnd = PIDEND;
+  if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
+  else if (fUseEnd == 1){fpidendL = 3.64*CLHEP::cm;}
   fzpos=0*CLHEP::cm;
-  fpid_z=40.00*CLHEP::cm;
-  fpidendL = 6*CLHEP::cm; // Set to 0 for non bent ends, 3.64cm for bent ends
+  fpid_z=30*CLHEP::cm;
   fpid_rin=4.3*CLHEP::cm;
   fpid_thick=0.4*CLHEP::cm;
   fpid_rout=fpid_rin+fpid_thick;
@@ -154,8 +157,16 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   //Make the light guide shape
   MakeLightGuide2(); // This makes the bent lightguides
   MakePhotomultipliers(); // This is unchanged since last two PIDs
-  //Make a single scint. detector
-  MakeSingleDetector2(); // Set to 1 for non bent ends (needs EndL changed too) or 2 for bent
+
+//Make a single scint. detector
+  if (fUseEnd == 0){
+    MakeSingleDetector1();
+  }
+
+  else if (fUseEnd == 1){
+    MakeSingleDetector2();
+  }
+
   MakeSupports3(); // New support structure
 
   //Make PID Logical Volume
@@ -184,18 +195,21 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   return fMyPhysi;
 }
 
-G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double Z0){
+G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double Z0, G4int PIDEND){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the second option for the phase 2 polarimeter where the PID is 40cm in length with inner radius 3.3cm
+  //This is the fourth option for the phase 2 polarimeter where the PID is 30cm long with inner radius 3.3cm
+  //This allows for the use of an "end cap" on the polarimeter
   //This option is displaced from the target center and will requires the use of the 3.1cm radius target
   //Need to alter support structure AND also add bent lightguides
 
   fMotherLogic=MotherLogical;
   //some parameters
   //Note it is full length not half length for this G4Trd constructor!
+  fUseEnd = PIDEND;
+  if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
+  else if (fUseEnd == 1){fpidendL = 1.732*CLHEP::cm;}
   fzpos= 0*CLHEP::cm;
-  fpid_z=40*CLHEP::cm; // Requires -7.9 cm displacement of PID! (Will change depending on LG!
-  fpidendL = 1.732*CLHEP::cm; // Set to 0 for non bent ends, 1.732cm for bent ends
+  fpid_z=30*CLHEP::cm; // Requires 1.4 cm displacement of PID! (Will change depending on LG!
   fpid_rin=3.3*CLHEP::cm;
   fpid_thick=0.4*CLHEP::cm;
   fpid_rout=fpid_rin+fpid_thick;
@@ -208,117 +222,16 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
   //Make the light guide shape
   MakeLightGuide3(); // Makes the bent light guides for the smaller PID case
   MakePhotomultipliers(); // This is unchanged since last two PIDs
+
   //Make a single scint. detector
-  MakeSingleDetector2(); // Set to 1 for non bent ends (needs EndL changed too) or 2 for bent
-  MakeSupports4(); // New support structure
+  if (fUseEnd == 0){
+    MakeSingleDetector1();
+  }
 
-  //Make PID Logical Volume
-  //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
-  // G4double moth_rin=fpid_rin+fpid_thick/2-8*mm;
-  G4double moth_rin=(fpid_rin - 4.05*CLHEP::mm)-0.1*CLHEP::mm; //aluminium ring
-  //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
-  G4double moth_rout=(66*CLHEP::mm); //aluminium ring
-  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm + fpidendL;//extra 6mm for supports
-  fzpos=((fpid_z-moth_z)/2+6*CLHEP::mm)+fpidendL;//zposition of centre of pid relative to mother, 3mm is for support ring
-  fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
-  G4RotationMatrix *Mrot=new G4RotationMatrix();
-  Mrot->rotateY(180*CLHEP::deg);//PID III is positioned in same orientation as PID II
-  G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin-(fpidendL*tan(30*CLHEP::deg)),moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
-  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
-  //Note here position is +fzpos beause of rotation
-  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
-  MakeDetector3();
-  G4VisAttributes* visatt=new G4VisAttributes();
-  visatt->SetColor(G4Color(0.5,0.5,1,1));
-  visatt->SetForceWireframe(true);
-  fMyLogic->SetVisAttributes(visatt);
+  else if (fUseEnd == 1){
+    MakeSingleDetector2();
+  }
 
-  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
-
-  return fMyPhysi;
-}
-
-G4VPhysicalVolume* A2DetPID::Construct5(G4LogicalVolume* MotherLogical,G4double Z0){
-  //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the third option for the phase 2 polarimeter where the PID is 25cm long with inner radius 4.3cm
-  //This allows for the use of an "end cap" on the polarimeter
-  //This does not require a change to the target dimensions
-
-  fMotherLogic=MotherLogical;
-  //some parameters
-  //Note it is full length not half length for this G4Trd constructor!
-  fzpos=0*CLHEP::cm;
-  fpid_z=25*CLHEP::cm;
-  fpidendL = 3.64*CLHEP::cm; // Set to 0 for non bent ends, 3.64cm for bent ends
-  fpid_rin=4.3*CLHEP::cm;
-  fpid_thick=0.4*CLHEP::cm;
-  fpid_rout=fpid_rin+fpid_thick;
-  fpid_theta=360*CLHEP::deg/fNPids;
-  fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short length
-  fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
-  fpid_xs2=2*(fpid_rin-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//short length at new inner radius
-  fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
-
-  //Make the light guide shape
-  MakeLightGuide2(); // This makes the bent lightguides
-  MakePhotomultipliers(); // This is unchanged since last two PIDs
-  //Make a single scint. detector
-  MakeSingleDetector2(); // Set to 1 for non bent ends (needs EndL changed too) or 2 for bent
-  MakeSupports3(); // New support structure
-
-  //Make PID Logical Volume
-  //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
-  // G4double moth_rin=fpid_rin+fpid_thick/2-8*mm;
-  G4double moth_rin=37.95-0.1*CLHEP::mm; //aliminium ring
-  //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
-  G4double moth_rout=66*CLHEP::mm; //aluminium ring
-  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm + fpidendL;//extra 6mm for supports
-  fzpos=((fpid_z-moth_z)/2+6*CLHEP::mm) + fpidendL;//zposition of centre of pid relative to mother, 3mm is for support ring
-  fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
-  G4RotationMatrix *Mrot=new G4RotationMatrix();
-  Mrot->rotateY(180*CLHEP::deg);//PID III is positioned in same orientation as PID II
-  G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin-(fpidendL*tan(30*CLHEP::deg)),moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
-  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
-  //Note here position is +fzpos beause of rotation
-  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
-  MakeDetector2();
-  G4VisAttributes* visatt=new G4VisAttributes();
-  visatt->SetColor(G4Color(0.5,0.5,1,1));
-  visatt->SetForceWireframe(true);
-  fMyLogic->SetVisAttributes(visatt);
-
-  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
-
-  return fMyPhysi;
-}
-
-G4VPhysicalVolume* A2DetPID::Construct6(G4LogicalVolume* MotherLogical,G4double Z0){
-  //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the fourth option for the phase 2 polarimeter where the PID is 25cm long with inner radius 3.3cm
-  //This allows for the use of an "end cap" on the polarimeter
-  //This option is displaced from the target center and will requires the use of the 3.1cm radius target
-  //Need to alter support structure AND also add bent lightguides
-
-  fMotherLogic=MotherLogical;
-  //some parameters
-  //Note it is full length not half length for this G4Trd constructor!
-  fzpos= 0*CLHEP::cm;
-  fpid_z=25*CLHEP::cm; // Requires 1.4 cm displacement of PID! (Will change depending on LG!
-  fpidendL = 1.732*CLHEP::cm; // Set to 0 for non bent ends, 1.732cm for bent ends
-  fpid_rin=3.3*CLHEP::cm;
-  fpid_thick=0.4*CLHEP::cm;
-  fpid_rout=fpid_rin+fpid_thick;
-  fpid_theta=360*CLHEP::deg/fNPids;
-  fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short length
-  fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
-  fpid_xs2=2*(fpid_rin-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//short length at new inner radius
-  fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
-
-  //Make the light guide shape
-  MakeLightGuide3(); // Makes the bent light guides for the smaller PID case
-  MakePhotomultipliers(); // This is unchanged since last two PIDs
-  //Make a single scint. detector
-  MakeSingleDetector2(); // Set to 1 for non bent ends (needs EndL changed too) or 2 for bent
   MakeSupports4(); // New support structure
 
   //Make PID Logical Volume
