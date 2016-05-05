@@ -34,7 +34,7 @@ public:
   void MakeCap(); // Original
   void MakeCap2(); // 2016
   //void MakeSupports1(); //for Polarimeter 1
-  //void MakeSupports2(); //for Polarimeter 2
+  void MakeSupports2(); //for Polarimeter 2
 
 private:
 
@@ -48,8 +48,13 @@ private:
   G4double fPol_rin;
   G4double fPol_rout;
   G4double fCap_rin;
+  G4double fCapThick;
   G4double fPol_Thick;
   G4double fPol_Z0;
+  G4double fPol_GrooveR;
+  G4double fPol_HoleR;
+  G4double fPolSC_Thick;
+  G4double fPolST_Thick;
   G4int fUseCap;
 
 } ;

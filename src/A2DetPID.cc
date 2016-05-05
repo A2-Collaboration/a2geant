@@ -151,6 +151,7 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   fpid_theta=360*CLHEP::deg/fNPids;
   fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short length
   fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
+  G4cout << fpid_xs << "   " << fpid_xl << G4endl;
   fpid_xs2=2*(fpid_rin-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//short length at new inner radius
   fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
 
