@@ -188,24 +188,25 @@ void A2DetPol::MakeSupports2(){
 
   //Support end caps for carbon polarimeter
 
-  fPol_HoleR = fPol_rout - (7*CLHEP::mm);
-  fPolSC_Thick = 10*CLHEP::mm;
-  fPolST_Thick = 2*CLHEP::mm;
+  fPol_HoleR = fPol_rout - (7*CLHEP::mm); // Radius of drilled hole for steel rods
+  fPolSC_Thick = 10*CLHEP::mm; // Thickness of support caps on polarimeter
+  fPolST_Thick = 2*CLHEP::mm; // Thickness of support tube
   G4Tubs* npolsc1=new G4Tubs("NPOLSC1",fCap_rin,fPol_rout,fPolSC_Thick/2,0*CLHEP::deg,360*CLHEP::deg);
-  G4Tubs* SupHole=new G4Tubs("CapHole", 0*CLHEP::mm, 3.025*CLHEP::mm, (fPolSC_Thick/2) + 0.2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg); // Grooves cut in polarimeter for support
+  G4Tubs* SupHole=new G4Tubs("CapHole", 0*CLHEP::mm, 3.025*CLHEP::mm, (fPolSC_Thick/2) + 0.2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg); // Holes cut in support caps for steel rods
   G4SubtractionSolid *npolsc2=new G4SubtractionSolid("NPOLSC2",npolsc1,SupHole,new G4RotationMatrix(),G4ThreeVector(0*CLHEP::mm, fPol_HoleR, 0*CLHEP::mm ));
   G4SubtractionSolid *npolsc3=new G4SubtractionSolid("NPOLSC3",npolsc2,SupHole,new G4RotationMatrix(),G4ThreeVector(fPol_HoleR * cos(30*CLHEP::deg), -(fPol_HoleR * sin(30*CLHEP::deg)) , 0*CLHEP::mm));
   G4SubtractionSolid *npolsc4=new G4SubtractionSolid("NPOLSC4",npolsc3,SupHole,new G4RotationMatrix(),G4ThreeVector(-(fPol_HoleR * cos(30*CLHEP::deg)), -(fPol_HoleR * sin(30*CLHEP::deg)), 0*CLHEP::mm));
-  G4LogicalVolume* npolscLogic=new G4LogicalVolume(npolsc4,G4NistManager::Instance()->FindOrBuildMaterial("A2_Al"),"NPOLSC");
+  G4LogicalVolume* npolscLogic=new G4LogicalVolume(npolsc4,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLSC");
   G4VisAttributes* SupVisAtt= new G4VisAttributes(G4Colour(0.1,0.5,0.0));
   npolscLogic->SetVisAttributes(SupVisAtt);
-  G4VPhysicalVolume* npolsc1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (-(fPol_Z/2)) + fPol_Z0 - (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999);
-  G4VPhysicalVolume* npolsc2Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999);
+  G4VPhysicalVolume* npolsc1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (-(fPol_Z/2)) + fPol_Z0 - (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999); // Cap at downstream (PMT) end
+  G4VPhysicalVolume* npolsc2Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999); // Cap at upstream (TAPS) end
 
   //Support tube for polarimeter
-  G4Tubs* npolst1 = new G4Tubs("NPOLST1", fCap_rin, fCap_rin + fPolST_Thick, 0.4*CLHEP::m, 0*CLHEP::deg, 360*CLHEP::deg);
-  G4LogicalVolume* npolstLogic=new G4LogicalVolume(npolst1,G4NistManager::Instance()->FindOrBuildMaterial("A2_Al"),"NPOLST");
+
+  G4Tubs* npolst1 = new G4Tubs("NPOLST1", fCap_rin, fCap_rin + fPolST_Thick, 0.45*CLHEP::m, 0*CLHEP::deg, 360*CLHEP::deg); // 90cm long support tube
+  G4LogicalVolume* npolstLogic=new G4LogicalVolume(npolst1,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLST"); // Build tube from aluminium
   npolstLogic->SetVisAttributes(SupVisAtt);
-  G4VPhysicalVolume* npolst1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolSC_Thick + (0.4*CLHEP::m)),npolstLogic,"NPOLST",fMotherLogic,false,999);
+  G4VPhysicalVolume* npolst1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolSC_Thick + (0.45*CLHEP::m)),npolstLogic,"NPOLST",fMotherLogic,false,999);
 
 }
