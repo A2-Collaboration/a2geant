@@ -55,6 +55,7 @@ private:
   G4double fPol_HoleR;
   G4double fPolSC_Thick;
   G4double fPolST_Thick;
+  G4double fPolSR_Length;
   G4int fUseCap;
 
 } ;

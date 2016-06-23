@@ -190,14 +190,17 @@ void A2DetPol::MakeSupports2(){
 
   fPol_HoleR = fPol_rout - (7*CLHEP::mm); // Radius of drilled hole for steel rods
   fPolSC_Thick = 10*CLHEP::mm; // Thickness of support caps on polarimeter
-  fPolST_Thick = 2*CLHEP::mm; // Thickness of support tube
+  fPolST_Thick = 1.6*CLHEP::mm; // Thickness of support tube
+  fPolSR_Length = (30*CLHEP::cm) + (2*fPolSC_Thick) + (fCapThick) + (1*CLHEP::cm); // Length of polarimeter + cap and 2x support caps + some leeway
   G4Tubs* npolsc1=new G4Tubs("NPOLSC1",fCap_rin,fPol_rout,fPolSC_Thick/2,0*CLHEP::deg,360*CLHEP::deg);
   G4Tubs* SupHole=new G4Tubs("CapHole", 0*CLHEP::mm, 3.025*CLHEP::mm, (fPolSC_Thick/2) + 0.2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg); // Holes cut in support caps for steel rods
+  G4Tubs* SupRod=new G4Tubs("SupRod", 0* CLHEP::mm, 3*CLHEP::mm, fPolSR_Length/2, 0*CLHEP::deg, 360*CLHEP::deg); // Steel rods through polarimeter
   G4SubtractionSolid *npolsc2=new G4SubtractionSolid("NPOLSC2",npolsc1,SupHole,new G4RotationMatrix(),G4ThreeVector(0*CLHEP::mm, fPol_HoleR, 0*CLHEP::mm ));
   G4SubtractionSolid *npolsc3=new G4SubtractionSolid("NPOLSC3",npolsc2,SupHole,new G4RotationMatrix(),G4ThreeVector(fPol_HoleR * cos(30*CLHEP::deg), -(fPol_HoleR * sin(30*CLHEP::deg)) , 0*CLHEP::mm));
   G4SubtractionSolid *npolsc4=new G4SubtractionSolid("NPOLSC4",npolsc3,SupHole,new G4RotationMatrix(),G4ThreeVector(-(fPol_HoleR * cos(30*CLHEP::deg)), -(fPol_HoleR * sin(30*CLHEP::deg)), 0*CLHEP::mm));
   G4LogicalVolume* npolscLogic=new G4LogicalVolume(npolsc4,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLSC");
   G4VisAttributes* SupVisAtt= new G4VisAttributes(G4Colour(0.1,0.5,0.0));
+  G4VisAttributes* SupRodVisAtt= new G4VisAttributes(G4Colour(0.75,0.0,0.0));
   npolscLogic->SetVisAttributes(SupVisAtt);
   G4VPhysicalVolume* npolsc1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (-(fPol_Z/2)) + fPol_Z0 - (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999); // Cap at downstream (PMT) end
   G4VPhysicalVolume* npolsc2Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + (fPolSC_Thick/2)),npolscLogic,"NPOLSC",fMotherLogic,false,999); // Cap at upstream (TAPS) end

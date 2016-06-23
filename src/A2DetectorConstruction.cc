@@ -215,10 +215,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
         if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct3(fWorldLogic,fPolZ, fUsePolCap);
         else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
     }
-    if (fUsePol == 2 || fUsePol == 3){
-        if (fUsePolCap == 0) {G4cerr << "Without cap"<<G4endl;}
-        else if (fUsePolCap == 1) {G4cerr << "With cap"<<G4endl;}
-    }
     else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  Set UsePolCap to 1 if you desire an end cap for options 2 or 3."<<G4endl << "Don't forget to add an offest for options 2-3, also a cap for versions 2 or 3 requires a shorter PID" << G4endl; exit(1);}
     G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
   }
