@@ -142,7 +142,7 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   //Note it is full length not half length for this G4Trd constructor!
   fUseEnd = PIDEND;
   if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
-  else if (fUseEnd == 1){fpidendL = 3.64*CLHEP::cm;}
+  else if (fUseEnd == 1){fpidendL = 2*CLHEP::cm;}
   fzpos=0*CLHEP::cm;
   fpid_z=30*CLHEP::cm;
   fpid_rin=4.3*CLHEP::cm;
@@ -208,7 +208,7 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
   //Note it is full length not half length for this G4Trd constructor!
   fUseEnd = PIDEND;
   if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
-  else if (fUseEnd == 1){fpidendL = 1.732*CLHEP::cm;}
+  else if (fUseEnd == 1){fpidendL = 1*CLHEP::cm;}
   fzpos= 0*CLHEP::cm;
   fpid_z=30*CLHEP::cm; // Requires 1.4 cm displacement of PID! (Will change depending on LG!
   fpid_rin=3.3*CLHEP::cm;
@@ -381,8 +381,10 @@ void A2DetPID::MakeSingleDetector1(){
 void A2DetPID::MakeSingleDetector2(){
  //Used for PID III (both options) to add on bent bit at end of PID scintillators
   fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
-  fPIDEnd=new G4Trap("PIDEnd", ((fpidendL)/2), 30*CLHEP::deg, 270*CLHEP::deg, (fpid_thick/2), (fpid_xl2/2), (fpid_xs2/2), 0*CLHEP::deg, (fpid_thick/2), (fpid_xl/2), (fpid_xs/2), 0*CLHEP::deg); // Define shape of bit at end
-  fPIDF=new G4UnionSolid("PIDFinal", fPID, fPIDEnd, 0,  G4ThreeVector (0, (fpidendL*tan(30*CLHEP::deg))/2, -((fpid_z+fpidendL)/2)));
+  //Commented out PIDEnd is for slanted/angled PID end pieces
+  //fPIDEnd=new G4Trap("PIDEnd", ((fpidendL)/2), 30*CLHEP::deg, 270*CLHEP::deg, (fpid_thick/2), (fpid_xl2/2), (fpid_xs2/2), 0*CLHEP::deg, (fpid_thick/2), (fpid_xl/2), (fpid_xs/2), 0*CLHEP::deg); // Define shape of bit at end
+  fPIDEnd = new G4Trap("PIDEnd", ((fpid_thick)), ((fpidendL)) , (fpid_xs), 5.99*CLHEP::mm);
+  fPIDF=new G4UnionSolid("PIDFinal", fPID, fPIDEnd, 0,  G4ThreeVector (0, (fpid_thick+fpidendL)/2, -((fpid_z)/2)+((fpid_thick)/2)));
   fPIDLogic=new G4LogicalVolume(fPIDF,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID");
   if(!fPIDSD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();

@@ -1,11 +1,11 @@
 ####Use the crystal ball?
-/A2/det/useCB 0
+/A2/det/useCB 1
 #if the 3rd number in the next line is negative use old geometry,
 # if positive use new Prakhov geometry
 #the first two numbers give the upper and lower air gap between hemispheres
 /A2/det/setHemiGap 0.4 0.4 -1 cm
 #####Use TAPS?
-/A2/det/useTAPS 0
+/A2/det/useTAPS 1
 ####Configure TAPS
 #/A2/det/setTAPSFile taps.dat
 #/A2/det/setTAPSZ 175 cm
@@ -18,7 +18,7 @@
 #### 1 = PID I, 2 = PID II, 3 = PID III Option 1 (30cm @ rin = 4.3cm), 4 = PID III Option 2 (30cm @ rin = 3.3cm)
 #### Option 3 requires PIDZ offset of 8.8cm to fit in new lightguides
 #### Option 4 requires PIDZ offset of 5.5cm to fit in new lightguides
-/A2/det/usePID 0
+/A2/det/usePID 4
 /A2/det/usePIDEnd 1
 /A2/det/setPIDZ 2.5 cm
 ####Use the Polarimeter
@@ -31,7 +31,7 @@
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
 #Phase 2 polarimeter proposal had MWPCZ offset of -5cm (why?)
-/A2/det/useMWPC 0
+/A2/det/useMWPC 1
 /A2/det/setMWPCZ 0. cm
 
 ####Use Cherenkov?
