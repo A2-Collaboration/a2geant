@@ -32,7 +32,7 @@
 #set to 1 to not create the anode wires, 2 to create the anode wires
 #Phase 2 polarimeter proposal had MWPCZ offset of -5cm (why?)
 /A2/det/useMWPC 1
-/A2/det/setMWPCZ 0. cm
+/A2/det/setMWPCZ 0.0 cm
 
 ####Use Cherenkov?
 /A2/det/useCherenkov 0
@@ -49,7 +49,7 @@
 /A2/det/setTargetLength 5. cm
 #Set target z position if offset desired, +ve is towards TAPS, -ve away
 #Only works for Cryo target currently since I don't care about the other 2!
-/A2/det/setTargetZ 0. cm
+/A2/det/setTargetZ 0.0 cm
 ####Solid targets : G4_Li, G4_GRAPHITE, G4_Ca, G4_Pb###
 #/A2/det/useTarget Solid
 #/A2/det/targetMaterial G4_Pb

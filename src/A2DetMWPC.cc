@@ -219,7 +219,7 @@ G4VPhysicalVolume* A2DetMWPC::ConstructMWPC(G4LogicalVolume* MotherLogical, G4do
   fMyLogic = new G4LogicalVolume(MWPCMother, fNistManager->FindOrBuildMaterial("G4_AIR"),"MWPC");
   fregionMWPC->AddRootLogicalVolume(fMyLogic);
 
-  fMyPhysi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fMyLogic, "MWPC", fMotherLogic, false, 1);
+  fMyPhysi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fMyLogic, "MWPC", fMotherLogic, false, 1);
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(1,0,0,1));
   visatt->SetForceWireframe(true);
@@ -490,42 +490,42 @@ void A2DetMWPC::MakeDetector() {
 
 //Placement of Materials into the Mother Volume
 //Shielding
-  fCHSI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHSI1Logic, "CHSI1P", fMyLogic, false, 0);
+  fCHSI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHSI1Logic, "CHSI1P", fMyLogic, false, 0);
 
-  fCHSO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHSO1Logic, "CHSO1P", fMyLogic, false, 0);
+  fCHSO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHSO1Logic, "CHSO1P", fMyLogic, false, 0);
 
-  fCHSI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHSI2Logic, "CHSI2P", fMyLogic, false, 0);
+  fCHSI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHSI2Logic, "CHSI2P", fMyLogic, false, 0);
 
-  fCHSO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHSO2Logic, "CHSO2P", fMyLogic, false, 0);
+  fCHSO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHSO2Logic, "CHSO2P", fMyLogic, false, 0);
 
 //Rohacell
-  fCHRI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHRI1Logic, "CHRI1P", fMyLogic, false, 0);
+  fCHRI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHRI1Logic, "CHRI1P", fMyLogic, false, 0);
 
-  fCHRO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHRO1Logic, "CHRO1P", fMyLogic, false, 0);
+  fCHRO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHRO1Logic, "CHRO1P", fMyLogic, false, 0);
 
-  fCHRI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHRI2Logic, "CHRI2P", fMyLogic, false, 0);
+  fCHRI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHRI2Logic, "CHRI2P", fMyLogic, false, 0);
 
-  fCHRO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHRO2Logic, "CHRO2P", fMyLogic, false, 0);
+  fCHRO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHRO2Logic, "CHRO2P", fMyLogic, false, 0);
 
 //Kapton
-  fCHKI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHKI1Logic, "CHKI1P", fMyLogic, false, 0);
+  fCHKI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKI1Logic, "CHKI1P", fMyLogic, false, 0);
 
-  fCHKO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHKO1Logic, "CHKO1P", fMyLogic,
+  fCHKO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKO1Logic, "CHKO1P", fMyLogic,
   false, 0);
 
-  fCHKI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHKI2Logic, "CHKI2P", fMyLogic, false, 0);
+  fCHKI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKI2Logic, "CHKI2P", fMyLogic, false, 0);
 
-  fCHKO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHKO2Logic, "CHKO2P", fMyLogic, false, 0);
+  fCHKO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKO2Logic, "CHKO2P", fMyLogic, false, 0);
 
 //Cathodes
 
-  fCHCI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHCI1Logic, "CHCI1P", fMyLogic, false, 0);
+  fCHCI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHCI1Logic, "CHCI1P", fMyLogic, false, 0);
 
-  fCHCO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHCO1Logic, "CHCO1P", fMyLogic, false, 1);
+  fCHCO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHCO1Logic, "CHCO1P", fMyLogic, false, 1);
 
-  fCHCI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHCI2Logic, "CHCI2P", fMyLogic, false, 2);
+  fCHCI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHCI2Logic, "CHCI2P", fMyLogic, false, 2);
 
-  fCHCO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fCHCO2Logic, "CHCO2P", fMyLogic, false, 3);
+  fCHCO2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHCO2Logic, "CHCO2P", fMyLogic, false, 3);
 
 //Anode Wires
 

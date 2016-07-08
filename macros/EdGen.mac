@@ -9,7 +9,7 @@
 /run/initialize
 
 ##the initial random number seed
-/A2/generator/Seed 241
+/A2/generator/Seed 4145
 
 #Set the number of particles to be tracked from the input ntuple
 /A2/generator/NToBeTracked 2
@@ -23,4 +23,4 @@
 
 #####Output
 #Open the output file for writing
-/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant_300_1557_10e7_pn_Without_Supports.root
+/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/Geant_300_1557_10e7_pn_10cm_Backward_PID_Displacement.root
