@@ -15,16 +15,14 @@
 /A2/det/setTAPSN 384
 /A2/det/setTAPSPbWO4Rings 2
 ####Use the PID
-#### 1 = PID I, 2 = PID II, 3 = PID III Option 1 (30cm @ rin = 4.3cm), 4 = PID III Option 2 (30cm @ rin = 3.3cm)
-#### Option 3 requires PIDZ offset of 8.8cm to fit in new lightguides
-#### Option 4 requires PIDZ offset of 5.5cm to fit in new lightguides
-/A2/det/usePID 4
-/A2/det/usePIDEnd 1
+#### 1 = PID I, 2 = PID II, 3 = PID III (30cm @ rin = 3.3cm)
+#### Option 3 requires PIDZ offset of 5.5cm to fit in new lightguides
+/A2/det/usePID 3
 /A2/det/setPIDZ 2.5 cm
 ####Use the Polarimeter
-####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016) option 1 (1.5cm), 3 = Use Phase II (2015/2016) option 2 (2.5cm)
-#### 30cm long polarimeter requires offset of 3.8 cm (PID option 3) or 2.9cm (PID option 4)
-/A2/det/usePol 3
+####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016, 2.6cm), 3 = Use Phase II (2015/2016, backup tube 2.25cm)
+#### 30cm long polarimeter requires offset of 3.8 cm (PID option 3)
+/A2/det/usePol 2
 #### For the P2 polarimeter only, P1 ALWAYS has a cap. Set to 0 for no cap or 1 for cap (requires shorter PID, options 3/4)
 /A2/det/usePolCap 1
 /A2/det/setPolZ 3.8 cm

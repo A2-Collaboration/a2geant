@@ -44,7 +44,6 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseCB(G4int use){fUseCB=use;}
   void SetUseTAPS(G4int use){fUseTAPS=use;}
   void SetUsePID(G4int use){fUsePID=use;}
-  void SetUsePIDEnd(G4int use){fUsePIDEnd=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
@@ -115,7 +114,6 @@ public:
   G4int fUseCB;   //Build the Crystal Ball
   G4int fUseTAPS;   //Build TAPS
   G4int fUsePID;   //Build the PID
-  G4int fUsePIDEnd; // Build PID end pieces
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov

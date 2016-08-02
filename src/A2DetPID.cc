@@ -8,7 +8,7 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
-// Still to be done is the updated support structure for all of the PID III options (options 3-6)
+// Still to be done is the updated - Crown for PID-III support
 
 A2DetPID::A2DetPID(){
   fregionPID=NULL;
@@ -131,72 +131,8 @@ G4VPhysicalVolume* A2DetPID::Construct2(G4LogicalVolume* MotherLogical,G4double 
   return fMyPhysi;
 }
 
-G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0, G4int PIDEND){
-  //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
-  //This is the third option for the phase 2 polarimeter where the PID is 30cm long with inner radius 4.3cm
-  //This allows for the use of an "end cap" on the polarimeter
-  //This does not require a change to the target dimensions
 
-  fMotherLogic=MotherLogical;
-  //some parameters
-  //Note it is full length not half length for this G4Trd constructor!
-  fUseEnd = PIDEND;
-  if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
-  else if (fUseEnd == 1){fpidendL = 2*CLHEP::cm;}
-  fzpos=0*CLHEP::cm;
-  fpid_z=30*CLHEP::cm;
-  fpid_rin=4.3*CLHEP::cm;
-  fpid_thick=0.4*CLHEP::cm;
-  fpid_rout=fpid_rin+fpid_thick;
-  fpid_theta=360*CLHEP::deg/fNPids;
-  fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short length
-  fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
-  G4cout << fpid_xs << "   " << fpid_xl << G4endl;
-  fpid_xs2=2*(fpid_rin-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//short length at new inner radius
-  fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
-
-  //Make the light guide shape
-  MakeLightGuide2(); // This makes the bent lightguides
-  MakePhotomultipliers(); // This is unchanged since last two PIDs
-
-//Make a single scint. detector
-  if (fUseEnd == 0){
-    MakeSingleDetector1();
-  }
-
-  else if (fUseEnd == 1){
-    MakeSingleDetector2();
-  }
-
-  MakeSupports3(); // New support structure
-
-  //Make PID Logical Volume
-  //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
-  // G4double moth_rin=fpid_rin+fpid_thick/2-8*mm;
-  G4double moth_rin=37.95-0.1*CLHEP::mm; //aliminium ring
-  //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
-  G4double moth_rout=66*CLHEP::mm; //aluminium ring
-  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm + fpidendL;//extra 6mm for supports
-  fzpos=((fpid_z-moth_z)/2+6*CLHEP::mm) + fpidendL;//zposition of centre of pid relative to mother, 3mm is for support ring
-  fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
-  G4RotationMatrix *Mrot=new G4RotationMatrix();
-  Mrot->rotateY(180*CLHEP::deg);//PID III is positioned in same orientation as PID II
-  G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin-(fpidendL*tan(30*CLHEP::deg)),moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
-  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
-  //Note here position is +fzpos beause of rotation
-  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
-  MakeDetector2();
-  G4VisAttributes* visatt=new G4VisAttributes();
-  visatt->SetColor(G4Color(0.5,0.5,1,1));
-  visatt->SetForceWireframe(true);
-  fMyLogic->SetVisAttributes(visatt);
-
-  //  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
-
-  return fMyPhysi;
-}
-
-G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double Z0, G4int PIDEND){
+G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double Z0){
   //Build the new mini PID-III for 2015/2016 that allows use of MWPC and polarimeter
   //This is the fourth option for the phase 2 polarimeter where the PID is 30cm long with inner radius 3.3cm
   //This allows for the use of an "end cap" on the polarimeter
@@ -206,9 +142,7 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
   fMotherLogic=MotherLogical;
   //some parameters
   //Note it is full length not half length for this G4Trd constructor!
-  fUseEnd = PIDEND;
-  if (fUseEnd == 0){fpidendL = 0*CLHEP::cm;}
-  else if (fUseEnd == 1){fpidendL = 1*CLHEP::cm;}
+  fpidendL = 1*CLHEP::cm;
   fzpos= 0*CLHEP::cm;
   fpid_z=30*CLHEP::cm; // Requires 1.4 cm displacement of PID! (Will change depending on LG!
   fpid_rin=3.3*CLHEP::cm;
@@ -224,16 +158,9 @@ G4VPhysicalVolume* A2DetPID::Construct4(G4LogicalVolume* MotherLogical,G4double 
   MakeLightGuide3(); // Makes the bent light guides for the smaller PID case
   MakePhotomultipliers(); // This is unchanged since last two PIDs
 
-  //Make a single scint. detector
-  if (fUseEnd == 0){
-    MakeSingleDetector1();
-  }
+  MakeSingleDetector2();
 
-  else if (fUseEnd == 1){
-    MakeSingleDetector2();
-  }
-
-  MakeSupports4(); // New support structure
+  MakeSupports3(); // New support structure
 
   //Make PID Logical Volume
   //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
@@ -624,27 +551,8 @@ void A2DetPID::MakeSupports2(){
 
 void A2DetPID::MakeSupports3(){
 
-  //c Aluminium ring for holding PMTs at the downstream end of the detector.
-  G4Tubs* solidPMTR=new G4Tubs("solidPMTR",(54*CLHEP::mm), 65.6*CLHEP::mm,5.*CLHEP::mm,0*CLHEP::deg,fpid_theta);
-  G4Tubs* subPMTR=new G4Tubs("subPMTR",0*CLHEP::mm,11/2*CLHEP::mm,5*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
-  G4SubtractionSolid *PMTR=new G4SubtractionSolid("PMTR",solidPMTR,subPMTR,new G4RotationMatrix(),G4ThreeVector(59.1*CLHEP::mm,8*CLHEP::mm,0*CLHEP::cm));
-  fPMTRLogic=new G4LogicalVolume(PMTR,fNistManager->FindOrBuildMaterial("G4_Al"),"PMTR");
-  //rest Done in MakeDetector so can subtract off the holes!
+  //PID-III Supports, need the crown included!
 
-  G4VisAttributes* SupVisAtt= new G4VisAttributes(G4Colour(0.7,0.4,0.6));
-  //CBVisAtt->SetVisibility(false);
-  fPMTRLogic->SetVisAttributes(SupVisAtt);
-
-}
-
-void A2DetPID::MakeSupports4(){
-
-  //c Aluminium ring at upstream end,
-  //c Note UPS1 should have a more complex, 24 sided outer structure
-  //c to match the shape of the inside of the PMT barrel.  The thickest
-  //c part of this structure would however only be 2.04mm and therefore
-  //c the extra complexity would add little to the accuracy and also would
-  //c complicate the tracking.
   G4Tubs* UPS1=new G4Tubs("UPS1",(fpid_rin - 2*CLHEP::mm),(fpid_rin*CLHEP::mm),3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
   fUPS1Logic=new G4LogicalVolume(UPS1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS1");
   //c UPS2 is the central part of the aluminium upstream support ring (with

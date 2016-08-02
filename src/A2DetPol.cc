@@ -47,42 +47,6 @@ G4VPhysicalVolume* A2DetPol::Construct1(G4LogicalVolume* MotherLogical,G4double 
 }
 
 G4VPhysicalVolume* A2DetPol::Construct2(G4LogicalVolume* MotherLogical,G4double Z0, G4int PCap){
-  //Build the phase 2 polarimeter (2015/2016) 1.5 cm thick
-
-  fMotherLogic=MotherLogical;
-  //some parameters
-  Xoff=0*CLHEP::mm;
-  Yoff=0*CLHEP::mm;     //original
-  fPol_Z = 300*CLHEP::mm;
-  fPol_rin = 51*CLHEP::mm;
-  fPol_rout = 66*CLHEP::mm;
-  fCap_rin = 30*CLHEP::mm;
-  fPol_Thick = fPol_rout - fPol_rin;
-  fPol_Z0 = Z0;
-  fUseCap = PCap;
-
-  if (PCap == 0){
-    //Make the polarimeter shape
-    fCapThick = 0*CLHEP::mm;
-    MakeTube2();
-    MakeSupports2();
-    G4cout<<"Made Phase II Polarimeter (2015/2016) option 1 (1.5cm)"<<G4endl;
-  }
-
-  else if (PCap == 1){
-    //Make the polarimeter shape
-    fCapThick = fPol_Thick;
-    MakeTube2();
-    MakeCap2();
-    MakeSupports2();
-    G4cout<<"Made Phase II Polarimeter (2015/2016) option 1 (1.5cm) with cap"<<G4endl;
- }
-
-return fMyPhysi; // Need to define this, what is it and why does it matter?
-
-}
-
-G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double Z0, G4int PCap){
   //Build the phase 2 polarimeter (2015/2016) 2.6cm thick, this is as the polarimeter is in reality
 
   fMotherLogic=MotherLogical;
@@ -92,7 +56,7 @@ G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double 
   fPol_Z = 300*CLHEP::mm;
   fPol_rin = 39*CLHEP::mm;
   fPol_rout = 65*CLHEP::mm;
-  fCap_rin = 30*CLHEP::mm;
+  fCap_rin = 24*CLHEP::mm;
   fPol_Thick = fPol_rout - fPol_rin;
   fPol_Z0 = Z0;
   fUseCap = PCap;
@@ -102,7 +66,7 @@ G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double 
     fCapThick = 0*CLHEP::mm;
     MakeTube2();
     MakeSupports2();
-    G4cout<<"Made Phase II Polarimeter (2015/2016) option 2 (2.5cm)"<<G4endl;
+    G4cout<<"Made Phase II Polarimeter (2015/2016, 2.6cm)"<<G4endl;
   }
 
   else if (PCap == 1){
@@ -111,7 +75,43 @@ G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double 
     MakeTube2();
     MakeCap2();
     MakeSupports2();
-    G4cout<<"Made Phase II Polarimeter (2015/2016) option 2 (2.5cm) with cap"<<G4endl;
+    G4cout<<"Made Phase II Polarimeter (2015/2016, 2.6cm) with cap"<<G4endl;
+ }
+
+return fMyPhysi; // Need to define this, what is it and why does it matter?
+
+}
+
+G4VPhysicalVolume* A2DetPol::Construct3(G4LogicalVolume* MotherLogical,G4double Z0, G4int PCap){
+  //Build the phase 2 polarimeter (2015/2016) backup tube 2.25cm thick
+
+  fMotherLogic=MotherLogical;
+  //some parameters
+  Xoff=0*CLHEP::mm;
+  Yoff=0*CLHEP::mm;     //original
+  fPol_Z = 300*CLHEP::mm;
+  fPol_rin = 42.5*CLHEP::mm;
+  fPol_rout = 66*CLHEP::mm;
+  fCap_rin = 24*CLHEP::mm;
+  fPol_Thick = fPol_rout - fPol_rin;
+  fPol_Z0 = Z0;
+  fUseCap = PCap;
+
+  if (PCap == 0){
+    //Make the polarimeter shape
+    fCapThick = 0*CLHEP::mm;
+    MakeTube2();
+    MakeSupports2();
+    G4cout<<"Made Phase II Polarimeter (2015/2016, Backup Tube 2.25cm)"<<G4endl;
+  }
+
+  else if (PCap == 1){
+    //Make the polarimeter shape
+    fCapThick = 2.6*CLHEP::cm;
+    MakeTube2();
+    MakeCap2();
+    MakeSupports2();
+    G4cout<<"Made Phase II Polarimeter (2015/2016, Backup Tube 2.25cm)"<<G4endl;
  }
 
 return fMyPhysi; // Need to define this, what is it and why does it matter?

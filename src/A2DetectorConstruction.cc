@@ -35,7 +35,6 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseCB=0;
   fUseTAPS=0;
   fUsePID=0;
-  fUsePIDEnd=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -87,7 +86,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
   fUseTAPS=0;
   fUsePID=0;
-  fUsePIDEnd=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -150,30 +148,10 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
     fPID=new A2DetPID();
 
-    if(fUsePID==1 || fUsePID ==2) {
-        if(fUsePIDEnd == 0){
-            if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
-            else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-        }
-        else if (fUsePIDEnd != 0) {G4cerr << "Error, please set UsePIDEnd to 0 if you want to use PID I or PID II"<<G4endl;exit(1);}
-    }
-
-    else if(fUsePID==3) {
-        if (fUsePIDEnd == 0 || fUsePIDEnd == 1) fPID->Construct3(fWorldLogic,fPIDZ, fUsePIDEnd);
-        else {G4cerr << "Please set fUsePIDEnd to either 0 (no end pieces) or 1 (with end pieces)"<<G4endl;exit(1);}
-    }
-
-    else if(fUsePID==4) {
-        if (fUsePIDEnd == 0 || fUsePIDEnd == 1) fPID->Construct4(fWorldLogic,fPIDZ, fUsePIDEnd);
-        else {G4cerr << "Please set fUsePIDEnd to either 0 (no end pieces) or 1 (with end pieces)"<<G4endl;exit(1);}
-    }
-
-    if (fUsePID == 3 || fUsePID == 4){
-        if (fUsePIDEnd == 0) {G4cerr << "Without end pieces"<<G4endl;}
-        else if (fUsePIDEnd == 1) {G4cerr << "With end pieces"<<G4endl;}
-    }
-
-    else {G4cerr<<"There are 4 possible PIDS, please set UsePID to be 1 (2003), 2 (2007), 3 (2015/2016 Option 1 large Target, add offset too!), 4 (2015/2016 Option 2 small target, add offset too!),  "<< G4endl; exit(1);}
+    if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
+    else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
+    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
+    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016 add offset too!),  "<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
@@ -243,30 +221,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     G4cout << "Use cryo target version " << fUseCryoTgt << G4endl;
     G4cout << "Target Z displaced by " << fTargetZ/CLHEP::cm << "cm" << G4endl;
   }
-
-  //Polarimeter
-  //G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg); // Keep out
-  //G4double  Xoff=0*CLHEP::mm;
-  //G4double  Yoff=7.8*mm; // Keep out
-  //G4double  Yoff=0*CLHEP::mm;     //original
-  //G4double  Yoff=5*mm;        //shift graphite // keep out
-
-  //**********orange support tube // Need to decide on new support structure
-  //G4Tubs* nptube=new G4Tubs("NPTUBE",195./2*CLHEP::mm,200*CLHEP::mm/2,280./2*CLHEP::cm,0*CLHEP::deg,360*CLHEP::deg);
-  //G4LogicalVolume* nptubeLogic=new G4LogicalVolume(nptube,G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYVINYL_CHLORIDE"),"NPTUBE");
-  //G4VPhysicalVolume* nptubePhysi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff-0.*CLHEP::mm,-9.4*CLHEP::cm),nptubeLogic,"NPTUBE",fWorldLogic,false,997);
-
-  // Need to adjust the shape of this so that it is a cone at thicker end of target
-  // For now it is same lenght as PID
-  //*************carbon cylinder
-  //G4double tubez=400*CLHEP::mm;
-  //G4double tubez0=-10*CLHEP::mm+tubez/2; //keep out
-  //G4Tubs* npol2=new G4Tubs("NPOL2", 41*CLHEP::mm,66*CLHEP::mm,tubez/2,0*CLHEP::deg,360*CLHEP::deg);     //small gap between cylinder and pipe wall where styrofoam was placed
-   //G4LogicalVolume* npolLogic2=new G4LogicalVolume(npol2,G4NistManager::Instance()->FindOrBuildMaterial("A2_G348GRAPHITE"),"NPOL2");
-   //G4VPhysicalVolume* npolPhysi2=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff,5.4*CLHEP::cm),npolLogic2,"NPOL2",fWorldLogic,false,998);
-
-   //  G4cout<<"Weight of Tube "<<npolLogic2->GetMass()/CLHEP::kg<<G4endl;
-  //G4cout<<"Weight of Support "<<nptubeLogic->GetMass()/CLHEP::kg<<G4endl;
 
   //
   // Visualization attributes

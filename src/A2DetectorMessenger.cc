@@ -38,12 +38,6 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
   fUsePIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUsePIDEndCmd = new G4UIcmdWithAnInteger("/A2/det/usePIDEnd",this);
-  fUsePIDEndCmd->SetGuidance("Construct PID End pieces");
-  fUsePIDEndCmd->SetParameterName("UsePIDEnd",false);
-  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
-  fUsePIDEndCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fUseMWPCCmd = new G4UIcmdWithAnInteger("/A2/det/useMWPC",this);
   fUseMWPCCmd->SetGuidance("Construct MWPC");
   fUseMWPCCmd->SetParameterName("UseMWPC",false);
@@ -176,7 +170,6 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fUseTAPSCmd;
   delete fUseCBCmd;
   delete fUsePIDCmd;
-  delete fUsePIDEndCmd;
   delete fUsePolCmd;
   delete fUsePolCapCmd;
   delete fPolZCmd;
@@ -212,9 +205,6 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fUsePIDCmd )
     { fA2Detector->SetUsePID(fUsePIDCmd->GetNewIntValue(newValue));}
-
-  if( command == fUsePIDEndCmd )
-    { fA2Detector->SetUsePIDEnd(fUsePIDEndCmd->GetNewIntValue(newValue));}
 
   if( command == fUseMWPCCmd )
     { fA2Detector->SetUseMWPC(fUseMWPCCmd->GetNewIntValue(newValue));}
