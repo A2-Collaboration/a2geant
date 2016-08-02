@@ -207,7 +207,7 @@ void A2DetPol::MakeSupports2(){
 
   //Support tube for polarimeter
 
-  G4Tubs* npolst1 = new G4Tubs("NPOLST1", fCap_rin, fCap_rin + fPolST_Thick, 0.45*CLHEP::m, 0*CLHEP::deg, 360*CLHEP::deg); // 90cm long support tube
+  G4Tubs* npolst1 = new G4Tubs("NPOLST1", fCap_rin, fCap_rin + fPolST_Thick, 0.4*CLHEP::m, 0*CLHEP::deg, 360*CLHEP::deg); // 90cm long support tube
   G4LogicalVolume* npolstLogic=new G4LogicalVolume(npolst1,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLST"); // Build tube from aluminium
   npolstLogic->SetVisAttributes(SupVisAtt);
   G4VPhysicalVolume* npolst1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolSC_Thick + (0.45*CLHEP::m)),npolstLogic,"NPOLST",fMotherLogic,false,999);
