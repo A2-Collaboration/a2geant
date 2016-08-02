@@ -13,24 +13,24 @@ A2SolidTarget::A2SolidTarget()
 }
 A2SolidTarget::~A2SolidTarget()
 {
- 
+
 }
 
-G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic){
+G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0){
   fMotherLogic=MotherLogic;
   //Parameters taken from ugeom_solid_target.F
-  G4double zm = 20.*CLHEP::cm;   //      ! z for mother volume 
+  G4double zm = 20.*CLHEP::cm;   //      ! z for mother volume
   G4double rm = 3.94*CLHEP::cm; //        ! radius of mother volume
   G4double zpos = -(zm-14.5*CLHEP::cm); //        ! zpos of mother volume relative to centre of ball
 
   if(!fMaterial){G4cerr<<"A2SolidTarget::Construct() Solid target material not defined. Add in DetectorSetup.mac."<<G4endl;exit(1);}
   //c target lenght:
   G4double trgt_length;
-  if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Li"))trgt_length=5.*CLHEP::cm; 
-  // else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_GRAPHITE"))trgt_length=1.5*CLHEP::cm; 
-  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Ca"))trgt_length=1.*CLHEP::cm; 
-  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_GRAPHITE"))trgt_length=1.5*CLHEP::cm; 
-  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"))trgt_length=0.05*CLHEP::cm; 
+  if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Li"))trgt_length=5.*CLHEP::cm;
+  // else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_GRAPHITE"))trgt_length=1.5*CLHEP::cm;
+  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Ca"))trgt_length=1.*CLHEP::cm;
+  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_GRAPHITE"))trgt_length=1.5*CLHEP::cm;
+  else if(fMaterial==G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb"))trgt_length=0.05*CLHEP::cm;
   else {G4cerr<<"A2SolidTarget::Construct() Solid target length not defined!!"<<G4endl;exit(1);}
   fLength=trgt_length;
   ///////////////////////////
@@ -128,5 +128,16 @@ G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic){
 
   return NULL;
 
+}
 
+// Alternate constructors if different variants of Target wanted, currently unused
+
+G4VPhysicalVolume* A2SolidTarget::Construct1(G4LogicalVolume *MotherLogic, G4double Z0)
+{
+ return 0;
+}
+
+G4VPhysicalVolume* A2SolidTarget::Construct2(G4LogicalVolume *MotherLogic, G4double Z0)
+{
+ return 0;
 }
