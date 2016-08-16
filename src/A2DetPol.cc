@@ -235,5 +235,5 @@ void A2DetPol::MakeSupports2(){
   G4VPhysicalVolume* npolcr2aPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (3*(fPolCradleThick/2))), npolcr2Logic, "NPOLCR2a", fMotherLogic, false, 999); //Place second piece of cradle
   G4VPhysicalVolume* npolcr2bPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + fPolCradleSep + (5*(fPolCradleThick/2))), npolcr2Logic, "NPOLCR2b", fMotherLogic, false, 999);
   G4VPhysicalVolume* npolcr1bPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + fPolCradleSep + (7*(fPolCradleThick/2))), npolcr1Logic, "NPOLCR1b", fMotherLogic, false, 999);
-  G4VPhysicalVolume* npolcrord1Physi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff-(71*CLHEP::mm)), (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (2*fPolCradleThick) + (fPolCradleSep/2)), npolcrrodLogic, "NPOLCRROD1", fMotherLogic, false, 999); //Place first rod
+  G4VPhysicalVolume* npolcrord1Physi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff-(71*CLHEP::mm), (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (2*fPolCradleThick) + (fPolCradleSep/2))), npolcrrodLogic, "NPOLCRROD1", fMotherLogic, false, 999); //Place first rod
 }
