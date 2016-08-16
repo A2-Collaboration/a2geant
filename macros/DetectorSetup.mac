@@ -46,8 +46,12 @@
 /A2/det/targetMaterial A2_lD2
 /A2/det/setTargetLength 10. cm
 #Set target z position if offset desired, +ve is towards TAPS, -ve away
+<<<<<<< HEAD
 # Only works for Cryo target currently since I don't care about the other 2!
 # For Polarimeter run set to -6.5cm!
+=======
+#Only works for Cryo target currently since I don't care about the other 2!
+>>>>>>> af6ef726ccd27e058e3c4fc7ff5e7c8c10701c47
 /A2/det/setTargetZ -6.5 cm
 ####Solid targets : G4_Li, G4_GRAPHITE, G4_Ca, G4_Pb###
 #/A2/det/useTarget Solid

@@ -56,6 +56,12 @@ private:
   G4double fPolSC_Thick;
   G4double fPolST_Thick;
   G4double fPolSR_Length;
+  G4double fPolCradleThick;
+  G4double fPolCradleOR;
+  G4double fPolCradleIR1;
+  G4double fPolCradleIR2;
+  G4double fPolCradleSep;
+  G4double fPolCradlePlacement;
   G4int fUseCap;
 
 } ;
