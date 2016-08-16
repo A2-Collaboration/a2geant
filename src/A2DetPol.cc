@@ -218,12 +218,12 @@ void A2DetPol::MakeSupports2(){
   G4Tubs* npolst1 = new G4Tubs("NPOLST1", fCap_rin, fCap_rin + fPolST_Thick, 0.4*CLHEP::m, 0*CLHEP::deg, 360*CLHEP::deg); // 80cm long support tube
   G4LogicalVolume* npolstLogic=new G4LogicalVolume(npolst1,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLST"); // Build tube from aluminium
   npolstLogic->SetVisAttributes(SupVisAtt);
-  G4VPhysicalVolume* npolst1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolSC_Thick + (0.45*CLHEP::m)),npolstLogic,"NPOLST",fMotherLogic,false,999);
+  G4VPhysicalVolume* npolst1Physi=new G4PVPlacement(0,G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolSC_Thick + (0.40*CLHEP::m)),npolstLogic,"NPOLST",fMotherLogic,false,999);
 
   // Cradle for polarimeter, support tube rests on this
 
-  G4Tubs* npolcr1 = new G4Tubs("NPOLCR1", fPolCradleIR1, fPolCradleOR, fPolCradleThick/2, 0*CLHEP::deg, 180*CLHEP::deg); //Outer piece of cradle (holds tube)
-  G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, 0*CLHEP::deg, 180*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
+  G4Tubs* npolcr1 = new G4Tubs("NPOLCR1", fPolCradleIR1, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 360*CLHEP::deg); //Outer piece of cradle (holds tube)
+  G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 360*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
   G4LogicalVolume* npolcr1Logic = new G4LogicalVolume(npolcr1 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR1"); // Set both cradle pieces to be made of Aluminium
   G4LogicalVolume* npolcr2Logic = new G4LogicalVolume(npolcr2 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR2");
   npolcr1Logic->SetVisAttributes(SupVisAtt); // Set colour of cradle pieces to green
