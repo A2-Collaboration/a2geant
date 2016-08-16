@@ -185,6 +185,7 @@ void A2DetPol::MakeCap2(){
 void A2DetPol::MakeSupports2(){
 
   // Make the supporting structure
+  // See wiki for diagrams of cradle pieces
 
   //Support end caps for carbon polarimeter
 
@@ -195,9 +196,9 @@ void A2DetPol::MakeSupports2(){
   fPolCradleThick = 12*CLHEP::mm; // Thickness of each piece of cradle
   fPolCradleOR = 95*CLHEP::mm; // Outer radius of cradle pieces
   fPolCradleIR1 = 24.5*CLHEP::mm; // Inner radius of first cradle piece (piece pipe rests on)
-  fPolCradleIR2 = 66*CLHEP::mm;
-  fPolCradleSep = 250*CLHEP::mm; // Separation between two ends of cradle
-  fPolCradlePlacement = 200*CLHEP::mm; // How far from second end cap is cradle?
+  fPolCradleIR2 = 66*CLHEP::mm; // Inner radius of other part of cradle
+  fPolCradleSep = 250*CLHEP::mm; // Separation between two ends of cradle and length of rods
+  fPolCradlePlacement = 200*CLHEP::mm; // How far from second end cap is cradle? Edit this parameter to move cradle along support pipe
 
   G4Tubs* npolsc1=new G4Tubs("NPOLSC1",fCap_rin,fPol_rout,fPolSC_Thick/2,0*CLHEP::deg,360*CLHEP::deg);
   G4Tubs* SupHole=new G4Tubs("CapHole", 0*CLHEP::mm, 3.025*CLHEP::mm, (fPolSC_Thick/2) + 0.2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg); // Holes cut in support caps for steel rods
