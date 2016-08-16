@@ -274,7 +274,6 @@ void A2DetectorConstruction::DefineMaterials()
  cboard->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.238095238);
  //NistManager->RegisterMaterial(cboard);
 
-
  //Fibre GLass. From cbsim.
  G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*CLHEP::g/CLHEP::cm3, ncomponents=8);
  fglass->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.557);
@@ -381,8 +380,23 @@ void A2DetectorConstruction::DefineMaterials()
   A2_Epoxy->AddMaterial(A2_Resin, fractionmass=0.8);
   A2_Epoxy->AddMaterial(A2_13BAC, fractionmass=0.2);
 
-  //polarimeter
+  //////////
+  //Materials for Polarimeter:
+  //////////
+
+
+  //Polarimeter graphite
   new G4Material("A2_G348GRAPHITE", z=6., a= 12.01*CLHEP::g/CLHEP::mole, density= 1.92*CLHEP::g/CLHEP::cm3);
+
+ //Silver steel for cradle rods - Not sure density is correct?
+  G4Material* A2_SilverSteel = new G4Material("A2_SilverSteel", density=8000.*CLHEP::kg/CLHEP::m3, ncomponents=7);
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(26), fractionmass=0.97818); // Iron
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(12), fractionmass=0.0113); // Carbon
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(24), fractionmass=0.0043); // Chromium
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(25), fractionmass=0.0037); // Manganese
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(14), fractionmass=0.0022); // Silicon
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(15), fractionmass=0.00014); // Phosphorous
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(16), fractionmass=0.00018); // Sulphur
 
   /*Now useG4NistManager
  //This function illustrates the possible ways to define materials
