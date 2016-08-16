@@ -222,8 +222,8 @@ void A2DetPol::MakeSupports2(){
 
   // Cradle for polarimeter, support tube rests on this
 
-  G4Tubs* npolcr1 = new G4Tubs("NPOLCR1", fPolCradleIR1, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 360*CLHEP::deg); //Outer piece of cradle (holds tube)
-  G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 360*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
+  G4Tubs* npolcr1 = new G4Tubs("NPOLCR1", fPolCradleIR1, fPolCradleOR, fPolCradleThick/2, -180*CLHEP::deg, 0*CLHEP::deg); //Outer piece of cradle (holds tube)
+  G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, -180*CLHEP::deg, 0*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
   G4LogicalVolume* npolcr1Logic = new G4LogicalVolume(npolcr1 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR1"); // Set both cradle pieces to be made of Aluminium
   G4LogicalVolume* npolcr2Logic = new G4LogicalVolume(npolcr2 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR2");
   npolcr1Logic->SetVisAttributes(SupVisAtt); // Set colour of cradle pieces to green
