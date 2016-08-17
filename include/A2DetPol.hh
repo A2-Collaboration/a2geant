@@ -7,6 +7,7 @@
 
 #include "G4Tubs.hh"
 #include "G4Cons.hh"
+#include "G4Box.hh"
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4UnionSolid.hh"
