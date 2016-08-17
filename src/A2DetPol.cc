@@ -8,7 +8,7 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
-// Need to update options 2-5 with new support structures once decided upon
+// 16/08/16 Need to confirm position of cradle and dimensions of pipe
 
 A2DetPol::A2DetPol(){
   //fregionPol=NULL;
@@ -223,15 +223,32 @@ void A2DetPol::MakeSupports2(){
 
   // Cradle for polarimeter, support tube rests on this
 
+  // Define basic shape of components
+
   G4Tubs* npolcr1 = new G4Tubs("NPOLCR1", fPolCradleIR1, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 180*CLHEP::deg); //Outer piece of cradle (holds tube)
   G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 180*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
   G4Tubs* npolcrrod = new G4Tubs("NPOLCRROD", 0, 6*CLHEP::mm, fPolCradleSep/2, 0*CLHEP::deg, 360*CLHEP::deg); // Silver steel rods
+  G4Tubs* npolc1 = new G4Tubs("NPOLC1", 25.4*CLHEP::mm, 45*CLHEP::mm, fPolCradleThick/2, 0*CLHEP::deg, 180*CLHEP::deg); // Circular piece of clamp
+  G4Tubs* npolc2 = new G4Box("NPOLC2", 25*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm); // Cuboidal section of clamp
+
+  // Add clamp pieces together
+
+  npolc3 = ("NPOLC3", npolc1, npolc2, 0, G4ThreeVector ( -49*CLHEP::mm, 10*CLHEP:mm, 6*CLHEP::mm));
+  npolc4 =("NPOLC4", npolc3, npolc2, 0, G4ThreeVector ( 49*CLHEP::mm, 10*CLHEP:mm, 6*CLHEP::mm));
+
+  // Define materials and colour for each component
+
   G4LogicalVolume* npolcr1Logic = new G4LogicalVolume(npolcr1 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR1"); // Set both cradle pieces to be made of Aluminium
   G4LogicalVolume* npolcr2Logic = new G4LogicalVolume(npolcr2 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR2");
   G4LogicalVolume* npolcrrodLogic = new G4LogicalVolume(npolcrrod ,G4NistManager::Instance()->FindOrBuildMaterial("A2_SilverSteel"),"NPOLCRROD"); // Set rods to be made of silver steel
+  G4LogicalVolume* npolcLogic = new G4LogicalVolume (npolc4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCLAMP")
   npolcr1Logic->SetVisAttributes(SupVisAtt); // Set colour of cradle pieces to green
   npolcr2Logic->SetVisAttributes(SupVisAtt);
   npolcrrodLogic->SetVisAttributes(SupVisAtt);
+  npolcLogic->SetVisAttributes(SupVisAtt);
+
+  // Place components into the volume
+
   G4VPhysicalVolume* npolcr1aPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (fPolCradleThick/2)), npolcr1Logic, "NPOLCR1a", fMotherLogic, false, 999); //Place first large piece of cradle
   G4VPhysicalVolume* npolcr2aPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (3*(fPolCradleThick/2))), npolcr2Logic, "NPOLCR2a", fMotherLogic, false, 999); //Place second piece of cradle
   G4VPhysicalVolume* npolcr2bPhysi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + fPolCradleSep + (5*(fPolCradleThick/2))), npolcr2Logic, "NPOLCR2b", fMotherLogic, false, 999);
@@ -239,5 +256,7 @@ void A2DetPol::MakeSupports2(){
   G4VPhysicalVolume* npolcrord1Physi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff-(71*CLHEP::mm), (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (2*fPolCradleThick) + (fPolCradleSep/2)), npolcrrodLogic, "NPOLCRROD1", fMotherLogic, false, 999); //Place first rod
   G4VPhysicalVolume* npolcrord2Physi = new G4PVPlacement(0, G4ThreeVector(Xoff-(71*CLHEP::mm),Yoff-(8*CLHEP::mm), (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (2*fPolCradleThick) + (fPolCradleSep/2)), npolcrrodLogic, "NPOLCRROD2", fMotherLogic, false, 999); //Place first rod
   G4VPhysicalVolume* npolcrord3Physi = new G4PVPlacement(0, G4ThreeVector(Xoff+(71*CLHEP::mm),Yoff-(8*CLHEP::mm), (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (2*fPolCradleThick) + (fPolCradleSep/2)), npolcrrodLogic, "NPOLCRROD3", fMotherLogic, false, 999); //Place first rod
+  G4VPhysicalVolume* npolc1Physi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + (fPolCradleThick/2)), npolcLogic, "NPOLC1", fMotherLogic, false, 999); // Place first clamp
+  G4VPhysicalVolume* npolc2Physi = new G4PVPlacement(0, G4ThreeVector(Xoff,Yoff, (fPol_Z/2) + fPol_Z0 + fCapThick + fPolCradlePlacement + fPolCradleSep + (7*(fPolCradleThick/2))), npolcLogic, "NPOLC2", fMotherLogic, false, 999); // Place second clamp
 
 }
