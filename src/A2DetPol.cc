@@ -241,7 +241,7 @@ void A2DetPol::MakeSupports2(){
   G4LogicalVolume* npolcr1Logic = new G4LogicalVolume(npolcr1 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR1"); // Set both cradle pieces to be made of Aluminium
   G4LogicalVolume* npolcr2Logic = new G4LogicalVolume(npolcr2 ,G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCR2");
   G4LogicalVolume* npolcrrodLogic = new G4LogicalVolume(npolcrrod ,G4NistManager::Instance()->FindOrBuildMaterial("A2_SilverSteel"),"NPOLCRROD"); // Set rods to be made of silver steel
-  G4LogicalVolume* npolcLogic = new G4LogicalVolume (npolc4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCLAMP")
+  G4LogicalVolume* npolcLogic = new G4LogicalVolume (npolc4, G4NistManager::Instance()->FindOrBuildMaterial("G4_Al"),"NPOLCLAMP"); // Set clamps to be made from Aluminium
   npolcr1Logic->SetVisAttributes(SupVisAtt); // Set colour of cradle pieces to green
   npolcr2Logic->SetVisAttributes(SupVisAtt);
   npolcrrodLogic->SetVisAttributes(SupVisAtt);
