@@ -233,8 +233,8 @@ void A2DetPol::MakeSupports2(){
 
   // Add clamp pieces together
 
-  npolc3 = ("NPOLC3", npolc1, npolc2, 0, G4ThreeVector ( -49*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm));
-  npolc4 =("NPOLC4", npolc3, npolc2, 0, G4ThreeVector ( 49*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm));
+  G4UnionSolid* npolc3 = new G4UnionSolid("NPOLC3", npolc1, npolc2, 0, G4ThreeVector ( -49*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm));
+  G4UnionSolid* npolc4 = new G4UnionSolid("NPOLC4", npolc3, npolc2, 0, G4ThreeVector ( 49*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm));
 
   // Define materials and colour for each component
 
