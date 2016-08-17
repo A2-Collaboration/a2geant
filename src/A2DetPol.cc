@@ -229,7 +229,7 @@ void A2DetPol::MakeSupports2(){
   G4Tubs* npolcr2 = new G4Tubs("NPOLCR2", fPolCradleIR2, fPolCradleOR, fPolCradleThick/2, 180*CLHEP::deg, 180*CLHEP::deg); // Inner piece of cradle (Attaches to rods)
   G4Tubs* npolcrrod = new G4Tubs("NPOLCRROD", 0, 6*CLHEP::mm, fPolCradleSep/2, 0*CLHEP::deg, 360*CLHEP::deg); // Silver steel rods
   G4Tubs* npolc1 = new G4Tubs("NPOLC1", 25.4*CLHEP::mm, 45*CLHEP::mm, fPolCradleThick/2, 0*CLHEP::deg, 180*CLHEP::deg); // Circular piece of clamp
-  G4Box* npolc2 = new G4Box("NPOLC2", 30*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm); // Cuboidal section of clamp
+  G4Box* npolc2 = new G4Box("NPOLC2", 25*CLHEP::mm, 10*CLHEP::mm, 6*CLHEP::mm); // Cuboidal section of clamp
 
   // Add clamp pieces together
 
