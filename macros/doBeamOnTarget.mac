@@ -4,15 +4,32 @@
 /run/initialize
 
 ##the initial random number seed
-/A2/generator/Seed 1111111
+/A2/generator/Seed 1111
 
-/gun/position 0 0 -3.0 m
-/gun/energy 6 GeV
-/gun/direction 0 0 1
-/gun/particle e-
+/gps/particle gamma 
+/gps/pos/type Beam 
+#Beam spot in XY plane
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 1 0
+# Gaussian shape beam spot
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. -3.0 m
+# 4mm collimator
+/gps/pos/radius 2.0 mm
+# Guess
+/gps/pos/sigma_r 0.1 mm 
+ # Beam along Z axis
+/gps/ang/rot
+/gps/ang/rot 
+/gps/ang/type beam2d
+# Dispersion of beam
+/gps/ang/sigma_r 0.0067 rad
+# Define energy of beam from histogram
+/gps/ene/type
+
 
 #Open the output file for writing
-/A2/event/setOutputFile /scratch/dglazier/simCLAS12/6GeVe10cmCTarget.root
+/A2/event/setOutputFile /Disk/ds-sopa-group/np/thehubdata/thehub4/SKay/Data/Geant_Output/PhotonGunTest.root
 
 
-/run/beamOn 100000
+/run/beamOn 1000000

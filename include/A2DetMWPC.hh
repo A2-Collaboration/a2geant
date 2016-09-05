@@ -28,10 +28,11 @@ public:
   void MakeDetector();
   void MakeSensitiveDetector();
 
-  G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic);
+  G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
+  G4VPhysicalVolume* ConstructMWPC(G4LogicalVolume *MotherLogic, G4double Z0);
 
   void UseAnodes(G4bool use=true){fuseAnodes=use;}
-  
+
 private:
 
 //Chambers

@@ -7,7 +7,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-
 #include "G4VVisManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -39,11 +38,15 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
+  fUseCryoTgt=0;
+  fUsePol=0;
+  fUsePolCap=0;
 
   fCrystalBall=NULL;
   fTAPS=NULL;
   fPID=NULL;
   fMWPC=NULL;
+  fPol=NULL;
   fTOF=NULL;
   fWorldSolid=NULL;
   fWorldLogic=NULL;
@@ -62,6 +65,12 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   //default settings for PID
   fPIDZ=0.;
+  //default offset for MWPC
+  fMWPCZ=0.;
+  //default offset for Polarimeter
+  fPolZ=0;
+  //default offset for target
+  fTargetZ=0;
   //has to be done here in case use new material for target
   DefineMaterials();
 
@@ -72,29 +81,26 @@ A2DetectorConstruction::~A2DetectorConstruction(){
  delete fDetMessenger;
 }
 
-
-
-
 G4VPhysicalVolume* A2DetectorConstruction::Construct()
 {
-
 
   fUseTAPS=0;
   fUsePID=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
+  fUsePol=0;
+  fUsePolCap=0;
 
   // read the set up file DetectorSetup.mac
-  // get the pointer to the User Interface manager 
+  // get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
-  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
+  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
     G4cout<<"G4VPhysicalVolume* A2DetectorConstruction::Construct() Don't seem to be simulating any detectors, please check you are using an appopriate detector setup. I tried the file "<<fDetectorSetup<< " I will exit here before the computer explodes"<<G4endl;
     exit(0);
   }
-
 
   // Clean old geometry, if any
   //
@@ -102,16 +108,16 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  //     
+  //
   // World
   //
   fWorldSolid = new G4Box("World",				//its name
 			  20*CLHEP::m,20*CLHEP::m,20*CLHEP::m);	//its size
-                         
+
   fWorldLogic = new G4LogicalVolume(fWorldSolid,		//its solid
 				    G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR"),	//its material
                                    "World");		//its name
-                                   
+
   fWorldPhysi = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
                                  fWorldLogic,		//its logical volume
@@ -119,7 +125,6 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
                                  0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
-
 
   //Make the crystal ball
   if(fUseCB){
@@ -129,20 +134,25 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fCrystalBall->SetGap(fHemiGap);
     fCrystalBall->Construct(fWorldLogic);
   }
+
   if(fUseTAPS){
     G4cout<<"A2DetectorConstruction::Construct() Turn on the taps"<<G4endl;
-    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl; 
+    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl;
     fTAPS=new A2DetTAPS(fTAPSSetupFile,fTAPSN,fNPbWO4,fTAPSZ);
     //fTAPS=new A2DetTAPS();
     fTAPS->SetIsInteractive(fIsInteractive);
     fTAPS->Construct(fWorldLogic);
   }
+
   if(fUsePID){
-    G4cout<<"A2DetectorConstruction::Construct() Take the pid "<< fUsePID<<G4endl;
+    G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
     fPID=new A2DetPID();
+
     if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
     else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 2 possible PIDS, please set UsePID to be 1 (2003) or 2 (2007)"<<G4endl; exit(1);}
+    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
+    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016 add offset too!),  "<< G4endl; exit(1);}
+    G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
   if(fUseMWPC){
@@ -150,20 +160,43 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUseMWPC==2)G4cout<<"With the anode wires created"<<G4endl;
     fMWPC = new A2DetMWPC();
     if(fUseMWPC==2)fMWPC->UseAnodes(true);
-    fMWPC ->Construct(fWorldLogic); 
+    fMWPC ->ConstructMWPC(fWorldLogic, fMWPCZ);
+    G4cout << "MWPC Z displaced by " << fMWPCZ/CLHEP::cm << "cm" << G4endl;
   }
+
   if(fUseTOF){
     G4cout<<"A2DetectorConstruction::Construct() ToF time!"<<G4endl;
     fTOF=new A2DetTOF();
     fTOF->ReadParameters(fTOFparFile);
     fTOF->Construct(fWorldLogic);
   }
- if(fUseCherenkov){
+
+  if(fUseCherenkov){
     G4cout<<"A2DetectorConstruction::Construct() Make the Cherenkov"<<G4endl;
     fCherenkov=new A2DetCherenkov();
     fCherenkov->SetIsInteractive(fIsInteractive);
     fCherenkov->Construct(fWorldLogic);
- }
+  }
+
+  if(fUsePol){ //Check to see if Polarimeter is to be constructed or not
+    G4cout<<"A2DetectorConstruction::Construct() Make Polarimeter option "<< fUsePol <<G4endl;
+    fPol = new A2DetPol();
+    if(fUsePol==1) {
+        if (fUsePolCap==0) fPol->Construct1(fWorldLogic, fPolZ);
+        else if (fUsePolCap!=0) {G4cerr << "Error, please set UsePolCap to 0 if you wish to use the Phase 1 Polarimeter"<<G4endl;exit(1);}
+    }
+    else if (fUsePol==2) {
+        if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct2(fWorldLogic,fPolZ, fUsePolCap);
+        else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
+    }
+    else if (fUsePol==3) {
+        if (fUsePolCap==0 || fUsePolCap==1) fPol->Construct3(fWorldLogic,fPolZ, fUsePolCap);
+        else {G4cerr << "Please set fUsePolCap to either 0 (no cap) or 1 (cap)"<<G4endl;exit(1);}
+    }
+    else {G4cerr<<"There are 3 possible polarimeters, please set UsePol to be 1 (2009),2 (2015/2016) 1.5cm or 3 (2015/2016) 2.5cm.  Set UsePolCap to 1 if you desire an end cap for options 2 or 3."<<G4endl << "Don't forget to add an offest for options 2-3, also a cap for versions 2 or 3 requires a shorter PID" << G4endl; exit(1);}
+    G4cout << "Polarimeter Z displaced by " << fPolZ/CLHEP::cm << "cm" << G4endl;
+  }
+
   if(fUseTarget!=G4String("NO")){
     G4cout<<"A2DetectorConstruction::Construct() Fill the "<<fUseTarget<<" with "<<fTargetMaterial->GetName()<<G4endl;
     if(fUseTarget=="Cryo") fTarget=static_cast<A2Target*>(new A2CryoTarget());
@@ -179,9 +212,17 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticField(fNameFileFieldMap);
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticCoils(fTypeMagneticCoils);
     }
-    fTarget->Construct(fWorldLogic);
+    if(fUseTarget=="Cryo") {
+        if (fUseCryoTgt == 1) fTarget->Construct1(fWorldLogic, fTargetZ);
+        else if (fUseCryoTgt == 2) fTarget->Construct2(fWorldLogic, fTargetZ);
+        else fTarget->Construct(fWorldLogic,fTargetZ);
+    }
+    else fTarget->Construct(fWorldLogic, fTargetZ);
+    G4cout << "Use cryo target version " << fUseCryoTgt << G4endl;
+    G4cout << "Target Z displaced by " << fTargetZ/CLHEP::cm << "cm" << G4endl;
   }
-  //                                        
+
+  //
   // Visualization attributes
   //
   fWorldLogic->SetVisAttributes (G4VisAttributes::Invisible);
@@ -195,29 +236,24 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   return fWorldPhysi;
 }
 
-
-
-
-
 #include "G4RunManager.hh"
 
 void A2DetectorConstruction::UpdateGeometry()
 {
-
   G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 
 
 void A2DetectorConstruction::DefineMaterials()
-{ 
+{
   G4double density,z,a,fractionmass;
   G4int ncomponents;
 
   //Add materials not contained in default Nist list
   G4NistManager* NistManager=G4NistManager::Instance();
 
-  //Rohacell. From cbsim.  The formula is (C4 H7 N 0)n. Density is 0.057 g/CLHEP::cm3.  (V.K)
- G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*CLHEP::g/CLHEP::cm3, ncomponents=4);  
+ //Rohacell. From cbsim.  The formula is (C4 H7 N 0)n. Density is 0.057 g/CLHEP::cm3.  (V.K)
+ G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*CLHEP::g/CLHEP::cm3, ncomponents=4);
  Roha->AddElement(NistManager->FindOrBuildElement(6),4);
  Roha->AddElement(NistManager->FindOrBuildElement(1),7);
  Roha->AddElement(NistManager->FindOrBuildElement(7),1);
@@ -238,7 +274,6 @@ void A2DetectorConstruction::DefineMaterials()
  cboard->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.238095238);
  //NistManager->RegisterMaterial(cboard);
 
-
  //Fibre GLass. From cbsim.
  G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*CLHEP::g/CLHEP::cm3, ncomponents=8);
  fglass->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.557);
@@ -251,7 +286,7 @@ void A2DetectorConstruction::DefineMaterials()
  fglass->AddElement(NistManager->FindOrBuildElement(3),fractionmass=0.2320000E-02);
  //NistManager->RegisterMaterial(fglass);
 
- //Plastic. From cbsim 
+ //Plastic. From cbsim
  G4Material *plastic=new G4Material("A2_PLASTIC",density=1.19*CLHEP::g/CLHEP::cm3, ncomponents=2);
  plastic->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);
  plastic->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
@@ -287,9 +322,9 @@ void A2DetectorConstruction::DefineMaterials()
 //////////
 //Materials for Polarized Target:
 //////////
- 
-  G4String symbol;             
-  G4int iz, n;                 //iz=number of protons  in an isotope; 
+
+  G4String symbol;
+  G4int iz, n;                 //iz=number of protons  in an isotope;
                                // n=number of nucleons in an isotope;
   G4int natoms;
   G4double abundance;
@@ -315,7 +350,7 @@ void A2DetectorConstruction::DefineMaterials()
   G4Material* A2_HeButanol=new G4Material("A2_HeButanol", density=0.6*CLHEP::g/CLHEP::cm3, ncomponents=2);
   A2_HeButanol->AddMaterial(A2_HeMix, fractionmass=0.094);
   A2_HeButanol->AddMaterial(A2_Butanol, fractionmass=0.906);
-  
+
 //Stainless steel (18% Cr, 10% Ni, 72% Fe):
   G4Material* A2_SS=new G4Material("A2_SS", density=8000.*CLHEP::kg/CLHEP::m3, ncomponents=3);
   A2_SS->AddElement(NistManager->FindOrBuildElement(24), fractionmass=0.18);
@@ -345,15 +380,32 @@ void A2DetectorConstruction::DefineMaterials()
   A2_Epoxy->AddMaterial(A2_Resin, fractionmass=0.8);
   A2_Epoxy->AddMaterial(A2_13BAC, fractionmass=0.2);
 
+  //////////
+  //Materials for Polarimeter:
+  //////////
+
+
+  //Polarimeter graphite
+  new G4Material("A2_G348GRAPHITE", z=6., a= 12.01*CLHEP::g/CLHEP::mole, density= 1.92*CLHEP::g/CLHEP::cm3);
+
+ //Silver steel for cradle rods - Not sure density is correct?
+  G4Material* A2_SilverSteel = new G4Material("A2_SilverSteel", density=8000.*CLHEP::kg/CLHEP::m3, ncomponents=7);
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(26), fractionmass=0.97818); // Iron
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(12), fractionmass=0.0113); // Carbon
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(24), fractionmass=0.0043); // Chromium
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(25), fractionmass=0.0037); // Manganese
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(14), fractionmass=0.0022); // Silicon
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(15), fractionmass=0.00014); // Phosphorous
+  A2_SilverSteel->AddElement(NistManager->FindOrBuildElement(16), fractionmass=0.00018); // Sulphur
 
   /*Now useG4NistManager
  //This function illustrates the possible ways to define materials
- 
+
   G4String symbol;             //a=mass of a mole;
-  G4double a, z, density;      //z=mean number of protons;  
-  G4int iz, n;                 //iz=number of protons  in an isotope; 
+  G4double a, z, density;      //z=mean number of protons;
+  G4int iz, n;                 //iz=number of protons  in an isotope;
                              // n=number of nucleons in an isotope;
-  
+
   G4int ncomponents, natoms;
   G4double abundance, fractionmass;
 
@@ -365,48 +417,48 @@ G4Element* H  = new G4Element("Hydrogen",symbol="H" , z= 1., a= 1.01*CLHEP::g/mo
 G4Element* C  = new G4Element("Carbon"  ,symbol="C" , z= 6., a= 12.01*CLHEP::g/mole);
 G4Element* N  = new G4Element("Nitrogen",symbol="N" , z= 7., a= 14.01*CLHEP::g/mole);
 G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*CLHEP::g/mole);
- G4Element* Si = new G4Element("Silicon",symbol="Si" , z= 14., a= 28.09*CLHEP::g/mole);
- G4Element* Na = new G4Element("Sodium", symbol="Na" , z= 11., a= 22.98977*CLHEP::g/mole);
- G4Element* I = new G4Element("Iodine",  symbol="I" , z= 53., a= 126.9045*CLHEP::g/mole);
- G4Element* Ca = new G4Element("Calcium",symbol="Ca",z=20, a= 40.08*CLHEP::g/mole);
- G4Element* Al = new G4Element("Aluminium",symbol="Al",z=13, a= 26.98154*CLHEP::g/mole);
- G4Element* B = new G4Element("Boron",   symbol="B",z=5, a=10.81*CLHEP::g/mole);
- G4Element* K = new G4Element("Potassium",symbol="K",z=19, a=39.098*CLHEP::g/mole);
- G4Element* Li = new G4Element("Lithium",symbol="Li",z=3, a= 6.941*CLHEP::g/mole);
- G4Element* Cl = new G4Element("Chlorine",symbol="Cl",z=17, a= 35.453*CLHEP::g/mole);
- G4Element* Ba = new G4Element("Barium",symbol="Ba",z=56, a= 137.327*CLHEP::g/mole);
- G4Element* F = new G4Element("Fluorine",symbol="F",z=9, a= 18.9984032*CLHEP::g/mole);
- G4Element* Ni = new G4Element("Nickel",symbol="Ni",z=28, a= 58.6934*CLHEP::g/mole);
- G4Element* Mo = new G4Element("Molybdenum",symbol="Mo",z=42, a= 95.94*CLHEP::g/mole);
- G4Element* Cu = new G4Element("Copper",symbol="Cu",z=29, a= 63.546*CLHEP::g/mole);
- G4Element* Fe = new G4Element("Iron",symbol="Fe",z=26, a= 55.845*CLHEP::g/mole);
+G4Element* Si = new G4Element("Silicon",symbol="Si" , z= 14., a= 28.09*CLHEP::g/mole);
+G4Element* Na = new G4Element("Sodium", symbol="Na" , z= 11., a= 22.98977*CLHEP::g/mole);
+G4Element* I = new G4Element("Iodine",  symbol="I" , z= 53., a= 126.9045*CLHEP::g/mole);
+G4Element* Ca = new G4Element("Calcium",symbol="Ca",z=20, a= 40.08*CLHEP::g/mole);
+G4Element* Al = new G4Element("Aluminium",symbol="Al",z=13, a= 26.98154*CLHEP::g/mole);
+G4Element* B = new G4Element("Boron",   symbol="B",z=5, a=10.81*CLHEP::g/mole);
+G4Element* K = new G4Element("Potassium",symbol="K",z=19, a=39.098*CLHEP::g/mole);
+G4Element* Li = new G4Element("Lithium",symbol="Li",z=3, a= 6.941*CLHEP::g/mole);
+G4Element* Cl = new G4Element("Chlorine",symbol="Cl",z=17, a= 35.453*CLHEP::g/mole);
+G4Element* Ba = new G4Element("Barium",symbol="Ba",z=56, a= 137.327*CLHEP::g/mole);
+G4Element* F = new G4Element("Fluorine",symbol="F",z=9, a= 18.9984032*CLHEP::g/mole);
+G4Element* Ni = new G4Element("Nickel",symbol="Ni",z=28, a= 58.6934*CLHEP::g/mole);
+G4Element* Mo = new G4Element("Molybdenum",symbol="Mo",z=42, a= 95.94*CLHEP::g/mole);
+G4Element* Cu = new G4Element("Copper",symbol="Cu",z=29, a= 63.546*CLHEP::g/mole);
+G4Element* Fe = new G4Element("Iron",symbol="Fe",z=26, a= 55.845*CLHEP::g/mole);
 
 
- new G4Material("Aluminium", z=13., a=26.98154*CLHEP::g/mole, density=2.700*CLHEP::g/cm3);
- new G4Material("Iron", z=26., a=55.85*CLHEP::g/mole, density=7.87*CLHEP::g/cm3);
- new G4Material("liquidArgon", z=18., a= 39.95*CLHEP::g/mole, density= 1.390*CLHEP::g/cm3);
- new G4Material("Lead"     , z=82., a= 207.19*CLHEP::g/mole, density= 11.35*CLHEP::g/cm3);
- new G4Material("Graphite"     , z=6., a= 12.01*CLHEP::g/mole, density= 2.267*CLHEP::g/cm3);//Note cbsim had rho=1.70?? 
- new G4Material("Copper"     , z=29, a= 63.546*CLHEP::g/mole, density= 8.96*CLHEP::g/cm3);
- //Targets
- new G4Material("LH2"     , z=1., a= 1.00794*CLHEP::g/mole, density= 0.0708*CLHEP::g/cm3);
- new G4Material("LD2"     , z=1., a= 2.014*CLHEP::g/mole, density= 0.162*CLHEP::g/cm3);
- new G4Material("Li7"     , z=3., a= 6.941*CLHEP::g/mole, density= 0.5340*CLHEP::g/cm3);
- new G4Material("Ca40"     , z=20., a= 40.08*CLHEP::g/mole, density= 1.55*CLHEP::g/cm3);//Note cbsim had 4??
- new G4Material("LD2"     , z=1., a= 2.014*CLHEP::g/mole, density= 0.162*CLHEP::g/cm3);
+new G4Material("Aluminium", z=13., a=26.98154*CLHEP::g/mole, density=2.700*CLHEP::g/cm3);
+new G4Material("Iron", z=26., a=55.85*CLHEP::g/mole, density=7.87*CLHEP::g/cm3);
+new G4Material("liquidArgon", z=18., a= 39.95*CLHEP::g/mole, density= 1.390*CLHEP::g/cm3);
+new G4Material("Lead"     , z=82., a= 207.19*CLHEP::g/mole, density= 11.35*CLHEP::g/cm3);
+new G4Material("Graphite"     , z=6., a= 12.01*CLHEP::g/mole, density= 2.267*CLHEP::g/cm3);//Note cbsim had rho=1.70??
+new G4Material("Copper"     , z=29, a= 63.546*CLHEP::g/mole, density= 8.96*CLHEP::g/cm3);
+//Targets
+new G4Material("LH2"     , z=1., a= 1.00794*CLHEP::g/mole, density= 0.0708*CLHEP::g/cm3);
+new G4Material("LD2"     , z=1., a= 2.014*CLHEP::g/mole, density= 0.162*CLHEP::g/cm3);
+new G4Material("Li7"     , z=3., a= 6.941*CLHEP::g/mole, density= 0.5340*CLHEP::g/cm3);
+new G4Material("Ca40"     , z=20., a= 40.08*CLHEP::g/mole, density= 1.55*CLHEP::g/cm3);//Note cbsim had 4??
+new G4Material("LD2"     , z=1., a= 2.014*CLHEP::g/mole, density= 0.162*CLHEP::g/cm3);
 
 //
 // define a material from elements.   case 1: chemical molecule
 //
 
-G4Material* H2O = 
+G4Material* H2O =
 new G4Material("Water", density= 1.000*CLHEP::g/cm3, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
-// overwrite computed meanExcitationEnergy with ICRU recommended value 
+// overwrite computed meanExcitationEnergy with ICRU recommended value
 H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-G4Material* Sci = 
+G4Material* Sci =
 new G4Material("Scintillator", density= 1.032*CLHEP::g/cm3, ncomponents=2);
 Sci->AddElement(C, natoms=9);
 Sci->AddElement(H, natoms=10);
@@ -415,13 +467,13 @@ G4Material* NaI=new G4Material("NaI", density= 3.67*CLHEP::g/cm3, ncomponents=2)
 NaI->AddElement(Na, fractionmass=0.1533733);
 NaI->AddElement(I, fractionmass=0.8466268);
 
-G4Material* Myl = 
+G4Material* Myl =
 new G4Material("Mylar", density= 1.397*CLHEP::g/cm3, ncomponents=3);
 Myl->AddElement(C, natoms=10);
 Myl->AddElement(H, natoms= 8);
 Myl->AddElement(O, natoms= 4);
 
-G4Material* SiO2 = 
+G4Material* SiO2 =
 new G4Material("quartz",density= 2.200*CLHEP::g/cm3, ncomponents=2);
 SiO2->AddElement(Si, natoms=1);
 SiO2->AddElement(O , natoms=2);
@@ -430,53 +482,53 @@ SiO2->AddElement(O , natoms=2);
 // define a material from elements.   case 2: mixture by fractional mass
 //
 
-G4Material* Air = 
+G4Material* Air =
 new G4Material("Air"  , density= 1.290*CLHEP::mg/cm3, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
 
- G4Material *plastic=new G4Material("plastic",density=1.19*CLHEP::g/cm3, ncomponents=2);
- plastic->AddElement(C,fractionmass=0.8562844);
- plastic->AddElement(H,fractionmass=0.1437155);
+G4Material *plastic=new G4Material("plastic",density=1.19*CLHEP::g/cm3, ncomponents=2);
+plastic->AddElement(C,fractionmass=0.8562844);
+plastic->AddElement(H,fractionmass=0.1437155);
 
- G4Material *basemat=new G4Material("basemat",density=2.26*CLHEP::g/cm3, ncomponents=2);
- basemat->AddElement(C,fractionmass=0.8562844);
- basemat->AddElement(H,fractionmass=0.1437155);
+G4Material *basemat=new G4Material("basemat",density=2.26*CLHEP::g/cm3, ncomponents=2);
+basemat->AddElement(C,fractionmass=0.8562844);
+basemat->AddElement(H,fractionmass=0.1437155);
 
- G4Material *fglass=new G4Material("fglass",density=2.0*CLHEP::g/cm3, ncomponents=8);
- fglass->AddElement(O,fractionmass=0.557);
- fglass->AddElement(Si,fractionmass=0.347);
- fglass->AddElement(Ca,fractionmass=0.3580000E-02);
- fglass->AddElement(Al,fractionmass=0.1590000E-02);
- fglass->AddElement(B,fractionmass=0.6840000E-01);
- fglass->AddElement(Na,fractionmass=0.7420000E-02);
- fglass->AddElement(K,fractionmass=0.1250000E-01);
- fglass->AddElement(Li,fractionmass=0.2320000E-02);
+G4Material *fglass=new G4Material("fglass",density=2.0*CLHEP::g/cm3, ncomponents=8);
+fglass->AddElement(O,fractionmass=0.557);
+fglass->AddElement(Si,fractionmass=0.347);
+fglass->AddElement(Ca,fractionmass=0.3580000E-02);
+fglass->AddElement(Al,fractionmass=0.1590000E-02);
+fglass->AddElement(B,fractionmass=0.6840000E-01);
+fglass->AddElement(Na,fractionmass=0.7420000E-02);
+fglass->AddElement(K,fractionmass=0.1250000E-01);
+fglass->AddElement(Li,fractionmass=0.2320000E-02);
 
- G4Material* PVC=new G4Material("PVC",density=1.38*CLHEP::g/cm3,ncomponents=3);
- PVC->AddElement(C,fractionmass=0.3843611);
- PVC->AddElement(H,fractionmass=0.4838227E-01);
- PVC->AddElement(Cl,fractionmass=0.5672566);
+G4Material* PVC=new G4Material("PVC",density=1.38*CLHEP::g/cm3,ncomponents=3);
+PVC->AddElement(C,fractionmass=0.3843611);
+PVC->AddElement(H,fractionmass=0.4838227E-01);
+PVC->AddElement(Cl,fractionmass=0.5672566);
 
- G4Material* BaF2=new G4Material("BaF2",density=4.89*CLHEP::g/cm3,ncomponents=2);
- BaF2->AddElement(Ba,fractionmass=0.7832764);
- BaF2->AddElement(F,fractionmass=0.2167236);
- G4Material* mumetal=new G4Material("mumetal",density=8.7*CLHEP::g/cm3,ncomponents=5);
- mumetal->AddElement(Ni,fractionmass=0.8);
- mumetal->AddElement(Mo,fractionmass=0.5000000E-01);
- mumetal->AddElement(Si,fractionmass=0.5000000E-02);
- mumetal->AddElement(Cu,fractionmass=0.2000000E-03);
- mumetal->AddElement(Fe,fractionmass=0.1448);
- G4Material* Kapton=new G4Material("Kapton",density=1.42000*CLHEP::g/cm3,ncomponents=4);
- Kapton->AddElement(C,0.6911325);
- Kapton->AddElement(H,0.2636296E-01);
- Kapton->AddElement(N,0.7327006E-01);
- Kapton->AddElement(O,0.2092344);
+G4Material* BaF2=new G4Material("BaF2",density=4.89*CLHEP::g/cm3,ncomponents=2);
+BaF2->AddElement(Ba,fractionmass=0.7832764);
+BaF2->AddElement(F,fractionmass=0.2167236);
+G4Material* mumetal=new G4Material("mumetal",density=8.7*CLHEP::g/cm3,ncomponents=5);
+mumetal->AddElement(Ni,fractionmass=0.8);
+mumetal->AddElement(Mo,fractionmass=0.5000000E-01);
+mumetal->AddElement(Si,fractionmass=0.5000000E-02);
+mumetal->AddElement(Cu,fractionmass=0.2000000E-03);
+mumetal->AddElement(Fe,fractionmass=0.1448);
+G4Material* Kapton=new G4Material("Kapton",density=1.42000*CLHEP::g/cm3,ncomponents=4);
+Kapton->AddElement(C,0.6911325);
+Kapton->AddElement(H,0.2636296E-01);
+Kapton->AddElement(N,0.7327006E-01);
+Kapton->AddElement(O,0.2092344);
 //
 // define a material from elements and/or others materials (mixture of mixtures)
 //
 
-G4Material* Aerog = 
+G4Material* Aerog =
 new G4Material("Aerogel", density= 0.200*CLHEP::g/cm3, ncomponents=3);
 Aerog->AddMaterial(SiO2, fractionmass=62.5*perCent);
 Aerog->AddMaterial(H2O , fractionmass=37.4*perCent);
@@ -486,13 +538,13 @@ Aerog->AddElement (C   , fractionmass= 0.1*perCent);
 // examples of gas in non STP conditions
 //
 
-G4Material* CO2 = 
+G4Material* CO2 =
 new G4Material("CarbonicGas", density= 27.*CLHEP::mg/cm3, ncomponents=2,
                               kStateGas, 325.*kelvin, 50.*atmosphere);
 CO2->AddElement(C, natoms=1);
 CO2->AddElement(O, natoms=2);
- 
-G4Material* steam = 
+
+G4Material* steam =
 new G4Material("WaterSteam", density= 0.3*CLHEP::mg/cm3, ncomponents=1,
                              kStateGas, 500.*kelvin, 2.*atmosphere);
 steam->AddMaterial(H2O, fractionmass=1.);
@@ -505,13 +557,13 @@ G4Material* Vacuum =
 new G4Material("Vacuum", z=1., a=1.01*CLHEP::g/mole,density= universe_mean_density,
                            kStateGas, 2.73*kelvin, 3.e-18*pascal);
 
-G4Material* beam = 
+G4Material* beam =
 new G4Material("Beam", density= 1.e-5*CLHEP::g/cm3, ncomponents=1,
                        kStateGas, STP_Temperature, 2.e-2*bar);
 beam->AddMaterial(Air, fractionmass=1.);
 
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
- G4cout<< G4Material::GetMaterial("Air")->GetName()<<G4endl;
+G4cout<< G4Material::GetMaterial("Air")->GetName()<<G4endl;
 //default materials of the World
 fMaterialDefault  = Vacuum;
   */

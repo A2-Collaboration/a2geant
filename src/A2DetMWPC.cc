@@ -81,12 +81,12 @@ A2DetMWPC::A2DetMWPC(){
 
 A2DetMWPC::~A2DetMWPC(){}
 
-G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
+G4VPhysicalVolume* A2DetMWPC::ConstructMWPC(G4LogicalVolume* MotherLogical, G4double Z0){
   fMotherLogic = MotherLogical;
 
 //Positioning Parameters
 
-   fz = 0*CLHEP::mm;
+   fz = Z0 + 0*CLHEP::mm;
    fdz = 64.5*CLHEP::cm/2;
 
 //Parameters for the First (Inner) Chamber
@@ -219,7 +219,7 @@ G4VPhysicalVolume* A2DetMWPC::Construct(G4LogicalVolume* MotherLogical){
   fMyLogic = new G4LogicalVolume(MWPCMother, fNistManager->FindOrBuildMaterial("G4_AIR"),"MWPC");
   fregionMWPC->AddRootLogicalVolume(fMyLogic);
 
-  fMyPhysi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fMyLogic, "MWPC", fMotherLogic, false, 1);
+  fMyPhysi = new G4PVPlacement(0, G4ThreeVector(0,0,fz), fMyLogic, "MWPC", fMotherLogic, false, 1);
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(1,0,0,1));
   visatt->SetForceWireframe(true);
@@ -280,7 +280,7 @@ void A2DetMWPC::MakeChambers(){
 
   G4VisAttributes* os1_visatt = new G4VisAttributes();
   os1_visatt->SetColor(G4Color(0.0,1.0,0.0));
-  fCHSO1Logic->SetVisAttributes(os1_visatt); 
+  fCHSO1Logic->SetVisAttributes(os1_visatt);
 
   fCHSI2 = new G4Tubs("Inner Shield 2", fchsi2_rmin, fchsi2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
 
@@ -296,8 +296,8 @@ void A2DetMWPC::MakeChambers(){
 
   G4VisAttributes* os2_visatt = new G4VisAttributes();
   os2_visatt->SetColor(G4Color(0.0,1.0,0.0));
-  fCHSO2Logic->SetVisAttributes(os2_visatt); 
-   
+  fCHSO2Logic->SetVisAttributes(os2_visatt);
+
 
 //Rohacell
 
@@ -409,7 +409,7 @@ void A2DetMWPC::MakeChambers(){
   fCHG1Logic = new G4LogicalVolume(fCHG1, fNistManager->FindOrBuildMaterial("A2_WCMAT"), "CHG1L");
 
 //  fCHG1Logic->SetVisAttributes(ok2_visatt);
-  fCHG1Logic->SetVisAttributes(G4VisAttributes::Invisible); 
+  fCHG1Logic->SetVisAttributes(G4VisAttributes::Invisible);
 
 
   fCHG2 = new G4Tubs("Gas 2", fchg2_rmin, fchg2_rmax, fdz, 0*CLHEP::deg, 360*CLHEP::deg);
@@ -434,10 +434,10 @@ void A2DetMWPC::MakeSupports(){
 
 //   G4Cons* fSC1D= new G4Cons("fSC1D",5.56*cm,7.16*cm,5.56*cm,8.16*cm,1.275*cm,0*deg,360*cm);
 //   fSC1DLogic = new G4LogicalVolume(fSC1D,fNistManager->FindOrBuildMaterial("A2_FGLASS"),"SC1DL");
-				   
+
 //   G4Tubs *fWS2U = new G4Tubs("fWS2U", 8.45*cm,9.98*cm,2.525*cm,0*deg,360*deg);
 //   fWS2ULogic = new G4LogicalVolume(fWS2U,fNistManager->FindOrBuildMaterial("A2_FGLASS"),"WS2UL");
- 
+
 //   G4Tubs *fWS2D = new G4Tubs("fWS2D", 8.45*cm,9.98*cm,2.525*cm,0*deg,360*deg);
 //   fWS2DLogic = new G4LogicalVolume(fWS2D,fNistManager->FindOrBuildMaterial("A2_FGLASS"),"WS2DL");
 
@@ -450,7 +450,7 @@ void A2DetMWPC::MakeSupports(){
 //   fWS1ULogic->SetVisAttributes(SupVisAtt);
 //   fWS1DLogic->SetVisAttributes(SupVisAtt);
 //   fSC1ULogic->SetVisAttributes(SupVisAtt);
-//   fSC1DLogic->SetVisAttributes(SupVisAtt); 
+//   fSC1DLogic->SetVisAttributes(SupVisAtt);
 //   fWS2ULogic->SetVisAttributes(SupVisAtt);
 //   fWS2DLogic->SetVisAttributes(SupVisAtt);
   //  fALTULogic->SetVisAttributes(SupVisAtt);
@@ -458,7 +458,7 @@ void A2DetMWPC::MakeSupports(){
 //  fWS1ULogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fWS1DLogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fSC1ULogic->SetVisAttributes(G4VisAttributes::Invisible);
-//  fSC1DLogic->SetVisAttributes(G4VisAttributes::Invisible); 
+//  fSC1DLogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fWS2ULogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fWS2DLogic->SetVisAttributes(G4VisAttributes::Invisible);
 //  fALTULogic->SetVisAttributes(G4VisAttributes::Invisible);
@@ -477,10 +477,10 @@ void A2DetMWPC::MakeSupports(){
 
   G4Tubs* fSC1D= new G4Tubs("fSC1D",fchso1_rmax,fchsi2_rmin,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fSC1DLogic = new G4LogicalVolume(fSC1D,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"SC1DL");
-				   
+
   G4Tubs *fWS2U = new G4Tubs("fWS2U",fchg2_rmin,(fchg2_rmin+fchg2_rmax)/2-1*CLHEP::mm ,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS2ULogic = new G4LogicalVolume(fWS2U,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS2UL");
- 
+
   G4Tubs *fWS2D = new G4Tubs("fWS2D",(fchg2_rmin+fchg2_rmax)/2+1*CLHEP::mm ,fchg2_rmax,3.5*CLHEP::cm/2,0*CLHEP::deg,360*CLHEP::deg);
   fWS2DLogic = new G4LogicalVolume(fWS2D,fNistManager->FindOrBuildMaterial("G4_POLYETHYLENE"),"WS2DL");
 
@@ -510,7 +510,7 @@ void A2DetMWPC::MakeDetector() {
 //Kapton
   fCHKI1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKI1Logic, "CHKI1P", fMyLogic, false, 0);
 
-  fCHKO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKO1Logic, "CHKO1P", fMyLogic, 
+  fCHKO1Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKO1Logic, "CHKO1P", fMyLogic,
   false, 0);
 
   fCHKI2Physi = new G4PVPlacement(0, G4ThreeVector(0,0,0), fCHKI2Logic, "CHKI2P", fMyLogic, false, 0);
@@ -536,19 +536,19 @@ void A2DetMWPC::MakeDetector() {
       G4double xpos = fanode1_r * cos(fanode1_angle);
       G4double ypos = fanode1_r * sin(fanode1_angle);
       G4ThreeVector dpos(xpos,ypos,fz);
-      
-      
+
+
       fANOIPhysi[i] = new G4PVPlacement(0, G4ThreeVector(xpos,ypos,fz), fANOILogic, "ANOIP", fMyLogic, false, i);
     }
-    
+
     for(G4int i = 0; i < fNIWires; i++) {
       G4double fanode2_r = (fchg2_rmin + fchg2_rmax)/2;
       G4double fanode2_angle = fanoi_theta * i;
       G4double xpos = fanode2_r * cos(fanode2_angle);
       G4double ypos = fanode2_r * sin(fanode2_angle);
       G4ThreeVector dpos(xpos,ypos,fz);
-      
-      
+
+
       fANOOPhysi[i] = new G4PVPlacement(0, G4ThreeVector(xpos,ypos,fz), fANOOLogic, "ANOOP", fMyLogic, false, i);
     }
   }
@@ -569,8 +569,6 @@ void A2DetMWPC::MakeDetector() {
   new G4PVPlacement(0,G4ThreeVector(0,0,-fdz),fWS2ULogic,"WS2UPb",fMyLogic,false,112);
 
 }
-
-
 
 //Electronics
 
@@ -597,7 +595,7 @@ void A2DetMWPC::MakeSensitiveDetector(){
     fMWPCSD4 = new A2WCSD("A2MWPCSD4", 100);
     SDman->AddNewDetector(fMWPCSD4);
   }
-  
+
 
   fCHCI1Logic->SetSensitiveDetector(fMWPCSD1);
   fCHCO1Logic->SetSensitiveDetector(fMWPCSD2);

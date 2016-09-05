@@ -24,7 +24,7 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
-  
+
   //create a messenger for this class
   fGunMessenger = new A2PrimaryGeneratorMessenger(this);
   //Get Particle table pointer
@@ -61,7 +61,7 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
   fNevent=0;
   fNToBeTcount=0;
   fNToBeTracked=0;
-  fNGenParticles=1;//for interactive use 
+  fNGenParticles=1;//for interactive use
   fNGenBranches=0;
 
   fDetCon=NULL;
@@ -97,6 +97,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //This function is called at the begining of event
   Float_t Mass;
   Float_t P;
+  Float_t r_v,x_v,y_v,test_v;
   G4ThreeVector pvec;
   switch(fMode){
   case EPGA_g4:
@@ -134,7 +135,15 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	G4cout<<"I have taken the liberty of choosing a new one inside!! see void A2PrimaryGeneratorAction::GeneratePrimaries"<<G4endl<<"I will not print this warning again, but will continue to move the vertex inside the target, to stop this please modify A2PrimaryGeneratorAction.cc around line 130"<<G4endl;
 	}
 	fThreeVector.setZ(fDetCon->GetTarget()->GetCenter().z()+fDetCon->GetTarget()->GetLength()/2*(2*G4UniformRand()-1));
-	fThreeVector.setPerp(fDetCon->GetTarget()->GetRadius()*G4UniformRand());
+	r_v=0.0;
+    	while(r_v == 0.0 ) {
+     	x_v = fDetCon->GetTarget()->GetRadius()*(2*G4UniformRand()-1);
+     	y_v = fDetCon->GetTarget()->GetRadius()*(2*G4UniformRand()-1);
+     	test_v = pow(x_v,2)+pow(y_v,2);
+     	if (test_v<pow(fDetCon->GetTarget()->GetRadius(),2)) r_v = test_v;
+    	}
+	fThreeVector.setX(x_v);
+	fThreeVector.setY(y_v);
 	if(fTargetWarning==0){G4cout<<fThreeVector<<" from "<<"("<<fGenPosition[0]*CLHEP::cm<<","<<fGenPosition[1]*CLHEP::cm<<","<<fGenPosition[2]*CLHEP::cm<<")*mm"<<G4endl;}
 	fGenPosition[0]=fThreeVector.x()/CLHEP::cm;
 	fGenPosition[1]=fThreeVector.y()/CLHEP::cm;
@@ -143,7 +152,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       };
        fParticleGun->SetParticlePosition(fThreeVector);
      //Loop over tracked particles, set particle gun and create vertex for each particle
-      
+
       for(Int_t i=0;i<fNToBeTracked;i++){
 	fParticleGun->SetParticleDefinition(fParticleDefinition[fTrackThis[i]]);
 	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(fGen4Vectors[fTrackThis[i]][0]*CLHEP::GeV,fGen4Vectors[fTrackThis[i]][1]*CLHEP::GeV,fGen4Vectors[fTrackThis[i]][2]*CLHEP::GeV).unit());
@@ -157,7 +166,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	P=fGen4Vectors[i][4]*CLHEP::GeV;
 	if(fParticleDefinition[i])fGenLorentzVec[i]->SetXYZM(P*fGen4Vectors[i][0],P*fGen4Vectors[i][1],P*fGen4Vectors[i][2],fGenMass[i]);
 	else fGenLorentzVec[i]->SetXYZM(P*fGen4Vectors[i][0],P*fGen4Vectors[i][1],P*fGen4Vectors[i][2],sqrt(fGen4Vectors[i][3]*fGen4Vectors[i][3]*CLHEP::GeV*CLHEP::GeV-P*P));
-      }	
+      }
       //Assume photon beam!
       P=fGen4Vectors[0][3]*CLHEP::GeV;
       fBeamLorentzVec->SetXYZM(fGen4Vectors[0][0]*P,fGen4Vectors[0][1]*P,fGen4Vectors[0][2]*P,0);
@@ -165,7 +174,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     else{ G4cerr<<"ROOT input mode specidied but no input file given"<<G4endl; exit(1);}
     break;
   default:
-    G4cerr<<"Unknown mode given to A2PrimiaryGeneratorAction"<<G4endl; 
+    G4cerr<<"Unknown mode given to A2PrimiaryGeneratorAction"<<G4endl;
     exit(1);
 
   }
@@ -205,7 +214,7 @@ void A2PrimaryGeneratorAction::PhaseSpaceGenerator(G4Event* anEvent){
   fGenPosition[1]=fThreeVector.y()/CLHEP::cm;
   fGenPosition[2]=fThreeVector.z()/CLHEP::cm;
 
-  
+
   //produce event
   fParticleGun->GeneratePrimaryVertex(anEvent);
 
@@ -282,7 +291,7 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
   }
   //Get the number of branches
   fNGenBranches=fGenTree->GetNbranches();
-  //Calculate number of particles assuming 3 position branches and 5 particle variables 
+  //Calculate number of particles assuming 3 position branches and 5 particle variables
   fNGenParticles=(fNGenBranches-3)/5;
   fGen4Vectors=new Float_t*[fNGenParticles];
   fGenLorentzVec=new TLorentzVector*[fNGenParticles];
@@ -325,7 +334,7 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     if(!bname.Contains("bm")&&!bname.Contains("vtx")){
       char* sbname=const_cast<char*>(bname.Data());
       Int_t index=(TString(sbname[4])+TString(sbname[5])).Atoi(); //Get the number of the particle
-      fGenPartType[index]=(TString(sbname[6])+TString(sbname[7])).Atoi(); 
+      fGenPartType[index]=(TString(sbname[6])+TString(sbname[7])).Atoi();
        if((bname.Contains("Px"))) G4cout<<"A2PrimaryGeneratorAction::SetUpRootInput, adding a "<<GetNamefromG3(fGenPartType[index])<<" as index "<<index<<G4endl;
       if(bname.Contains("Px"))branch->SetAddress(&fGen4Vectors[index][0]);
       if(bname.Contains("Py"))branch->SetAddress(&fGen4Vectors[index][1]);
@@ -335,7 +344,7 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
 
       //G4cout<<fGenPartType[index]<<" "<<GetPDGfromG3(fGenPartType[index])<<G4endl;
       fParticleDefinition[index]=NULL;
-      if((fParticleDefinition[index]=fParticleTable->FindParticle(GetPDGfromG3(fGenPartType[index])))) ;	
+      if((fParticleDefinition[index]=fParticleTable->FindParticle(GetPDGfromG3(fGenPartType[index])))) ;
       else if((fParticleDefinition[index]=fParticleTable->GetIonTable()->GetIon(GetPDGfromG3(fGenPartType[index])))) ;
       else {
  	G4cout<<"As yet undefined particle check lists in MCNtuple.h"<<G4endl;
