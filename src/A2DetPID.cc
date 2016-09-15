@@ -8,8 +8,6 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
-// Still to be done is the updated - Crown for PID-III support
-
 A2DetPID::A2DetPID(){
   fregionPID=NULL;
   fregionPID=new G4Region("PID");//allows seperate cuts to be defined for crystal
@@ -155,7 +153,7 @@ G4VPhysicalVolume* A2DetPID::Construct3(G4LogicalVolume* MotherLogical,G4double 
   fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
 
   //Make the light guide shape
-  MakeLightGuide3(); // Makes the bent light guides for the smaller PID case
+  MakeLightGuide2(); // Makes the bent light guides for the smaller PID case
   MakePhotomultipliers(); // This is unchanged since last two PIDs
 
   MakeSingleDetector2();
@@ -399,45 +397,6 @@ void A2DetPID::MakeLightGuide1(){
 }
 
 void A2DetPID::MakeLightGuide2(){
-
-  //Bent light guides for use with PID III Option 1 (4.3cm rin)
-  G4double lg12_y=2*0.05*CLHEP::cm;
-  flg12_z=2*0.4*CLHEP::cm;
-  //longer one (LGFO)
-  G4double lg1_xl=fpid_xl+lg12_y*tan(fpid_theta/2);
-  G4double lg1_xs=fpid_xl;
-  //shorter one (LGFI)
-  G4double lg2_xl=fpid_xs;
-  G4double lg2_xs=fpid_xs-lg12_y*tan(fpid_theta/2);
-  G4double lg3_z=2.7*CLHEP::cm;//half length for G4Trd constructor!
-  G4double lg3_y=(fpid_thick+2*lg12_y)/2;
-  G4double lg3_xbot=fpid_xl/2;
-  //tub (LGTU)
-  G4double lg4_z=0.1*CLHEP::cm;
-  G4double lg4_r=9.7/2;//change dglazier 26/01/09, too big before!
-
-  flg_z=2*lg3_z+lg4_z+flg12_z; //distance from z=0 (cenre of LGTU) to tip
-
-  fLGFO=new G4Trap("LGFO",flg12_z,50*lg12_y,lg1_xl,lg1_xs);
-  fLGFI=new G4Trap("LGFO",flg12_z,50*lg12_y,lg2_xl,lg2_xs);
-  fLGTU=new G4Tubs("LGTU",0.,lg4_r,lg4_z,0.,360*CLHEP::deg);
-  // See notebook for calculation of length Z!
-  // Main bit of lightguide is parallelepiped, 5.4cm long angled at 15 degrees (also needs to be rotated a bit)
-  fLGB1 = new G4Para("LGB3", lg3_xbot, lg3_y, lg3_z, 0.*CLHEP::deg, 165.*CLHEP::deg, 90.*CLHEP::deg); // This shape LOOKS fine but does not fit the PID elements correctly currently
-
-  fLG1=new G4UnionSolid("LG1",fLGTU,fLGB1,0,G4ThreeVector(0,0.65*CLHEP::cm,-(lg4_z+lg3_z))); // Not sure WHY y parameter needs to be 1 but this seems to work so...
-  //fLG2=new G4UnionSolid("LG2",fLG1,fLGFO,0,G4ThreeVector(0,((2*lg12_y)+(tan(30)*2*lg3_z))*CLHEP::cm,-(lg4_z+2*lg3_z+flg12_z/2)));
-  //fLG3=new G4UnionSolid("LG3",fLG2,fLGFI,0,G4ThreeVector(0,(tan(30)*2*lg3_z)*CLHEP::cm,-(lg4_z+2*lg3_z+flg12_z/2)));
-  fLGLogic=new G4LogicalVolume(fLG1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"LG1");
-  //fLGPhysi=new G4PVPlacement(0,G4ThreeVector(),fLGLogic,"LG",fMotherLogic,false,1);
-
-  G4VisAttributes* lg_visatt=new G4VisAttributes();
-  lg_visatt->SetColor(G4Color(0,0,1));
-  fLGLogic->SetVisAttributes(lg_visatt);
-}
-
-
-void A2DetPID::MakeLightGuide3(){
 
   //Bent light guides for use with PID III Option 2 (3.1cm rin)
   G4double lg12_y=2*0.05*CLHEP::cm;

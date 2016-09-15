@@ -12,6 +12,7 @@
 #include "A2DetCrystalBall.hh"
 #include "A2DetTAPS.hh"
 #include "A2DetPID.hh"
+#include "A2DetNestPID.hh"
 #include "A2DetTOF.hh"
 #include "A2Target.hh"
 #include "A2DetMWPC.hh"
@@ -44,6 +45,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseCB(G4int use){fUseCB=use;}
   void SetUseTAPS(G4int use){fUseTAPS=use;}
   void SetUsePID(G4int use){fUsePID=use;}
+  void SetUseNestPID(G4int use){fUseNestPID=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
@@ -63,6 +65,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSN(G4int nn){fTAPSN=nn;}
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
+  void SetNestPIDZ(G4double zz){fNestPIDZ=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
   void SetPolZ(G4double zz){fPolZ=zz;}
   void SetTargetZ(G4double zz){fTargetZ=zz;}
@@ -90,10 +93,10 @@ public:
   G4LogicalVolume*   fWorldLogic;    //pointer to the logical World
   G4VPhysicalVolume* fWorldPhysi;    //pointer to the physical World
 
-
   A2DetCrystalBall* fCrystalBall;   //CrystalBall detector
   A2DetTAPS* fTAPS;   //TAPS detector
   A2DetPID* fPID;   //PID detector
+  A2DetNetPID* fNestPID; //Nested PID detector
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
   A2DetCherenkov* fCherenkov; //Cherenkov detector
@@ -114,6 +117,7 @@ public:
   G4int fUseCB;   //Build the Crystal Ball
   G4int fUseTAPS;   //Build TAPS
   G4int fUsePID;   //Build the PID
+  G4int fUseNestPID;   //Build a nested PID (PID III inside PID II) arrangement
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov
@@ -132,6 +136,9 @@ public:
 
   //PID setup
   G4double fPIDZ;
+
+  // Nested PID positioning
+  G4double fNestPIDZ;
 
   //MWPC setup
   G4double fMWPCZ;

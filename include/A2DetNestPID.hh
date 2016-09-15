@@ -1,6 +1,6 @@
-
-#ifndef A2DetPID_h
-#define A2DetPID_h 1
+s
+#ifndef A2DetNestPID_h
+#define A2DetNestPID_h 1
 
 #include "A2Detector.hh"
 #include "A2SD.hh"
@@ -19,29 +19,21 @@
 #include "globals.hh"
 
 
-class A2DetPID : public A2Detector
+class A2DetNestPID : public A2Detector
 {
 public:
 
-  A2DetPID();
-  ~A2DetPID();
+  A2DetNestPID();
+  ~A2DetNestPID();
 
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0);
 
   void MakeDetector1();
-  void MakeDetector2();
-  void MakeDetector3();
-  void MakeSingleDetector1();
-  void MakeSingleDetector2();
+  void MakeSingleDetector();
   void MakeLightGuide1();
-  void MakeLightGuide2();
   void MakePhotomultipliers();
-  void MakeSupports1(); //for PID1
-  void MakeSupports2(); //for PID2
-  void MakeSupports3(); //for PID3
+  void MakeSupports(); //for PID2
 
 private:
   G4int fNPids;  //Number of Pid scintillators
@@ -58,7 +50,6 @@ private:
   G4Trap *fLGFI;  //part of light guide
   G4Trd *fLGFM;  //part of light guide
   G4Tubs *fLGTU;  //part of light guide
-  G4Para *fLGB1; //Part of bent LG
   G4UnionSolid *fLG1;  //part of light guide
   G4UnionSolid *fLG2;  //part of light guide
   G4UnionSolid *fLG3;  //part of light guide

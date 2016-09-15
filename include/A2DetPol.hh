@@ -39,7 +39,6 @@ public:
 
 private:
 
-  G4Trap *fPolarimeter;  //Polarimeter scintillator shape
   G4LogicalVolume *fPolarimeterLogic;
   G4VPhysicalVolume** fPolarimeterPhysi;
 

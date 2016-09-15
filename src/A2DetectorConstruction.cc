@@ -35,6 +35,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseCB=0;
   fUseTAPS=0;
   fUsePID=0;
+  fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -45,6 +46,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fCrystalBall=NULL;
   fTAPS=NULL;
   fPID=NULL;
+  fNestPID=NULL;
   fMWPC=NULL;
   fPol=NULL;
   fTOF=NULL;
@@ -65,6 +67,8 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   //default settings for PID
   fPIDZ=0.;
+  //default settings for nested PID
+  fNestPIDZ=0.;
   //default offset for MWPC
   fMWPCZ=0.;
   //default offset for Polarimeter
@@ -86,6 +90,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
   fUseTAPS=0;
   fUsePID=0;
+  fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -97,7 +102,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
-  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
+  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseNestPID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
     G4cout<<"G4VPhysicalVolume* A2DetectorConstruction::Construct() Don't seem to be simulating any detectors, please check you are using an appopriate detector setup. I tried the file "<<fDetectorSetup<< " I will exit here before the computer explodes"<<G4endl;
     exit(0);
   }
@@ -153,6 +158,19 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
     else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016 add offset too!),  "<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+  }
+
+  if(fUseNestPID){
+    G4cout<<"A2DetectorConstruction::Construct() Make Nested PID option" << G4endl;
+    G4cout<<"This arrangement is PID III inside PID II" << G4endl;
+    fNestPID = new A2DetNestPID();
+
+    if (fUseNestPID == 1){
+        if(fUsePID != 3) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
+        if(fUseMWPC!= 0) {G4cerr<<"Nested PID cannot be used with MWPC!"<< G4endl; exit(1);}
+        fNestPID->Construct1(fWorldLogic, fNestPIDZ);
+        G4cout << " Outer PID Z displaced by " << fNestPIDZ/CLHEP::cm << "cm" << G4endl;
+    }
   }
 
   if(fUseMWPC){
