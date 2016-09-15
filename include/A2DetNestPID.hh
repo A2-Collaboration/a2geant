@@ -74,9 +74,7 @@ private:
   G4VPhysicalVolume **fMUMEPhysi;
   //geometric parameters
   G4double fzpos;
-  G4int fUseEnd;
   G4double fpid_z;
-  G4double fpidendL;
   G4double fpid_rin;
   G4double fpid_thick;
   G4double fpid_rout;

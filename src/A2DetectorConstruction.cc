@@ -161,7 +161,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
 
   if(fUseNestPID){
-    G4cout<<"A2DetectorConstruction::Construct() Make Nested PID option" << G4endl;
+    G4cout<<"A2DetectorConstruction::Construct() Make Nested PID" << G4endl;
     G4cout<<"This arrangement is PID III inside PID II" << G4endl;
     fNestPID = new A2DetNestPID();
 
@@ -169,7 +169,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
         if(fUsePID != 3) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
         if(fUseMWPC!= 0) {G4cerr<<"Nested PID cannot be used with MWPC!"<< G4endl; exit(1);}
         fNestPID->Construct1(fWorldLogic, fNestPIDZ);
-        G4cout << " Outer PID Z displaced by " << fNestPIDZ/CLHEP::cm << "cm" << G4endl;
+        G4cout << "Outer PID Z displaced by " << fNestPIDZ/CLHEP::cm << "cm" << G4endl;
     }
   }
 
