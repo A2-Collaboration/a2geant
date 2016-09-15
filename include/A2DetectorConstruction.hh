@@ -96,7 +96,7 @@ public:
   A2DetCrystalBall* fCrystalBall;   //CrystalBall detector
   A2DetTAPS* fTAPS;   //TAPS detector
   A2DetPID* fPID;   //PID detector
-  A2DetNetPID* fNestPID; //Nested PID detector
+  A2DetNestPID* fNestPID; //Nested PID detector
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
   A2DetCherenkov* fCherenkov; //Cherenkov detector
