@@ -167,7 +167,7 @@ void A2DetNestPID::MakePhotomultipliers(){
 
 }
 
-void A2DetNestPID::MakeLightGuide(){
+void A2DetNestPID::MakeLightGuide1(){
 
   //Original Straight lightguides
   //Made up of 3 wedges and a tub
