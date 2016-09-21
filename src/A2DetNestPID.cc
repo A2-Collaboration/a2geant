@@ -8,6 +8,7 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
+// PIDCeption
 // This makes the PID II in the same orientation as PID I, i.e. PMTs at TAPS end
 // Only compatible with PID III and small targets for htis
 
