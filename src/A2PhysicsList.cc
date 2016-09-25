@@ -90,10 +90,6 @@
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
 
-//#include "PolHadronElasticPhysics.hh"
-//#include "PolHadronElasticPhysicsN.hh"
-//#include "PolHadronInelasticPhysics.hh"
-//#include "PolNucleonRotate.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -129,53 +125,6 @@ A2PhysicsList::~A2PhysicsList()
     delete fHadronPhys[i];
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-//PolNucleonRotate* A2PhysicsList::GetPolNucleonRotate(G4String type)
-//{
-//  if(type==G4String("n-elastic"))return  fPolHadronElasticPhysicsN->GetnElPolProc()->GetPolRot();
-// else if(type==G4String("p-elastic"))return fPolHadronElasticPhysicsN->GetpElPolProc()->GetPolRot();
-//  else if(type==G4String("p-inelastic"))return fPolHadronInelasticPhysics->GettheProtonInelastic()->GetPolRot();
-//  else if(type==G4String("n-inelastic"))return fPolHadronInelasticPhysics->GettheNeutronInelastic()->GetPolRot();
-  //else if(type==G4String("p-inelastic-qf"))return ((PolHadronQuasiFreeProcess*)fPolHadronInelasticPhysics->GettheProtonInelastic())->GetPolRotNP();//MHS, Nov 14, 2014, "p-inelastic-qf" not listed in npolPhysicsListMessenger
-  //else if(type==G4String("n-inelastic-qf"))return ((PolHadronQuasiFreeProcess*)fPolHadronInelasticPhysics->GettheNeutronInelastic())->GetPolRotNP();MHS, Nov 14, 2014,"n-inelastic-qf" not listed in npolPhysicsListMessenger
-  //else {G4cerr<<" npolPhysicsList::GetPolNucleonRotate() No process "<<type<<G4endl;return NULL;}
-
-//void A2PhysicsList::ResetEvent(){
-//  if(!fSaveScat) return;
-  // if(fPolHadronInelasticPhysics->GettheProtonInelastic()->GetPolRotEvent())fPolHadronInelasticPhysics->GettheProtonInelastic()->GetPolRotEvent()->ResetEvent();
-  // if(fPolHadronInelasticPhysics->GettheNeutronInelastic()->GetPolRotEvent())fPolHadronInelasticPhysics->GettheNeutronInelastic()->GetPolRotEvent()->ResetEvent();
-  // if(fPolHadronElasticPhysicsN->GetnElPolProc()->GetPolRotEvent())fPolHadronElasticPhysicsN->GetnElPolProc()->GetPolRotEvent()->ResetEvent();
-    // G4String process[]={ "p-elastic", "n-elastic", "p-inelastic", "n-inelastic", "p-inelastic-qf", "n-inelastic-qf"};
-//G4String process[]={ "p-elastic", "n-elastic", "p-inelastic", "n-inelastic"};//MHS Nov 14, 2014
-//   for(G4int i=0;i<4;i++){
-//    PolNucleonRotate* fPolRot = GetPolNucleonRotate(process[i]);
-//     if (fPolRot) fPolRot->ResetEvent();
-      //if (fPolRot) fPolRot->ToggleDidScat(false);
-// //     }
-   
-// // }
-// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-// //G4LorentzVector* A2PhysicsList::GetScatVec(){
-//   //This can be quite ambigous, particularly if there are more than 1 original nucleons
-//   //The highest energy incident nucleon that participates in a scatter is taken for
-//   //the saved nucleon
-// //  if(!fSaveScat) return NULL;
-// //  PolNucleonRotate* polRotE=fPolHadronElasticPhysicsN->GetnElPolProc()->GetPolRotEvent();
-// //  PolNucleonRotate* polRotIN=fPolHadronInelasticPhysics->GettheNeutronInelastic()->GetPolRotEvent();
-// //  PolNucleonRotate* polRotIP=fPolHadronInelasticPhysics->GettheProtonInelastic()->GetPolRotEvent();
-// //G4double NE,INE,IPE;
-// // NE=INE=IPE=0;
-// // if(polRotE)NE=polRotE->GetScatE();
-// // if(polRotIN)INE=polRotIN->GetScatE();
-// // if(polRotIP)IPE=polRotIP->GetScatE();
-
-// // if(NE&&NE>INE&&NE>IPE) return polRotE->GetScatVec();
-// // else if(INE&&INE>IPE)  return polRotIN->GetScatVec();
-// // else if(IPE) return polRotIP->GetScatVec();
-// // else return NULL;
-// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -334,31 +283,6 @@ void A2PhysicsList::SetBuilderList0(G4bool flagHP)
   fHadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
-
-//void A2PhysicsList::SetPolList(G4bool flagHP, G4bool isNew)
-//{
-//  fIsNew = isNew;
-//  fhadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
-//  if( isNew ){
-//    fPolHadronElasticPhysicsN =
-//     new PolHadronElasticPhysicsN("NPelastic", verboseLevel, flagHP);
-//   hadronPhys.push_back( fPolHadronElasticPhysicsN );
-// }
-// else{
-//   fPolHadronElasticPhysics =
-//     new PolHadronElasticPhysics("NPelastic", verboseLevel, flagHP);
-//   fhadronPhys.push_back( fPolHadronElasticPhysics );
-// }
-//  fhadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
-//  fhadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-//  fhadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
-//}
-//void A2PhysicsList::SetNoHadList()
-//{
-//  fhadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
-//  fhadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
-// fhadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
-//}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

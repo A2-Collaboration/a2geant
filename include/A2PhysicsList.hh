@@ -45,15 +45,10 @@
 #define A2PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-#include "G4LorentzVector.hh"
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
 class A2PhysicsListMessenger;
-//class PolHadronElasticPhysics;
-//class PolHadronElasticPhysicsN;
-//class PolHadronInelasticPhysics;
-//class PolNucleonRotate;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,8 +75,6 @@ public:
   
 private:
 
-  //void SetPolList(G4bool = false, G4bool = false);
-  //void SetNoHadList();
   void SetBuilderList0(G4bool flagHP = false);
   void SetBuilderList1(G4bool flagHP = false);
   void SetBuilderList2();
@@ -96,26 +89,6 @@ private:
   std::vector<G4VPhysicsConstructor*>  fHadronPhys;
     
   A2PhysicsListMessenger* fMessenger;
-  // PolHadronElasticPhysics*  fPolHadronElasticPhysics;
-  // PolHadronElasticPhysicsN*  fPolHadronElasticPhysicsN;
-  //PolHadronInelasticPhysics*  fPolHadronInelasticPhysics;
-  //G4bool dump;
-  //G4bool fIsNew;
-  //G4bool fSaveScat;
-
-  //public:
-  //PolHadronElasticPhysics* GetPolHadronElasticPhysics()
-  // { return  fPolHadronElasticPhysics; }
-  // PolHadronElasticPhysicsN* GetPolHadronElasticPhysicsN()
-  // { return  fPolHadronElasticPhysicsN; }
-  // PolHadronInelasticPhysics* GetPolHadronInelasticPhysics()
-  // { return fPolHadronInelasticPhysics; }
-  // PolNucleonRotate* GetPolNucleonRotate(G4String type);
-
-  // void SetSaveScat(G4bool save=true){fSaveScat=save;}
-  // G4bool IsSaveScat(){return fSaveScat;} 
-  // G4LorentzVector* GetScatVec();
-  // void ResetEvent();
 
 };
 

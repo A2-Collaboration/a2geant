@@ -10,13 +10,15 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ThreeVector.hh"
 
+
+
 A2DetectorMessenger::A2DetectorMessenger(
                                            A2DetectorConstruction* A2Det)
 :fA2Detector(A2Det)
-{
+{ 
   fA2Dir = new G4UIdirectory("/A2/");
   fA2Dir->SetGuidance("UI commands of this example");
-
+  
   fdetDir = new G4UIdirectory("/A2/det/");
   fdetDir->SetGuidance("detector control");
 
@@ -26,11 +28,13 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseTAPSCmd->SetRange("UseTAPS=0 don't build TAPS or UseTAPS!=0 build TAPS");
   fUseTAPSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+
   fUseCBCmd = new G4UIcmdWithAnInteger("/A2/det/useCB",this);
   fUseCBCmd->SetGuidance("Construct CB");
   fUseCBCmd->SetParameterName("UseCB",false);
   //fUseCBCmd->SetRange("UseCB=0 don't build CB or UseCB!=0 build CB");
   fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 
   fUsePIDCmd = new G4UIcmdWithAnInteger("/A2/det/usePID",this);
   fUsePIDCmd->SetGuidance("Construct PID");
@@ -43,38 +47,23 @@ A2DetectorMessenger::A2DetectorMessenger(
   fUseMWPCCmd->SetParameterName("UseMWPC",false);
   fUseMWPCCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUsePolCmd = new G4UIcmdWithAnInteger("/A2/det/usePol", this);
-  fUsePolCmd->SetGuidance("Construct Pol");
-  fUsePolCmd->SetParameterName("UsePol", false);
-  fUsePolCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fUsePolCapCmd = new G4UIcmdWithAnInteger("/A2/det/usePolCap", this);
-  fUsePolCapCmd->SetGuidance("Construct Pol Cap");
-  fUsePolCapCmd->SetParameterName("UsePolCap", false);
-  fUsePolCapCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
   fUseTargetCmd=new G4UIcmdWithAString("/A2/det/useTarget",this);
   fUseTargetCmd->SetGuidance("Select the type of target");
   fUseTargetCmd->SetGuidance("Either Cryo or Solid");
   fUseTargetCmd->SetParameterName("UseTarget",false);
   fUseTargetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUseCryoTgtCmd = new G4UIcmdWithAnInteger("/A2/det/useCryoTgt",this);
-  fUseCryoTgtCmd->SetGuidance("Construct Cryo target version");
-  fUseCryoTgtCmd->SetParameterName("UseCryoTgt",false);
-  fUseCryoTgtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fTargetMatCmd=new G4UIcmdWithAString("/A2/det/targetMaterial",this);
   fTargetMatCmd->SetGuidance("Select the target material");
   fTargetMatCmd->SetParameterName("TargetMaterial",false);
   fTargetMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  
   fTargetLengthCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetLength",this);
   fTargetLengthCmd->SetGuidance("Set target cell length");
   fTargetLengthCmd->SetParameterName("TargetLength",false);
   fTargetLengthCmd->SetUnitCategory("Length");
   fTargetLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  
   // Target magnetic coils type
   fTargetMagneticCoilsCmd = new G4UIcmdWithAString("/A2/det/targetMagneticCoils",this);
   fTargetMagneticCoilsCmd->SetGuidance("Select the target magnetic coils type");
@@ -122,24 +111,6 @@ A2DetectorMessenger::A2DetectorMessenger(
   fPIDZCmd->SetUnitCategory("Length");
   fPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fMWPCZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setMWPCZ",this);
-  fMWPCZCmd->SetGuidance("Set distance of MWPC from centre of ball");
-  fMWPCZCmd->SetParameterName("MWPCZ",false);
-  fMWPCZCmd->SetUnitCategory("Length");
-  fMWPCZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fPolZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setPolZ", this);
-  fPolZCmd->SetGuidance("Set distance of polarimeter from centre of ball");
-  fPolZCmd->SetParameterName("PolZ", false);
-  fPolZCmd->SetUnitCategory("Length");
-  fPolZCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fTargetZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetZ",this);
-  fTargetZCmd->SetGuidance("Set distance of Target from centre of ball");
-  fTargetZCmd->SetParameterName("TargetZ",false);
-  fTargetZCmd->SetUnitCategory("Length");
-  fTargetZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fUpdateCmd = new G4UIcmdWithoutParameter("/A2/det/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
@@ -162,20 +133,17 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseCherenkovCmd->SetRange("UseCherenkov=0 don't build Cherenkov or UseCherenkov!=0 build Cherenkov");
   fUseCherenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-
+ 
 }
+
+
 
 A2DetectorMessenger::~A2DetectorMessenger()
 {
   delete fUseTAPSCmd;
   delete fUseCBCmd;
   delete fUsePIDCmd;
-  delete fUsePolCmd;
-  delete fUsePolCapCmd;
-  delete fPolZCmd;
   delete fUseTargetCmd;
-  delete fUseCryoTgtCmd;
-  delete fTargetZCmd;
   delete fTargetMatCmd;
   delete fTargetMagneticCoilsCmd;
   delete fUpdateCmd;
@@ -194,8 +162,11 @@ A2DetectorMessenger::~A2DetectorMessenger()
 
  }
 
+
+
 void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{
+{ 
+
 
   if( command == fUseTAPSCmd )
     { fA2Detector->SetUseTAPS(fUseTAPSCmd->GetNewIntValue(newValue));}
@@ -206,73 +177,57 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fUsePIDCmd )
     { fA2Detector->SetUsePID(fUsePIDCmd->GetNewIntValue(newValue));}
 
+
   if( command == fUseMWPCCmd )
     { fA2Detector->SetUseMWPC(fUseMWPCCmd->GetNewIntValue(newValue));}
 
-  if( command == fUsePolCmd)
-    { fA2Detector->SetUsePol(fUsePolCmd->GetNewIntValue(newValue));}
-
-  if( command == fUsePolCapCmd)
-    { fA2Detector->SetUsePolCap(fUsePolCapCmd->GetNewIntValue(newValue));}
-
   if( command == fUseCherenkovCmd )
     { fA2Detector->SetUseCherenkov(fUseCherenkovCmd->GetNewIntValue(newValue));}
-
+  
   if( command == fUpdateCmd )
     { fA2Detector->UpdateGeometry(); }
-
+  
   if( command == fUseTargetCmd )
     { fA2Detector->SetUseTarget(newValue);}
-
-  if (command == fUseCryoTgtCmd)
-    { fA2Detector->SetUseCryoTgt(fUseCryoTgtCmd->GetNewIntValue(newValue));}
-
+  
   if( command == fTargetMatCmd )
     { fA2Detector->SetTargetMaterial(newValue);}
-
+    
   if ( command == fTargetMagneticCoilsCmd )
     { fA2Detector->SetTargetMagneticCoils(newValue); }
-
+  
   if( command == fTargetLengthCmd )
     { fA2Detector->SetTargetLength(fTargetLengthCmd->GetNewDoubleValue(newValue));}
-
+    
   // Target magnetic field map
   if( command == fTargetMagneticFieldCmd )
     { fA2Detector->SetTargetMagneticFieldMap(newValue); }
 
    if( command == fHemiGapCmd )
     { fA2Detector->SetHemiGap(fHemiGapCmd->GetNew3VectorValue(newValue));}
-
+ 
   if( command == fTAPSFileCmd )
     { fA2Detector->SetTAPSFile(newValue);}
-
+  
   if( command == fTAPSZCmd )
     { fA2Detector->SetTAPSZ(fTAPSZCmd->GetNewDoubleValue(newValue));}
-
+  
+  
   if( command == fTAPSNCmd )
     {fA2Detector->SetTAPSN(fTAPSNCmd->GetNewIntValue(newValue));}
-
+  
   if( command == fTAPSPbCmd )
     {fA2Detector->SetTAPSPbWO4Rings(fTAPSPbCmd->GetNewIntValue(newValue));}
-
+  
   if( command == fPIDZCmd )
     { fA2Detector->SetPIDZ(fPIDZCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fMWPCZCmd )
-    { fA2Detector->SetMWPCZ(fMWPCZCmd->GetNewDoubleValue(newValue));}
-
-  if( command ==fPolZCmd )
-    { fA2Detector->SetPolZ(fPolZCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fTargetZCmd )
-    { fA2Detector->SetTargetZ(fTargetZCmd->GetNewDoubleValue(newValue));}
-
+  
   if( command == fTOFFileCmd )
     { fA2Detector->SetTOFFile(newValue);}
-
+  
   if( command == fUseTOFCmd )
     { fA2Detector->SetUseTOF(fUseTOFCmd->GetNewIntValue(newValue));}
-
+  
  }
 
 

@@ -74,10 +74,6 @@ protected:
   Float_t *ftofy; //y hit position
   Float_t *ftofz; //z hit position
 
-  //  //polarimeter scatter angles
-  //  Float_t fScatTheta;
-  // Float_t fScatPhi;
-
   TLorentzVector** fGenLorentzVec;
   TLorentzVector* fBeamLorentzVec;
   Int_t *fGenPartType;
@@ -93,11 +89,6 @@ public:
   TTree* GetTree(){return fTree;}
  
   void SetBranches();
-
-  //  void SetThetaSc(Float_t theta_sc) {fScatTheta=theta_sc;}
-  //  Float_t GetThetaSc() {return fScatTheta;}
-  //  void SetPhiSc(Float_t phi_sc) {fScatPhi=phi_sc;}  
-  //  Float_t GetPhiSc() {return fScatPhi;}
   
   void WriteTree(){fTree->Write();}
   void WriteHit(G4HCofThisEvent* );

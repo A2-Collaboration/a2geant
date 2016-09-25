@@ -106,9 +106,6 @@ void A2CBOutput::SetBranches(){
     fTree->Branch("tofy",ftofy,"ftofy[fntof]/F",basket);
     fTree->Branch("tofz",ftofz,"ftofz[fntof]/F",basket);
   }
-  //polarimeter scatter angles
-  //fTree->Branch("ScatTheta",&fScatTheta,"fScatTheta/F",basket);
-  //fTree->Branch("ScatPhi",&fScatPhi,"fScatPhi/F",basket);
 }
 void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
   G4int CollSize=HitsColl->GetNumberOfCollections();

@@ -48,16 +48,10 @@
 #include "G4UImessenger.hh"
 
 class A2PhysicsList;
-class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
-class G4UIcmdWithABool;
 class G4UIcmdWithoutParameter;
 class G4UIdirectory;
-//class PolHadronicProcess;
-//class G4HadronicProcess;
-//class PolNucleonRotate;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class A2PhysicsListMessenger: public G4UImessenger
@@ -84,15 +78,6 @@ private:
   G4UIcmdWithADoubleAndUnit* fRegCutCmd;
   G4UIcmdWithAString*        fRegCmd;
   G4UIdirectory* fphysDir;
-  // polarised nucleon stuff
-  G4UIcmdWithADouble* fAyValue;
-  G4UIcmdWithAString* fAyModel;
-  G4UIcmdWithAString* fAyProc;
-  G4UIcmdWithABool* fSaveScat;
-  G4UIcmdWithABool* fDetFrame;
-  G4UIdirectory* fPolDir;
-  // PolHadronicProcess* fNproc;
-  // PolNucleonRotate* fPolRot;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

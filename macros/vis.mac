@@ -4,17 +4,18 @@
 #####Pre-Initialisation
 #Choose a physics list, for a full listing type /A2/physics/ListPhysics
 
-/A2/physics/Physics QGSP_BIC
+#/A2/physics/Physics QGSP_BIC
 
 ####Initialise
 /run/initialize
 
+
 #
 # Sets some default verbose
 #
-/control/verbose 1
+/control/verbose 2
 /control/saveHistory
-/run/verbose 1
+/run/verbose 2
 /vis/verbose 0
 #
 # create empty scene
@@ -29,8 +30,8 @@
 #/vis/open DAWNFILE
 #
 # Use this open statement instead for OpenGL in immediate mode.
-/vis/open OGLIX
-/vis/open RayTracer
+#/vis/open OGLIXm
+#/vis/open RayTracer
 #
 # Use this open statement instead to get a HepRep version 1 file
 # suitable for viewing in WIRED.
@@ -58,33 +59,33 @@
 # The first file will contain just detector geometry.
 # The second file will contain the detector plus one event.
 # The third file will contain the detector plus ten events.
-#/vis/open OGLI
+/vis/open OGLI
 #/vis/open OGL
-/vis/open OGLIX
+#/vis/open OGLS
+#/vis/open OGLIX
+#/vis/open OGLSQt
 #/vis/open DAWNFILE
+#/vis/scene/create 
 #/vis/viewer/reset
-/vis/viewer/zoom 1.2
-/vis/viewer/set/viewpointThetaPhi 40. 40.
-/vis/scene/add/trajectories
-/vis/scene/add/hits
-/vis/scene/create 
+#/vis/viewer/zoom 1.
+/vis/viewer/set/viewpointThetaPhi 130. 40.
+#/vis/viewer/set/viewpointThetaPhi 0. 0.
 /vis/viewer/set/style surface
-/vis/drawVolume
-/vis/scene/endOfEventAction accumulate	
-/tracking/storeTrajectory 1
-#/vis/ogl/printEPS	
-/vis/geometry/set/visibility CNIN 0 false
+#/vis/drawVolume
+#/vis/scene/endOfEventAction accumulate	
+/tracking/storeTrajectory 1	
+#/vis/geometry/set/visibility CNIN 0 false
 #/vis/geometry/set/forceAuxEdgeVisible World -1 true
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
    
-#/gun/particle gamma
-#/gun/energy 200 MeV
+/gun/particle pi-
+/gun/energy 3 MeV
 #/particle/select kaon+
 #/particle/process/inactivate 3
 #for checking CCUT
-#/gun/direction 0. 0. 1
-#/gun/position 0 0 0
+/gun/direction 0. 0. 1
+/gun/position 0 0 0
 #/gun/position -2.924 10.2 22.98
 #/gun/position -2.924 9.7 22.98
 #/gun/position -2.558 9.7 20.66
