@@ -22,15 +22,15 @@
 #### Use a nested PID? This option constructs PID II outside PID III
 #### Warning requires PID III and no wire chamber!
 #### Needs Z offset of ~20cm so as not to overlap with lightguides of PID III
-/A2/det/useNestPID 1
+/A2/det/useNestPID 0
 /A2/det/setNestPIDZ 22.0 cm
 ####Use the Polarimeter
 ####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016, 2.6cm), 3 = Use Phase II (2015/2016, backup tube 2.25cm)
 #### 30cm long polarimeter requires offset of 3.8 cm (PID option 3)
-/A2/det/usePol 0
+/A2/det/usePol 2
 #### For the P2 polarimeter only, P1 ALWAYS has a cap. Set to 0 for no cap or 1 for cap (requires shorter PID, options 3/4)
-/A2/det/usePolCap 0
-/A2/det/setPolZ 3.8 cm
+/A2/det/usePolCap 1
+/A2/det/setPolZ 43.8 cm
 
 #set to 1 to not create the anode wires, 2 to create the anode wires
 #Phase 2 polarimeter proposal had MWPCZ offset of -5cm (why?)
