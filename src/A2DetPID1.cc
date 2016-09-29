@@ -98,10 +98,10 @@ void A2DetPID1::MakeDetector1(){
     //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
     fPIDPhysi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID",fMyLogic,false,i+1);
-     fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
+    fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
     fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
-     fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
-      fMUMEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z+fbase_z).rotateZ(fpid_theta/2),fMUMELogic,"MUME",fMyLogic,false,i);
+    fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
+    fMUMEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z+fbase_z).rotateZ(fpid_theta/2),fMUMELogic,"MUME",fMyLogic,false,i);
     RotPMTR[i]=new G4RotationMatrix();
     RotPMTR[i]->rotateZ(pid_angle);
     new G4PVPlacement(RotPMTR[i],G4ThreeVector(0,0,fpmtr_z),fPMTRLogic,"PMTR",fMyLogic,false,i);
@@ -118,7 +118,7 @@ void A2DetPID1::MakeDetector1(){
 void A2DetPID1::MakeSingleDetector1(){
  //Constructor for right angular wedge!
  //Used for PID I and PID II
-  fPID1=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
+  fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
   fPIDLogic=new G4LogicalVolume(fPID,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID");
   if(!fPIDSD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();

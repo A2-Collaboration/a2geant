@@ -41,7 +41,6 @@ private:
   A2SD* fPIDSD;
 
   G4Trap *fPID;  //PID scintillator shape
-  G4Trap *fPIDEnd; // PID end for larger case
   G4LogicalVolume *fPIDLogic;
   G4VPhysicalVolume** fPIDPhysi;
 
