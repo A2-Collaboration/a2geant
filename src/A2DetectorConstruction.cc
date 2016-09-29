@@ -108,7 +108,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
-  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseNestPID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
+  if(fUseCB==0&&fUseTAPS==0&&fUsePID1==0&&fUsePID2==0&&fUsePID3==0&&fUseNestPID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
     G4cout<<"G4VPhysicalVolume* A2DetectorConstruction::Construct() Don't seem to be simulating any detectors, please check you are using an appopriate detector setup. I tried the file "<<fDetectorSetup<< " I will exit here before the computer explodes"<<G4endl;
     exit(0);
   }
@@ -194,8 +194,9 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fNestPID = new A2DetNestPID();
 
     if (fUseNestPID == 1){
-        if(fUsePID != 3) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
-        if(fUseMWPC!= 0) {G4cerr<<"Nested PID cannot be used with MWPC!"<< G4endl; exit(1);}
+        if(fUsePID1 != 0) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
+        if(fUsePID2 != 0) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
+        if(fUseMWPC != 0) {G4cerr<<"Nested PID cannot be used with MWPC!"<< G4endl; exit(1);}
         fNestPID->Construct1(fWorldLogic, fNestPIDZ);
         G4cout << "Outer PID Z displaced by " << fNestPIDZ/CLHEP::cm << "cm" << G4endl;
     }
