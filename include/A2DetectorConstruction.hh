@@ -48,7 +48,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseCB(G4int use){fUseCB=use;}
   void SetUseTAPS(G4int use){fUseTAPS=use;}
   void SetUsePID1(G4int use){fUsePID1=use;}
-  void SetUsePID2(G4int use){fUsePID3=use;}
+  void SetUsePID2(G4int use){fUsePID2=use;}
   void SetUsePID3(G4int use){fUsePID3=use;}
   void SetUseNestPID(G4int use){fUseNestPID=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
@@ -100,9 +100,9 @@ public:
 
   A2DetCrystalBall* fCrystalBall;   //CrystalBall detector
   A2DetTAPS* fTAPS;   //TAPS detector
-  A2DetPID1* fPID1;   //PID detector
-  A2DetPID2* fPID2;   //PID detector
-  A2DetPID3* fPID3;   //PID detector
+  A2DetPID1* fPID1;   //PID detector 1
+  A2DetPID2* fPID2;   //PID detector 2
+  A2DetPID3* fPID3;   //PID detector 3
   A2DetNestPID* fNestPID; //Nested PID detector
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
