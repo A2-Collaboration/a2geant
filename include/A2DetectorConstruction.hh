@@ -95,7 +95,9 @@ public:
 
   A2DetCrystalBall* fCrystalBall;   //CrystalBall detector
   A2DetTAPS* fTAPS;   //TAPS detector
-  A2DetPID* fPID;   //PID detector
+  A2DetPID1* fPID1;   //PID detector
+  A2DetPID2* fPID2;   //PID detector
+  A2DetPID3* fPID3;   //PID detector
   A2DetNestPID* fNestPID; //Nested PID detector
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
@@ -116,7 +118,9 @@ public:
   //or changed interactively eg, /A2/det/useTAPS 0, then,  /A2/det/update
   G4int fUseCB;   //Build the Crystal Ball
   G4int fUseTAPS;   //Build TAPS
-  G4int fUsePID;   //Build the PID
+  G4int fUsePID1;   //Build the PID1
+  G4int fUsePID2;   //Build the PID2
+  G4int fUsePID3;   //Build the PID3
   G4int fUseNestPID;   //Build a nested PID (PID III inside PID II) arrangement
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall

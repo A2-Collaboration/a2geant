@@ -34,7 +34,9 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   fUseCB=0;
   fUseTAPS=0;
-  fUsePID=0;
+  fUsePID1=0;
+  fUsePID2=0;
+  fUsePID3=0;
   fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
@@ -45,7 +47,9 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   fCrystalBall=NULL;
   fTAPS=NULL;
-  fPID=NULL;
+  fPID1=NULL;
+  fPID2=NULL;
+  fPID3=NULL;
   fNestPID=NULL;
   fMWPC=NULL;
   fPol=NULL;
@@ -89,7 +93,9 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 {
 
   fUseTAPS=0;
-  fUsePID=0;
+  fUsePID1=0;
+  fUsePID2=0;
+  fUsePID3=0;
   fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
@@ -149,14 +155,36 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fTAPS->Construct(fWorldLogic);
   }
 
-  if(fUsePID){
-    G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
-    fPID=new A2DetPID();
+  if(fUsePID1){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-I "<<G4endl;
+    fPID1=new A2DetPID1();
 
-    if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
-    else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016 add offset too!),  "<< G4endl; exit(1);}
+    if(fUsePID2!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID3!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID1==1) fPID1->Construct1(fWorldLogic,fPIDZ);
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
+    G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+  }
+
+  if(fUsePID2){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-II "<<G4endl;
+    fPID2=new A2DetPID2();
+
+    if(fUsePID1!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID3!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID2==1) fPID2->Construct1(fWorldLogic,fPIDZ);
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
+    G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+  }
+
+  if(fUsePID3){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-III "<<G4endl;
+    fPID3=new A2DetPID3();
+
+    if(fUsePID1!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID2!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID3==1) fPID3->Construct1(fWorldLogic,fPIDZ);
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 

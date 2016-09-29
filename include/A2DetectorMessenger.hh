@@ -29,7 +29,9 @@ class A2DetectorMessenger: public G4UImessenger
     G4UIdirectory*             fdetDir;
     G4UIcmdWithAnInteger*      fUseCBCmd;
     G4UIcmdWithAnInteger*      fUseTAPSCmd;
-    G4UIcmdWithAnInteger*      fUsePIDCmd;
+    G4UIcmdWithAnInteger*      fUsePID1Cmd;
+    G4UIcmdWithAnInteger*      fUsePID2Cmd;
+    G4UIcmdWithAnInteger*      fUsePID3Cmd;
     G4UIcmdWithAnInteger*      fUseNestPIDCmd;
     G4UIcmdWithAnInteger*      fUseMWPCCmd;
     G4UIcmdWithAnInteger*      fUsePolCmd;

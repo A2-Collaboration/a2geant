@@ -32,11 +32,23 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseCBCmd->SetRange("UseCB=0 don't build CB or UseCB!=0 build CB");
   fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUsePIDCmd = new G4UIcmdWithAnInteger("/A2/det/usePID",this);
-  fUsePIDCmd->SetGuidance("Construct PID");
-  fUsePIDCmd->SetParameterName("UsePID",false);
+  fUsePID1Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID1",this);
+  fUsePID1Cmd->SetGuidance("Construct PID-I");
+  fUsePID1Cmd->SetParameterName("UsePID1",false);
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
-  fUsePIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUsePID1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUsePID2Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID2",this);
+  fUsePID2Cmd->SetGuidance("Construct PID-II");
+  fUsePID2Cmd->SetParameterName("UsePID2",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fUsePID2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUsePID3Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID3",this);
+  fUsePID3Cmd->SetGuidance("Construct PID-III");
+  fUsePID3Cmd->SetParameterName("UsePID3",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fUsePID3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fUseNestPIDCmd = new G4UIcmdWithAnInteger("/A2/det/useNestPID",this);
   fUseNestPIDCmd->SetGuidance("Construct Nested PID Arrangement");
@@ -180,7 +192,9 @@ A2DetectorMessenger::~A2DetectorMessenger()
 {
   delete fUseTAPSCmd;
   delete fUseCBCmd;
-  delete fUsePIDCmd;
+  delete fUsePID1Cmd;
+  delete fUsePID2Cmd;
+  delete fUsePID3Cmd;
   delete fUseNestPIDCmd;
   delete fUsePolCmd;
   delete fUsePolCapCmd;
@@ -216,8 +230,14 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fUseCBCmd )
     { fA2Detector->SetUseCB(fUseCBCmd->GetNewIntValue(newValue));}
 
-  if( command == fUsePIDCmd )
-    { fA2Detector->SetUsePID(fUsePIDCmd->GetNewIntValue(newValue));}
+  if( command == fUsePID1Cmd )
+    { fA2Detector->SetUsePID1(fUsePID1Cmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePID2Cmd )
+    { fA2Detector->SetUsePID2(fUsePID2Cmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePID3Cmd )
+    { fA2Detector->SetUsePID3(fUsePID3Cmd->GetNewIntValue(newValue));}
 
   if( command == fUseNestPIDCmd )
     { fA2Detector->SetUseNestPID(fUseNestPIDCmd->GetNewIntValue(newValue));}
