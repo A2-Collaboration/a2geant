@@ -82,7 +82,7 @@ G4VPhysicalVolume* A2DetPID3::Construct1(G4LogicalVolume* MotherLogical,G4double
   fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
   //Note here position is +fzpos beause of rotation
   fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
-  MakeDetector3();
+  MakeDetector1();
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(0.5,0.5,1,1));
   visatt->SetForceWireframe(true);
