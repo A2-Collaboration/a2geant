@@ -127,7 +127,7 @@ void A2DetPID3::MakeDetector1(){
 
 void A2DetPID3::MakeSingleDetector1(){
  //Used for PID III (both options) to add on bent bit at end of PID scintillators
-  fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
+  fPID3=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
   //Commented out PIDEnd is for slanted/angled PID end pieces
   //fPIDEnd=new G4Trap("PIDEnd", ((fpidendL)/2), 30*CLHEP::deg, 270*CLHEP::deg, (fpid_thick/2), (fpid_xl2/2), (fpid_xs2/2), 0*CLHEP::deg, (fpid_thick/2), (fpid_xl/2), (fpid_xs/2), 0*CLHEP::deg); // Define shape of bit at end
   fPIDEnd = new G4Trap("PIDEnd", ((fpid_thick)), ((fpidendL)) , (fpid_xs), 5.99*CLHEP::mm);

@@ -118,7 +118,7 @@ void A2DetPID1::MakeDetector1(){
 void A2DetPID1::MakeSingleDetector1(){
  //Constructor for right angular wedge!
  //Used for PID I and PID II
-  fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
+  fPID1=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
   fPIDLogic=new G4LogicalVolume(fPID,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID");
   if(!fPIDSD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
