@@ -12,6 +12,9 @@
 #include "A2DetCrystalBall.hh"
 #include "A2DetTAPS.hh"
 #include "A2DetPID.hh"
+#include "A2DetPID1.hh"
+#include "A2DetPID2.hh"
+#include "A2DetPID3.hh"
 #include "A2DetNestPID.hh"
 #include "A2DetTOF.hh"
 #include "A2Target.hh"
@@ -44,7 +47,9 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   //Set functions used by messenger class
   void SetUseCB(G4int use){fUseCB=use;}
   void SetUseTAPS(G4int use){fUseTAPS=use;}
-  void SetUsePID(G4int use){fUsePID=use;}
+  void SetUsePID1(G4int use){fUsePID1=use;}
+  void SetUsePID2(G4int use){fUsePID3=use;}
+  void SetUsePID3(G4int use){fUsePID3=use;}
   void SetUseNestPID(G4int use){fUseNestPID=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}

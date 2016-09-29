@@ -185,7 +185,6 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseCherenkovCmd->SetRange("UseCherenkov=0 don't build Cherenkov or UseCherenkov!=0 build Cherenkov");
   fUseCherenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-
 }
 
 A2DetectorMessenger::~A2DetectorMessenger()
