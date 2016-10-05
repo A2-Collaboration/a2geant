@@ -107,7 +107,7 @@ void A2DetPID2::MakeDetector1(){
                  //this matches the pid positions with PID_MC.dat
     //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
-    fPID2Physi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID2",fMyLogic,false,i+1);
+    fPID2Physi[i]=new G4PVPlacement(Rot[i],dpos1,fPID2Logic,"PID2",fMyLogic,false,i+1);
      fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
     fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
      fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
