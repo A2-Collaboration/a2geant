@@ -69,7 +69,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSN(G4int nn){fTAPSN=nn;}
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
-  void SetPIDZ2(G4double zz){fPIDZ=zz;}
+  void SetPIDZ2(G4double zz){fPIDZ2=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
   void SetPolZ(G4double zz){fPolZ=zz;}
   void SetTargetZ(G4double zz){fTargetZ=zz;}

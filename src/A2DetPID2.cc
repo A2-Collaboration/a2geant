@@ -73,6 +73,9 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   if (fRotPID2 == 0){
     Mrot->rotateY(180*CLHEP::deg);//pid2 is positioned in opposite orientation
   }
+  else if (fRotPID2 == 1){
+    Mrot->rotateY(0*CLHEP::deg);//pid2 is positioned in same orientation as PID-I
+  }
   G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin,moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
   fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
   //Note here position is +fzpos beause of rotation
