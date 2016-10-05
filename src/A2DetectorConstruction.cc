@@ -173,16 +173,16 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUsePID2==1 && fUsePID3 == 0)
     {
         if(fRotPID2 == 0 || fRotPID2 == 1) fPID2->Construct1(fWorldLogic,fPIDZ, fRotPID2);
-        G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
         else {G4cerr<<"Error please select rotation of PID2,0 = default 1 = PID 1 orientation"<< G4endl; exit(1);}
+        G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
     }
     else if (fUsePID2 == 1 && fUsePID3 == 1)
     {
         if (fUseMWPC != 0) {G4cerr<<"Error for 2 PID arrangement turn off MWPC"<< G4endl; exit(1);}
         if(fRotPID2 == 0) {G4cerr<<"Error to be compatible with PID-III need to rotate PID-II"<< G4endl; exit(1);}
         else if (fRotPID2 == 1) fPID2->Construct1(fWorldLogic,fPIDZ2, fRotPID2);
-        G4cout << "Outer PID Z displaced by " << fPIDZ2/CLHEP::cm << "cm" << G4endl;
         else {G4cerr<<"Error please select rotation of PID2,0 = default 1 = PID 1 orientation"<< G4endl; exit(1);}
+        G4cout << "Outer PID Z displaced by " << fPIDZ2/CLHEP::cm << "cm" << G4endl;
     }
     else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
   }
