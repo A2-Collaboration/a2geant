@@ -26,7 +26,7 @@ public:
   ~A2DetPID2();
 
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
-  G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0, G4Int RotPID);
+  G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0, G4int RotPID);
 
   void MakeDetector1();
   void MakeSingleDetector();
