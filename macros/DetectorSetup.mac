@@ -17,15 +17,13 @@
 ####Use the PID, select 0 or 1 for the PID option you want
 #### 1 = PID I, 2 = PID II, 3 = PID III (30cm @ rin = 3.3cm)
 #### Option 3 requires PIDZ offset of 2.5cm to fit in new lightguides
+#### To use a PID2 + PID3 setup select PID2/PID3 on and rotate PID2, offset PID2 by ~ 22cm using the PIDZ2 line
 /A2/det/usePID1 0
 /A2/det/usePID2 1
+/A2/det/RotPID2 0
 /A2/det/usePID3 0
 /A2/det/setPIDZ 2.5 cm
-#### Use a nested PID? This option constructs PID II outside PID III
-#### Warning requires PID III and no wire chamber!
-#### Needs Z offset of ~20cm so as not to overlap with lightguides of PID III
-/A2/det/useNestPID 0
-/A2/det/setNestPIDZ 22.0 cm
+/A2/det/setPIDZ2 22.0 cm 
 ####Use the Polarimeter
 ####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016, 2.6cm), 3 = Use Phase II (2015/2016, backup tube 2.25cm)
 #### 30cm long polarimeter requires offset of 3.8 cm (PID option 3)
