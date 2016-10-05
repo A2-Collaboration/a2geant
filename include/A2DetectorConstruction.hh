@@ -48,7 +48,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseTAPS(G4int use){fUseTAPS=use;}
   void SetUsePID1(G4int use){fUsePID1=use;}
   void SetUsePID2(G4int use){fUsePID2=use;}
-  void SetRotPID2(G4int use){fUsePID2=use;}
+  void SetRotPID2(G4int use){fRotPID2=use;}
   void SetUsePID3(G4int use){fUsePID3=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
