@@ -37,10 +37,10 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
 
-     G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
-     void DefineMaterials();
+  void UpdateGeometry();
+  void DefineMaterials();
   void SetIsInteractive(G4int is){fIsInteractive=is;}
 
   //Set functions used by messenger class
@@ -48,8 +48,8 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetUseTAPS(G4int use){fUseTAPS=use;}
   void SetUsePID1(G4int use){fUsePID1=use;}
   void SetUsePID2(G4int use){fUsePID2=use;}
+  void SetRotPID2(G4int use){fUsePID2=use;}
   void SetUsePID3(G4int use){fUsePID3=use;}
-  void SetUseNestPID(G4int use){fUseNestPID=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
@@ -69,7 +69,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSN(G4int nn){fTAPSN=nn;}
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
-  void SetNestPIDZ(G4double zz){fNestPIDZ=zz;}
+  void SetPIDZ2(G4double zz){fPIDZ=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
   void SetPolZ(G4double zz){fPolZ=zz;}
   void SetTargetZ(G4double zz){fTargetZ=zz;}

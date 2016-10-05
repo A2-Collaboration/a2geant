@@ -37,7 +37,7 @@ A2DetPID2::~A2DetPID2(){
   //delete Rot;
 }
 
-G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double Z0, G4Int RotPID){
+G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double Z0, G4int RotPID){
   //Build the new PID for 2007
 
   fMotherLogic=MotherLogical;
