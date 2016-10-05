@@ -185,7 +185,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     else if (fUsePID3 == 1){
         if(fUseMWPC != 0) {G4cerr<<"Error for 2 PID arrangement turn off MWPC"<< G4endl; exit(1);}
         if (fRotPID2 == 0) {G4cerr<<"Error to be compatible with PID-III need to rotate PID-II"<< G4endl; exit(1);}
-        else if ()fRotPID2 == 1){
+        else if (fRotPID2 == 1){
             fPID2->Construct1(fWorldLogic,fPIDZ2, fRotPID2);
             G4cout << "Outer PID Z displaced by " << fPIDZ2/CLHEP::cm << "cm" << G4endl;
             G4cout << "PID2 constructed with PID3" << G4endl;
