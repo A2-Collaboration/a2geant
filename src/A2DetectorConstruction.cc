@@ -36,8 +36,8 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fUseTAPS=0;
   fUsePID1=0;
   fUsePID2=0;
+  fRotPID2=0;
   fUsePID3=0;
-  fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -49,8 +49,8 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fTAPS=NULL;
   fPID1=NULL;
   fPID2=NULL;
+  fRotPID2=NULL;
   fPID3=NULL;
-  fNestPID=NULL;
   fMWPC=NULL;
   fPol=NULL;
   fTOF=NULL;
@@ -71,8 +71,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   //default settings for PID
   fPIDZ=0.;
-  //default settings for nested PID
-  fNestPIDZ=0.;
+  fPIDZ2=0; // For second (outer PID)
   //default offset for MWPC
   fMWPCZ=0.;
   //default offset for Polarimeter
@@ -95,8 +94,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   fUseTAPS=0;
   fUsePID1=0;
   fUsePID2=0;
+  fRotPID2=0;
   fUsePID3=0;
-  fUseNestPID=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -159,8 +158,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     G4cout<<"A2DetectorConstruction::Construct() Make PID-I "<<G4endl;
     fPID1=new A2DetPID1();
 
-    if(fUsePID2!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
-    if(fUsePID3!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID2!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if(fUsePID3!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
     if(fUsePID1==1) fPID1->Construct1(fWorldLogic,fPIDZ);
     else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
@@ -170,9 +169,20 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     G4cout<<"A2DetectorConstruction::Construct() Make PID-II "<<G4endl;
     fPID2=new A2DetPID2();
 
-    if(fUsePID1!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
-    if(fUsePID3!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
-    if(fUsePID2==1) fPID2->Construct1(fWorldLogic,fPIDZ);
+    if(fUsePID1!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if(fUsePID2==1 && fUsePID3 == 0)
+    {
+        if(fRotPID2 == 0 || fRotPID2 == 1)fPID2->Construct1(fWorldLogic,fPIDZ, fRotPID2);
+        G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+        else {G4cerr<<"Error please select rotation of PID2,0 = default 1 = PID 1 orientation"<< G4endl; exit(1);}
+    }
+    else if (fUsePID2 == 1 && fUsePID 3 == 1)
+    {
+        if (fUseMWPC != 0) {G4cerr<<"Error for 2 PID arrangement turn off MWPC"<< G4endl; exit(1);}
+        if(fRotPID2 == 0) {G4cerr<<"Error to be compatible with PID-III need to rotate PID-II"<< G4endl; exit(1);}
+        else if (fRotPID2 == 1) fPID2->Construct1(fWorldLogic,fPIDZ2, fRotPID2);
+        else {G4cerr<<"Error please select rotation of PID2,0 = default 1 = PID 1 orientation"<< G4endl; exit(1);}
+    }
     else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
@@ -181,25 +191,10 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     G4cout<<"A2DetectorConstruction::Construct() Make PID-III "<<G4endl;
     fPID3=new A2DetPID3();
 
-    if(fUsePID1!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
-    if(fUsePID2!=0) {G4cerr<<"Error please build only 1 PID at a time, for nested PID use nest PID"<< G4endl; exit(1);}
+    if(fUsePID1!=0) {G4cerr<<"EError PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
     if(fUsePID3==1) fPID3->Construct1(fWorldLogic,fPIDZ);
     else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
-  }
-
-  if(fUseNestPID){
-    G4cout<<"A2DetectorConstruction::Construct() Make Nested PID" << G4endl;
-    G4cout<<"This arrangement is PID III inside PID II" << G4endl;
-    fNestPID = new A2DetNestPID();
-
-    if (fUseNestPID == 1){
-        if(fUsePID1 != 0) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
-        if(fUsePID2 != 0) {G4cerr<<"Nested PID requires PID III to be selected!"<< G4endl; exit(1);}
-        if(fUseMWPC != 0) {G4cerr<<"Nested PID cannot be used with MWPC!"<< G4endl; exit(1);}
-        fNestPID->Construct1(fWorldLogic, fNestPIDZ);
-        G4cout << "Outer PID Z displaced by " << fNestPIDZ/CLHEP::cm << "cm" << G4endl;
-    }
   }
 
   if(fUseMWPC){

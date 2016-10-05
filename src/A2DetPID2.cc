@@ -37,7 +37,7 @@ A2DetPID2::~A2DetPID2(){
   //delete Rot;
 }
 
-G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double Z0){
+G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double Z0, G4Int RotPID){
   //Build the new PID for 2007
 
   fMotherLogic=MotherLogical;
@@ -51,6 +51,7 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   fpid_theta=360*CLHEP::deg/fNPids;
   fpid_xs=2*fpid_rin*tan(fpid_theta/2);//short length
   fpid_xl=2*fpid_rout*tan(fpid_theta/2);//long length
+  fRotPID2 = RotPID;
 
   //Make the light guide shape
   MakeLightGuide1();
@@ -69,7 +70,9 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   fzpos=(fpid_z-moth_z)/2+6*CLHEP::mm;//zposition of centre of pid relative to mother, 3mm is for support ring
   fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
   G4RotationMatrix *Mrot=new G4RotationMatrix();
-  Mrot->rotateY(180*CLHEP::deg);//pid2 is positioned in opposite orientation
+  if (fRotPID2 == 0){
+    Mrot->rotateY(180*CLHEP::deg);//pid2 is positioned in opposite orientation
+  }
   G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin,moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
   fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
   //Note here position is +fzpos beause of rotation

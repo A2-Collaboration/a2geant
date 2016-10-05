@@ -44,16 +44,17 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
   fUsePID2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fRotPID2Cmd = new G4UIcmdWithAnInteger("/A2/det/RotPID2",this);
+  fRotPID2Cmd->SetGuidance("Rotate PID-II");
+  fRotPID2Cmd->SetParameterName("RotPID2",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fRotPID2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   fUsePID3Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID3",this);
   fUsePID3Cmd->SetGuidance("Construct PID-III");
   fUsePID3Cmd->SetParameterName("UsePID3",false);
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
   fUsePID3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fUseNestPIDCmd = new G4UIcmdWithAnInteger("/A2/det/useNestPID",this);
-  fUseNestPIDCmd->SetGuidance("Construct Nested PID Arrangement");
-  fUseNestPIDCmd->SetParameterName("UseNestPID",false);
-  fUseNestPIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fUseMWPCCmd = new G4UIcmdWithAnInteger("/A2/det/useMWPC",this);
   fUseMWPCCmd->SetGuidance("Construct MWPC");
@@ -139,11 +140,11 @@ A2DetectorMessenger::A2DetectorMessenger(
   fPIDZCmd->SetUnitCategory("Length");
   fPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fNestPIDZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setNestPIDZ",this);
-  fNestPIDZCmd->SetGuidance("Set distance of outer PID from centre of ball");
-  fNestPIDZCmd->SetParameterName("NestPIDZ",false);
-  fNestPIDZCmd->SetUnitCategory("Length");
-  fNestPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fPIDZ2Cmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setPIDZ2",this);
+  fPIDZ2Cmd->SetGuidance("Set distance of outer PID from centre of ball");
+  fPIDZ2Cmd->SetParameterName("PIDZ2",false);
+  fPIDZ2Cmd->SetUnitCategory("Length");
+  fPIDZ2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fMWPCZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setMWPCZ",this);
   fMWPCZCmd->SetGuidance("Set distance of MWPC from centre of ball");
@@ -193,8 +194,8 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fUseCBCmd;
   delete fUsePID1Cmd;
   delete fUsePID2Cmd;
+  delete fRotPID2Cmd;
   delete fUsePID3Cmd;
-  delete fUseNestPIDCmd;
   delete fUsePolCmd;
   delete fUsePolCapCmd;
   delete fPolZCmd;
@@ -209,7 +210,7 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fTAPSNCmd;
   delete fTAPSPbCmd;
   delete fPIDZCmd;
-  delete fNestPIDZCmd;
+  delete fPIDZ2Cmd;
   delete fUseMWPCCmd;
   delete fTOFFileCmd;
   delete fUseTOFCmd;
@@ -235,11 +236,11 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fUsePID2Cmd )
     { fA2Detector->SetUsePID2(fUsePID2Cmd->GetNewIntValue(newValue));}
 
+  if( command == fRotPID2Cmd )
+    { fA2Detector->SetRotPID2(fRotPID2Cmd->GetNewIntValue(newValue));}
+
   if( command == fUsePID3Cmd )
     { fA2Detector->SetUsePID3(fUsePID3Cmd->GetNewIntValue(newValue));}
-
-  if( command == fUseNestPIDCmd )
-    { fA2Detector->SetUseNestPID(fUseNestPIDCmd->GetNewIntValue(newValue));}
 
   if( command == fUseMWPCCmd )
     { fA2Detector->SetUseMWPC(fUseMWPCCmd->GetNewIntValue(newValue));}
@@ -293,8 +294,8 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fPIDZCmd )
     { fA2Detector->SetPIDZ(fPIDZCmd->GetNewDoubleValue(newValue));}
 
-  if( command == fNestPIDZCmd )
-    { fA2Detector->SetNestPIDZ(fNestPIDZCmd->GetNewDoubleValue(newValue));}
+  if( command == fPIDZ2Cmd )
+    { fA2Detector->SetPIDZ2(fPIDZ2Cmd->GetNewDoubleValue(newValue));}
 
   if( command == fMWPCZCmd )
     { fA2Detector->SetMWPCZ(fMWPCZCmd->GetNewDoubleValue(newValue));}

@@ -103,7 +103,6 @@ public:
   A2DetPID1* fPID1;   //PID detector 1
   A2DetPID2* fPID2;   //PID detector 2
   A2DetPID3* fPID3;   //PID detector 3
-  A2DetNestPID* fNestPID; //Nested PID detector
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
   A2DetCherenkov* fCherenkov; //Cherenkov detector
@@ -125,8 +124,8 @@ public:
   G4int fUseTAPS;   //Build TAPS
   G4int fUsePID1;   //Build the PID1
   G4int fUsePID2;   //Build the PID2
+  G4int fRotPID2;   //Rotate PID2 to same orientation as PID1
   G4int fUsePID3;   //Build the PID3
-  G4int fUseNestPID;   //Build a nested PID (PID III inside PID II) arrangement
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov
@@ -145,9 +144,7 @@ public:
 
   //PID setup
   G4double fPIDZ;
-
-  // Nested PID positioning
-  G4double fNestPIDZ;
+  G4double fPIDZ2; // For outer PID I.e. PID2 in a PID 2 + 3 setup
 
   //MWPC setup
   G4double fMWPCZ;
