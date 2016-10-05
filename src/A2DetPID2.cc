@@ -138,7 +138,7 @@ void A2DetPID2::MakeSingleDetector(){
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(0.5,0.5,1,1));
   //visatt->SetForceWireframe(true);
-  fPIDLogic->SetVisAttributes(visatt);
+  fPID2Logic->SetVisAttributes(visatt);
 }
 
 void A2DetPID2::MakePhotomultipliers(){

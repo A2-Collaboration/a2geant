@@ -89,7 +89,7 @@ private:
   G4double fbase_z;
   G4double fmume_z;
   G4double fpmtr_z;
-  G4Region* fregionPID;
+  G4Region* fregionPID2;
 
 } ;
 
