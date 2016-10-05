@@ -9,13 +9,13 @@
 #include "G4SubtractionSolid.hh"
 
 A2DetPID2::A2DetPID2(){
-  fregionPID=NULL;
-  fregionPID=new G4Region("PID");//allows seperate cuts to be defined for crystal
+  fregionPID2=NULL;
+  fregionPID2=new G4Region("PID2");//allows seperate cuts to be defined for crystal
   // fZ0=0*cm;
   fNPids=24;//including dummies
 
-  fPIDPhysi=new G4VPhysicalVolume*[fNPids];   //Crystal physical volumes
-  for(G4int i=0;i<fNPids+1;i++) fPIDPhysi[i]=NULL;
+  fPID2Physi=new G4VPhysicalVolume*[fNPids];   //Crystal physical volumes
+  for(G4int i=0;i<fNPids+1;i++) fPID2Physi[i]=NULL;
   fLGPhysi=new G4VPhysicalVolume*[fNPids];   //Crystal physical volumes
   for(G4int i=0;i<fNPids+1;i++) fLGPhysi[i]=NULL;
   fTPMTPhysi=new G4VPhysicalVolume*[fNPids];   //Crystal physical volumes
@@ -30,7 +30,7 @@ A2DetPID2::A2DetPID2(){
   fPMTRLogic=NULL;
   fBRTULogic=NULL;
 
-  fPIDSD=NULL;
+  fPID2SD=NULL;
 }
 
 A2DetPID2::~A2DetPID2(){
@@ -76,10 +76,10 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   else if (fRotPID2 == 1){
     Mrot->rotateY(0*CLHEP::deg);//pid2 is positioned in same orientation as PID-I
   }
-  G4Tubs *PIDMother=new G4Tubs("PIDD",moth_rin,moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
-  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD");
+  G4Tubs *PIDMother=new G4Tubs("PIDD2",moth_rin,moth_rout,moth_z/2,0*CLHEP::deg,360*CLHEP::deg);
+  fMyLogic=new G4LogicalVolume(PIDMother,fNistManager->FindOrBuildMaterial("G4_AIR"),"PIDD2");
   //Note here position is +fzpos beause of rotation
-  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD",fMotherLogic,false,1);
+  fMyPhysi =new G4PVPlacement(Mrot,G4ThreeVector(0,0,Z0+fzpos),fMyLogic,"PIDD2",fMotherLogic,false,1);
   MakeDetector1();
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(0.5,0.5,1,1));
@@ -109,7 +109,7 @@ void A2DetPID2::MakeDetector1(){
                  //this matches the pid positions with PID_MC.dat
     //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
-    fPIDPhysi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID",fMyLogic,false,i+1);
+    fPID2Physi[i]=new G4PVPlacement(Rot[i],dpos1,fPID2Logic,"PID2",fMyLogic,false,i+1);
      fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
     fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
      fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
@@ -125,15 +125,15 @@ void A2DetPID2::MakeDetector1(){
 void A2DetPID2::MakeSingleDetector(){
  //Constructor for right angular wedge!
  //Used for PID I and PID II
-  fPID=new G4Trap("PID",fpid_z,fpid_thick,fpid_xl,fpid_xs);
-  fPIDLogic=new G4LogicalVolume(fPID,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID");
-  if(!fPIDSD){
+  fPID2=new G4Trap("PID2",fpid_z,fpid_thick,fpid_xl,fpid_xs);
+  fPID2Logic=new G4LogicalVolume(fPID2,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID2");
+  if(!fPID2SD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    fPIDSD = new A2SD("PIDSD",fNPids);
-    SDman->AddNewDetector( fPIDSD );
+    fPID2SD = new A2SD("PID2SD",fNPids);
+    SDman->AddNewDetector( fPID2SD );
   }
-  fPIDLogic->SetSensitiveDetector(fPIDSD);
-  fregionPID->AddRootLogicalVolume(fPIDLogic);
+  fPID2Logic->SetSensitiveDetector(fPID2SD);
+  fregionPID2->AddRootLogicalVolume(fPID2Logic);
 
   G4VisAttributes* visatt=new G4VisAttributes();
   visatt->SetColor(G4Color(0.5,0.5,1,1));

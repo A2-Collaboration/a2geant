@@ -39,11 +39,11 @@ private:
   G4double fZ0;
   G4int fRotPID2;
 
-  A2SD* fPIDSD;
+  A2SD* fPID2SD;
 
-  G4Trap *fPID;  //PID scintillator shape
-  G4LogicalVolume *fPIDLogic;
-  G4VPhysicalVolume** fPIDPhysi;
+  G4Trap *fPID2;  //PID scintillator shape
+  G4LogicalVolume *fPID2Logic;
+  G4VPhysicalVolume** fPID2Physi;
 
   G4Trap *fLGFO;  //part of light guide
   G4Trap *fLGFI;  //part of light guide
