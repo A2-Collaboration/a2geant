@@ -11,11 +11,6 @@
 // 16/08/16 Need to confirm position of cradle and dimensions of pipe
 
 A2DetPol::A2DetPol(){
-  //fregionPol=NULL;
-  //fregionPol=new G4Region("Pol");
-  //Polarimeter
-  //  G4Tubs* npol=new G4Tubs("NPOL",10/2*mm,60*mm,40/2*mm,0*deg,360*deg);
-  // fZ0=0*cm;
 
 }
 

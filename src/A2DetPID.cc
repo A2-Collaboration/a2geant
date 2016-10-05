@@ -423,10 +423,7 @@ void A2DetPID::MakeLightGuide2(){
   fLGB1 = new G4Para("LGB3", lg3_xbot, lg3_y, lg3_z, 0.*CLHEP::deg, 150.*CLHEP::deg, 90.*CLHEP::deg); // This shape LOOKS fine but does not fit the PID elements correctly currently
 
   fLG1=new G4UnionSolid("LG1",fLGTU,fLGB1,0,G4ThreeVector(0,1.2*CLHEP::cm,-(lg4_z+lg3_z))); // Not sure WHY y parameter needs to be 1 but this seems to work so...
-  //fLG2=new G4UnionSolid("LG2",fLG1,fLGFO,0,G4ThreeVector(0,((2*lg12_y)+(tan(30)*2*lg3_z))*CLHEP::cm,-(lg4_z+2*lg3_z+flg12_z/2)));
-  //fLG3=new G4UnionSolid("LG3",fLG2,fLGFI,0,G4ThreeVector(0,(tan(30)*2*lg3_z)*CLHEP::cm,-(lg4_z+2*lg3_z+flg12_z/2)));
   fLGLogic=new G4LogicalVolume(fLG1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"LG1");
-  //fLGPhysi=new G4PVPlacement(0,G4ThreeVector(),fLGLogic,"LG",fMotherLogic,false,1);
 
   G4VisAttributes* lg_visatt=new G4VisAttributes();
   lg_visatt->SetColor(G4Color(0,0,1));

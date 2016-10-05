@@ -66,7 +66,7 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   G4double moth_rin=54.2-0.1*CLHEP::mm; //aliminium ring
   //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
   G4double moth_rout=66.31*CLHEP::mm; //aliminium ring chnaged dglazier 26/01/09
-  G4double moth_z=fpid_z+flg_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm;//extra 6mm for supports
+  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm;//extra 6mm for supports
   fzpos=(fpid_z-moth_z)/2+6*CLHEP::mm;//zposition of centre of pid relative to mother, 3mm is for support ring
   fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
   G4RotationMatrix *Mrot=new G4RotationMatrix();
@@ -100,8 +100,6 @@ void A2DetPID2::MakeDetector1(){
     G4double pid_R=fpid_rin+fpid_thick/2; //radius to centre of scintillator
     G4double xpos=pid_R*cos(pid_angle);
     G4double ypos=pid_R*sin(pid_angle);
-    G4double xpos2=(pid_R+(14.1*CLHEP::mm))*cos(pid_angle);
-    G4double ypos2=(pid_R+(14.1*CLHEP::mm))*sin(pid_angle);
     Rot[i]=new G4RotationMatrix();
     Rot[i]->rotateZ(270*CLHEP::deg-pid_angle-fpid_theta/2);
     G4ThreeVector dpos1(xpos,ypos,fzpos);
@@ -109,17 +107,19 @@ void A2DetPID2::MakeDetector1(){
                  //this matches the pid positions with PID_MC.dat
     //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
-    fPID2Physi[i]=new G4PVPlacement(Rot[i],dpos1,fPID2Logic,"PID2",fMyLogic,false,i+1);
-     fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
-    fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
-     fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
-      fMUMEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z+fbase_z).rotateZ(fpid_theta/2),fMUMELogic,"MUME",fMyLogic,false,i);
+    fPID2Physi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID2",fMyLogic,false,i+1);
+     fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
+    fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
+     fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
+      fMUMEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos,ypos,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z+fbase_z).rotateZ(fpid_theta/2),fMUMELogic,"MUME",fMyLogic,false,i);
     RotPMTR[i]=new G4RotationMatrix();
     RotPMTR[i]->rotateZ(pid_angle);
     new G4PVPlacement(RotPMTR[i],G4ThreeVector(0,0,fpmtr_z),fPMTRLogic,"PMTR",fMyLogic,false,i);
 
  }
-
+  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2-3/2*CLHEP::mm)),fUPS1Logic,"UPS1",fMyLogic,false,101);
+  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2+3/2*CLHEP::mm)),fUPS2Logic,"UPS2",fMyLogic,false,102);
+  new G4PVPlacement(0,G4ThreeVector(0,0,fzpos-(fpid_z/2+3*CLHEP::mm)),fUPS3Logic,"UPS3",fMyLogic,false,103);
 }
 
 void A2DetPID2::MakeSingleDetector(){
