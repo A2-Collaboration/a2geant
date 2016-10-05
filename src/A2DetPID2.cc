@@ -66,7 +66,7 @@ G4VPhysicalVolume* A2DetPID2::Construct1(G4LogicalVolume* MotherLogical,G4double
   G4double moth_rin=54.2-0.1*CLHEP::mm; //aliminium ring
   //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
   G4double moth_rout=66.31*CLHEP::mm; //aliminium ring chnaged dglazier 26/01/09
-  G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm;//extra 6mm for supports
+  G4double moth_z=fpid_z+flg_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm;//extra 6mm for supports
   fzpos=(fpid_z-moth_z)/2+6*CLHEP::mm;//zposition of centre of pid relative to mother, 3mm is for support ring
   fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
   G4RotationMatrix *Mrot=new G4RotationMatrix();
