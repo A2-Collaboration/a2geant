@@ -19,15 +19,15 @@
 #### Option 3 requires PIDZ offset of 2.5cm to fit in new lightguides
 #### To use a PID2 + PID3 setup select PID2/PID3 on and rotate PID2, offset PID2 by ~ 22cm using the PIDZ2 line
 /A2/det/usePID1 0
-/A2/det/usePID2 1
+/A2/det/usePID2 0
 /A2/det/RotPID2 0
-/A2/det/usePID3 0
+/A2/det/usePID3 1
 /A2/det/setPIDZ 2.5 cm
 /A2/det/setPIDZ2 22.0 cm 
 ####Use the Polarimeter
 ####1 = Use Phase I (2009), 2 = Use Phase II (2015/2016, 2.6cm), 3 = Use Phase II (2015/2016, backup tube 2.25cm)
 #### 30cm long polarimeter requires offset of 3.8 cm (PID option 3)
-/A2/det/usePol 0
+/A2/det/usePol 2
 #### For the P2 polarimeter only, P1 ALWAYS has a cap. Set to 0 for no cap or 1 for cap (requires shorter PID, options 3/4)
 /A2/det/usePolCap 1
 /A2/det/setPolZ 3.8 cm
@@ -50,20 +50,6 @@
 ###Cryo targets : G4_lH2, A2_lD2###
 /A2/det/targetMaterial A2_lD2
 /A2/det/setTargetLength 10. cm
+/A2/det/setTargetZ -6.5cm
+
 #Set target z position if offset desired, +ve is towards TAPS, -ve away
-<<<<<<< HEAD
-# Only works for Cryo target currently!
-# For Polarimeter run set to -6.5cm!
-=======
-#Only works for Cryo target currently!
-/A2/det/setTargetZ -6.5 cm
-####Solid targets : G4_Li, G4_GRAPHITE, G4_Ca, G4_Pb###
-#/A2/det/useTarget Solid
-#/A2/det/targetMaterial G4_Pb
-#/A2/det/targetMaterial G4_GRAPHITE
-#####Polarised target
-#/A2/det/useTarget Polarized
-#/A2/det/targetMaterial A2_HeButanol
-#/A2/det/targetMagneticCoils Solenoidal
-#/A2/det/targetMagneticCoils Saddle
-#/A2/det/setTargetMagneticFieldMap wouter_field_map.dat

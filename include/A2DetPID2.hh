@@ -39,7 +39,7 @@ private:
   G4double fZ0;
   G4int fRotPID2;
 
-  A2SD* fPID2SD;
+  A2SD* fPIDSD;
 
   G4Trap *fPID2;  //PID scintillator shape
   G4LogicalVolume *fPID2Logic;

@@ -30,7 +30,7 @@ A2DetPID2::A2DetPID2(){
   fPMTRLogic=NULL;
   fBRTULogic=NULL;
 
-  fPID2SD=NULL;
+  fPIDSD=NULL;
 }
 
 A2DetPID2::~A2DetPID2(){
@@ -127,12 +127,12 @@ void A2DetPID2::MakeSingleDetector(){
  //Used for PID I and PID II
   fPID2=new G4Trap("PID2",fpid_z,fpid_thick,fpid_xl,fpid_xs);
   fPID2Logic=new G4LogicalVolume(fPID2,fNistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE"),"PID2");
-  if(!fPID2SD){
+  if(!fPIDSD){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    fPID2SD = new A2SD("PID2SD",fNPids);
-    SDman->AddNewDetector( fPID2SD );
+    fPIDSD = new A2SD("PIDSD",fNPids);
+    SDman->AddNewDetector( fPIDSD );
   }
-  fPID2Logic->SetSensitiveDetector(fPID2SD);
+  fPID2Logic->SetSensitiveDetector(fPIDSD);
   fregionPID2->AddRootLogicalVolume(fPID2Logic);
 
   G4VisAttributes* visatt=new G4VisAttributes();
