@@ -323,7 +323,7 @@ void A2DetectorConstruction::DefineMaterials()
  cboard->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.238095238);
  //NistManager->RegisterMaterial(cboard);
 
- //Fibre GLass. From cbsim.
+ //Fibre Glass. From cbsim.
  G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*CLHEP::g/CLHEP::cm3, ncomponents=8);
  fglass->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.557);
  fglass->AddElement(NistManager->FindOrBuildElement(14),fractionmass=0.347);
