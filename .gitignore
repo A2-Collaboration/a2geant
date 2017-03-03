@@ -40,3 +40,5 @@ G4History.macro
 # you can also use symlinks to your "real" folders
 /scratch
 
+# ignore temporary macro files
+/macros_tmp/
