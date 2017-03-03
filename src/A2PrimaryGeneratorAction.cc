@@ -142,15 +142,19 @@ A2PrimaryGeneratorAction::~A2PrimaryGeneratorAction()
  */
 G4ThreeVector A2PrimaryGeneratorAction::GetRandomVertex() {
 
-    // beamspot at target for 4mm collimator
-    const double beamspotradius = 1.313 * cm;
+    double z;
+    if(fTargetThick == 0.0) {
+        z = 0.0;
+    } else {
+        const double l = fTargetThick >= 0.0 ? fTargetThick : fDetCon->GetTarget()->GetLength();
+        z = fDetCon->GetTarget()->GetCenter().z() + l/2 * (2*G4UniformRand()-1);
+    }
 
-    const double z   = fDetCon->GetTarget()->GetCenter().z() + fDetCon->GetTarget()->GetLength()/2 * (2*G4UniformRand()-1);
     const double phi = 2 * M_PI * G4UniformRand();
     const double u   = G4UniformRand() + G4UniformRand();
     const double r   = (u>1) ? 2-u : u;
 
-    return G4ThreeVector(beamspotradius * r * sin(phi), beamspotradius * r * cos(phi), z);
+    return G4ThreeVector(fTargetRadius * r * sin(phi), fTargetRadius * r * cos(phi), z);
 }
 
 G4ParticleDefinition* A2PrimaryGeneratorAction::PlutoIDToGeant( int pluto_id ) const {

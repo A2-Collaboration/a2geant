@@ -1,16 +1,5 @@
-    # Choose a physics list, 
-    # for a full listing type /A2/physics/ListPhysics
-    /A2/physics/Physics QGSP_BIC
-     
-    # Initialise
-    /run/initialize
-     
-    # Set the number of particles to be tracked from the input ntuple
-    /A2/generator/NToBeTracked 0
-    # give the indexes of the particles to be tracked
-    # (have a look at the branch names in the input file)
- #   /A2/generator/Track 1 # the proton
-#    /A2/generator/Track 2 # one gamma
-#    /A2/generator/Track 3 # another gamma
-
-
+/A2/physics/Physics QGSP_BIC
+/A2/generator/SetTargetThick 10 cm
+/A2/generator/SetTargetRadius 1.3 cm
+/run/initialize
+/A2/generator/NToBeTracked 0
