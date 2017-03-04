@@ -13,4 +13,4 @@ while(my $line = <STDIN>) {
   print $line;
 }
 
-die "$n_lines_changed != 1 Lines were changed." unless $n_lines_changed == 1;
+die "$n_lines_changed > 1 Lines were changed." if $n_lines_changed > 1;
