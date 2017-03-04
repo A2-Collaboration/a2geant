@@ -20,7 +20,7 @@ do
     if [[ $arg =~ ^s.* ]]; then
         # arg starts with s, looks like replacement regex
         REGEX_PIPES+=" | $BASE/modifyMacro.pl '$arg'"
-        ((N_REGEXES++))
+        N_REGEXES=$(($N_REGEXES+1))
     fi
 done
 
