@@ -16,7 +16,7 @@
 /A2/generator/SetTargetThick 0.1 mm
 /A2/generator/SetTargetRadius 0.1 mm
 
-/A2/event/setOutputFile /scratch/Mainz_Software/Data/NeutronBeamTest.root
+/A2/event/setOutputFile /scratch/Mainz_Software/Data/NeutronBeam_10e6.root
 
 /gun/particle neutron
 #/gun/position 0 0 -10 m

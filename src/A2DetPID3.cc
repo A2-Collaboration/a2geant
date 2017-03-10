@@ -8,6 +8,11 @@
 #include "G4Cons.hh"
 #include "G4SubtractionSolid.hh"
 
+// This is the src code currently used to construct PID3
+// Due to an issue with volume overlaps the PMTs, lightguides and support strcuture are currently NOT created
+// Relevant lines have been commented out below
+// Including these appears to cause the polarimeter to become non interactive
+
 A2DetPID3::A2DetPID3(){
   fregionPID=NULL;
   fregionPID=new G4Region("PID");//allows seperate cuts to be defined for crystal
@@ -60,23 +65,23 @@ G4VPhysicalVolume* A2DetPID3::Construct1(G4LogicalVolume* MotherLogical,G4double
   fpid_xl2=2*(fpid_rout-(fpidendL*tan(30*CLHEP::deg)))*tan(fpid_theta/2);//long length at new inner radius
 
   //Make the light guide shape
-  //MakeLightGuide1(); // Makes the bent light guides for the smaller PID case
-  //MakePhotomultipliers(); // This is unchanged since last two PIDs
+  //MakeLightGuide1(); // Makes the bent light guides for the smaller PID case Uncomment if desired, see other lines later too
+  //MakePhotomultipliers(); // This is unchanged since last two PIDs Uncomment if desired
 
   MakeSingleDetector1();
 
-  //MakeSupports1(); // New support structure
+  //MakeSupports1(); // New support structure Uncomment if desired
 
   //Make PID Logical Volume
   //Take the centre radius from the scintillators, thickness from the lightguides~1CLHEP::cm, and length from scintillators+lightguides+pmts+base
   // G4double moth_rin=fpid_rin+fpid_thick/2-8*mm;
   G4double moth_rin=(fpid_rin - 4.05*CLHEP::mm)-0.1*CLHEP::mm; //aluminium ring
   //  G4double moth_rout=fpid_rin+fpid_thick/2+0.55*CLHEP::cm;
-  //G4double moth_rout=(66*CLHEP::mm); //aluminium ring Original values with supports
+  //G4double moth_rout=(66*CLHEP::mm); //aluminium ring Original values with supports, turn back on if supports commented back in
   //G4double moth_z=fpid_z+flg_z-flg12_z+fpmt_z*2+fbase_z*2+10*CLHEP::mm + fpidendL;//extra 6mm for supports
   G4double moth_rout=(38*CLHEP::mm);
   G4double moth_z=fpid_z+5*CLHEP::mm;//extra 6mm for supports
-  //fzpos=((fpid_z-moth_z)/2+6*CLHEP::mm)+fpidendL;//zposition of centre of pid relative to mother, 3mm is for support ring
+  //fzpos=((fpid_z-moth_z)/2+6*CLHEP::mm)+fpidendL;//zposition of centre of pid relative to mother, 3mm is for support ring Turn back on if supports commented back in
   fzpos=2.5*CLHEP::mm;//zposition of centre of pid relative to mother
   //fpmtr_z=fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+2*fbase_z-5/2*CLHEP::mm;//zposition of the pmt supportring
   G4RotationMatrix *Mrot=new G4RotationMatrix();
@@ -116,6 +121,7 @@ void A2DetPID3::MakeDetector1(){
     //Check the hit positions, should collate with AcquRoot setup
     //G4cout<<"PID "<<i<<" "<<xpos<< " "<<ypos<<" "<<" "<<pid_R<<" "<<fzpos<<" "<<dpos1.phi()/CLHEP::deg<<G4endl;
     fPIDPhysi[i]=new G4PVPlacement(Rot[i],dpos1,fPIDLogic,"PID",fMyLogic,false,i+1);
+    // Uncomment lines below if supports turned back on
      //fLGPhysi[i]=new  G4PVPlacement(Rot[i],G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z).rotateZ(fpid_theta/2),fLGLogic,"LG",fMyLogic,false,i);
     //fBASEPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+2*fpmt_z+fbase_z).rotateZ(fpid_theta/2),fBASELogic,"BASE",fMyLogic,false,i);
      //fTPMTPhysi[i]=new  G4PVPlacement(0,G4ThreeVector(xpos2,ypos2,fzpos+fpid_z/2+flg_z-flg12_z+fpmt_z).rotateZ(fpid_theta/2),fTPMTLogic,"TPMT",fMyLogic,false,i);
@@ -218,7 +224,7 @@ void A2DetPID3::MakeLightGuide1(){
 
 void A2DetPID3::MakeSupports1(){
 
-  //PID-III Supports, need the crown included!
+  //PID-III Supports, crown not included
 
   G4Tubs* UPS1=new G4Tubs("UPS1",(fpid_rin - 2*CLHEP::mm),(fpid_rin*CLHEP::mm),3/2*CLHEP::mm,0*CLHEP::deg,360*CLHEP::deg);
   fUPS1Logic=new G4LogicalVolume(UPS1,fNistManager->FindOrBuildMaterial("A2_PLASTIC"),"UPS1");
