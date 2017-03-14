@@ -193,6 +193,11 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     //Set vertex position
     const G4ThreeVector primaryVertex = GetRandomVertex()  * (1.0 / cm);
+
+    fGenPosition[0]=primaryVertex.x();
+    fGenPosition[1]=primaryVertex.y();
+    fGenPosition[2]=primaryVertex.z();
+
     TLorentzVector beamVector(0,0,0,0);
 
 
@@ -210,7 +215,8 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
             PParticle* part = dynamic_cast<PParticle*>(fGenParticles->At(p));
 
-            if( part->ID() < 1000 && part->GetDaughterIndex() == -1 ) {
+            const G4int PID = part->ID();
+            if( PID < 1000 && part->GetDaughterIndex() == -1 ) {
 
                 fParticleGun->SetParticleDefinition( PlutoIDToGeant( part->ID() ));
 
@@ -221,7 +227,6 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                 part->Pz()*GeV
                         ).unit());
                 fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
-                fParticleGun->GeneratePrimaryVertex(anEvent);
 
                 // vertex position in pluto is in mm, no conversion needed
                 const G4ThreeVector particleVertex = primaryVertex
@@ -229,25 +234,28 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                                                        part->Y(),
                                                                        part->Z());
 
-                fGenPosition[0]=particleVertex.x();
-                fGenPosition[1]=particleVertex.y();
-                fGenPosition[2]=particleVertex.z();
+
                 fParticleGun->SetParticlePosition(particleVertex);
 
+                fParticleGun->GeneratePrimaryVertex(anEvent);
 
                 final_particles++;
 
                 fSimParticles.push_back(part);
 
-            } else {  // beam particle, compound of beam photon and tagert proton
+            } else if (PID > 1000) {  // beam pseudo-particle, compound of beam photon and tagert particle
 
                 if( beam_found )
                     G4cerr << "Warning: Multiple Beam Particles in Event" << G4endl;
-                if(GetPlutoBeamID(part->ID() != 1))
-                    G4cerr << "Warning: Expecting photon beam for A2-simulation!" << G4endl;
+
+                const G4int beamID   = GetPlutoBeamID(PID);
+                const G4int targetID = GetPlutoTargetID(PID);
+
+                if(beamID != 1)
+                    G4cerr << "Warning: Beam id is " << beamID << " Expecting photon beam for A2-simulation!" << G4endl;
 
                 try {
-                    const double Eg = part->E() -PlutoIDToGeant(GetPlutoTargetID(part->ID()))->GetPDGMass(); // subtract target mass
+                    const double Eg = part->E() -PlutoIDToGeant(targetID)->GetPDGMass(); // subtract target mass
                     beamVector = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
                 } catch (...) {
                     G4cerr << "Warning: Can't find G4 particle ID for target-particle " << part->Name() << G4endl;
