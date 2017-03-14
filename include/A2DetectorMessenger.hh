@@ -29,7 +29,10 @@ class A2DetectorMessenger: public G4UImessenger
     G4UIdirectory*             fdetDir;
     G4UIcmdWithAnInteger*      fUseCBCmd;
     G4UIcmdWithAnInteger*      fUseTAPSCmd;
-    G4UIcmdWithAnInteger*      fUsePIDCmd;
+    G4UIcmdWithAnInteger*      fUsePID1Cmd;
+    G4UIcmdWithAnInteger*      fUsePID2Cmd;
+    G4UIcmdWithAnInteger*      fRotPID2Cmd;
+    G4UIcmdWithAnInteger*      fUsePID3Cmd;
     G4UIcmdWithAnInteger*      fUseMWPCCmd;
     G4UIcmdWithAnInteger*      fUsePolCmd;
     G4UIcmdWithAnInteger*      fUsePolCapCmd;
@@ -49,6 +52,7 @@ class A2DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fTAPSZCmd;
     G4UIcmdWithoutParameter*   fUpdateCmd;
     G4UIcmdWithADoubleAndUnit* fPIDZCmd;
+    G4UIcmdWithADoubleAndUnit* fPIDZ2Cmd;
     G4UIcmdWithADoubleAndUnit* fMWPCZCmd;
     G4UIcmdWithADoubleAndUnit* fPolZCmd;
     G4UIcmdWithADoubleAndUnit* fTargetZCmd;

@@ -12,6 +12,9 @@
 #include "A2DetCrystalBall.hh"
 #include "A2DetTAPS.hh"
 #include "A2DetPID.hh"
+#include "A2DetPID1.hh"
+#include "A2DetPID2.hh"
+#include "A2DetPID3.hh"
 #include "A2DetTOF.hh"
 #include "A2Target.hh"
 #include "A2DetMWPC.hh"
@@ -34,16 +37,19 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
 
-     G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
-     void DefineMaterials();
+  void UpdateGeometry();
+  void DefineMaterials();
   void SetIsInteractive(G4int is){fIsInteractive=is;}
 
   //Set functions used by messenger class
   void SetUseCB(G4int use){fUseCB=use;}
   void SetUseTAPS(G4int use){fUseTAPS=use;}
-  void SetUsePID(G4int use){fUsePID=use;}
+  void SetUsePID1(G4int use){fUsePID1=use;}
+  void SetUsePID2(G4int use){fUsePID2=use;}
+  void SetRotPID2(G4int use){fRotPID2=use;}
+  void SetUsePID3(G4int use){fUsePID3=use;}
   void SetUseMWPC(G4int use){fUseMWPC=use;}
   void SetUseCherenkov(G4int use){fUseCherenkov=use;}
   void SetUseCryoTgt(G4int use){fUseCryoTgt=use;}
@@ -63,6 +69,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetTAPSN(G4int nn){fTAPSN=nn;}
   void SetTAPSPbWO4Rings(G4int nn){fNPbWO4=nn;}
   void SetPIDZ(G4double zz){fPIDZ=zz;}
+  void SetPIDZ2(G4double zz){fPIDZ2=zz;}
   void SetMWPCZ(G4double zz){fMWPCZ=zz;}
   void SetPolZ(G4double zz){fPolZ=zz;}
   void SetTargetZ(G4double zz){fTargetZ=zz;}
@@ -90,10 +97,11 @@ public:
   G4LogicalVolume*   fWorldLogic;    //pointer to the logical World
   G4VPhysicalVolume* fWorldPhysi;    //pointer to the physical World
 
-
   A2DetCrystalBall* fCrystalBall;   //CrystalBall detector
   A2DetTAPS* fTAPS;   //TAPS detector
-  A2DetPID* fPID;   //PID detector
+  A2DetPID1* fPID1;   //PID detector 1
+  A2DetPID2* fPID2;   //PID detector 2
+  A2DetPID3* fPID3;   //PID detector 3
   A2DetMWPC* fMWPC;   //MWPC detector
   A2DetTOF* fTOF;   //MWPC detector
   A2DetCherenkov* fCherenkov; //Cherenkov detector
@@ -113,7 +121,10 @@ public:
   //or changed interactively eg, /A2/det/useTAPS 0, then,  /A2/det/update
   G4int fUseCB;   //Build the Crystal Ball
   G4int fUseTAPS;   //Build TAPS
-  G4int fUsePID;   //Build the PID
+  G4int fUsePID1;   //Build the PID1
+  G4int fUsePID2;   //Build the PID2
+  G4int fRotPID2;   //Rotate PID2 to same orientation as PID1
+  G4int fUsePID3;   //Build the PID3
   G4int fUseMWPC;  //Build the Wire Chambers
   G4int fUseTOF;  //Build the TOF wall
   G4int fUseCherenkov; //Build the Cherenkov
@@ -132,6 +143,7 @@ public:
 
   //PID setup
   G4double fPIDZ;
+  G4double fPIDZ2; // For outer PID I.e. PID2 in a PID 2 + 3 setup
 
   //MWPC setup
   G4double fMWPCZ;

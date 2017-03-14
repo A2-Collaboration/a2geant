@@ -34,7 +34,10 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   fUseCB=0;
   fUseTAPS=0;
-  fUsePID=0;
+  fUsePID1=0;
+  fUsePID2=0;
+  fRotPID2=0;
+  fUsePID3=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -44,7 +47,10 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   fCrystalBall=NULL;
   fTAPS=NULL;
-  fPID=NULL;
+  fPID1=NULL;
+  fPID2=NULL;
+  fRotPID2=NULL;
+  fPID3=NULL;
   fMWPC=NULL;
   fPol=NULL;
   fTOF=NULL;
@@ -65,6 +71,7 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
 
   //default settings for PID
   fPIDZ=0.;
+  fPIDZ2=0; // For second (outer PID)
   //default offset for MWPC
   fMWPCZ=0.;
   //default offset for Polarimeter
@@ -85,7 +92,10 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 {
 
   fUseTAPS=0;
-  fUsePID=0;
+  fUsePID1=0;
+  fUsePID2=0;
+  fRotPID2=0;
+  fUsePID3=0;
   fUseMWPC=0;
   fUseTOF=0;
   fUseCherenkov=0;
@@ -97,7 +107,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4String command = "/control/execute "+fDetectorSetup;//macros/DetectorSetup.mac";
   UI->ApplyCommand(command);
-  if(fUseCB==0&&fUseTAPS==0&&fUsePID==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
+  if(fUseCB==0&&fUseTAPS==0&&fUsePID1==0&&fUsePID2==0&&fUsePID3==0&&fUseMWPC==0&&fUsePol==0&&fUseTOF==0&&fUseCherenkov==0&&fUseTarget==G4String("NO")){
     G4cout<<"G4VPhysicalVolume* A2DetectorConstruction::Construct() Don't seem to be simulating any detectors, please check you are using an appopriate detector setup. I tried the file "<<fDetectorSetup<< " I will exit here before the computer explodes"<<G4endl;
     exit(0);
   }
@@ -144,14 +154,53 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     fTAPS->Construct(fWorldLogic);
   }
 
-  if(fUsePID){
-    G4cout<<"A2DetectorConstruction::Construct() Make PID option "<< fUsePID<<G4endl;
-    fPID=new A2DetPID();
+  if(fUsePID1){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-I "<<G4endl;
+    fPID1=new A2DetPID1();
 
-    if(fUsePID==1) fPID->Construct1(fWorldLogic,fPIDZ);
-    else if(fUsePID==2) fPID->Construct2(fWorldLogic,fPIDZ);
-    else if(fUsePID==3) fPID->Construct3(fWorldLogic,fPIDZ);
-    else {G4cerr<<"There are 3 possible PIDS, please set UsePID to be 1 (2003), 2 (2007) or 3 (2015/2016 add offset too!),  "<< G4endl; exit(1);}
+    if(fUsePID2!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if(fUsePID3!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if(fUsePID1==1) fPID1->Construct1(fWorldLogic,fPIDZ);
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
+    G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+  }
+
+  if(fUsePID2){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-II"<<G4endl;
+    fPID2=new A2DetPID2();
+
+    if(fUsePID1!=0) {G4cerr<<"Error PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if (fUsePID3 == 0){
+        if (fRotPID2 == 0){
+            fPID2->Construct1(fWorldLogic,fPIDZ, fRotPID2);
+            G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+            G4cout << "PID2 constructed in normal orientation" << G4endl;
+        }
+        else if (fRotPID2 == 1){
+            fPID2->Construct1(fWorldLogic,fPIDZ, fRotPID2);
+            G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
+            G4cout << "PID2 constructed in PID-I orientation" << G4endl;
+        }
+    }
+    else if (fUsePID3 == 1){
+        if(fUseMWPC != 0) {G4cerr<<"Error for 2 PID arrangement turn off MWPC"<< G4endl; exit(1);}
+        if (fRotPID2 == 0) {G4cerr<<"Error to be compatible with PID-III need to rotate PID-II"<< G4endl; exit(1);}
+        else if (fRotPID2 == 1){
+            fPID2->Construct1(fWorldLogic,fPIDZ2, fRotPID2);
+            G4cout << "Outer PID Z displaced by " << fPIDZ2/CLHEP::cm << "cm" << G4endl;
+            G4cout << "PID2 constructed with PID3" << G4endl;
+        }
+    }
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
+  }
+
+  if(fUsePID3){
+    G4cout<<"A2DetectorConstruction::Construct() Make PID-III "<<G4endl;
+    fPID3=new A2DetPID3();
+
+    if(fUsePID1!=0) {G4cerr<<"EError PID-I Not compatible with other PIDs"<< G4endl; exit(1);}
+    if(fUsePID3==1) fPID3->Construct1(fWorldLogic,fPIDZ);
+    else {G4cerr<<"Error please enter either 0 or 1"<< G4endl; exit(1);}
     G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
   }
 
@@ -274,7 +323,7 @@ void A2DetectorConstruction::DefineMaterials()
  cboard->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.238095238);
  //NistManager->RegisterMaterial(cboard);
 
- //Fibre GLass. From cbsim.
+ //Fibre Glass. From cbsim.
  G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*CLHEP::g/CLHEP::cm3, ncomponents=8);
  fglass->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.557);
  fglass->AddElement(NistManager->FindOrBuildElement(14),fractionmass=0.347);

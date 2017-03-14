@@ -1,6 +1,6 @@
 
-#ifndef A2DetPID_h
-#define A2DetPID_h 1
+#ifndef A2DetPID3_h
+#define A2DetPID3_h 1
 
 #include "A2Detector.hh"
 #include "A2SD.hh"
@@ -19,29 +19,21 @@
 #include "globals.hh"
 
 
-class A2DetPID : public A2Detector
+class A2DetPID3 : public A2Detector
 {
 public:
 
-  A2DetPID();
-  ~A2DetPID();
+  A2DetPID3();
+  ~A2DetPID3();
 
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
   G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0);
 
   void MakeDetector1();
-  void MakeDetector2();
-  void MakeDetector3();
   void MakeSingleDetector1();
-  void MakeSingleDetector2();
   void MakeLightGuide1();
-  void MakeLightGuide2();
   void MakePhotomultipliers();
-  void MakeSupports1(); //for PID1
-  void MakeSupports2(); //for PID2
-  void MakeSupports3(); //for PID3
+  void MakeSupports1();
 
 private:
   G4int fNPids;  //Number of Pid scintillators

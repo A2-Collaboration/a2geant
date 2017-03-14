@@ -32,11 +32,29 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseCBCmd->SetRange("UseCB=0 don't build CB or UseCB!=0 build CB");
   fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUsePIDCmd = new G4UIcmdWithAnInteger("/A2/det/usePID",this);
-  fUsePIDCmd->SetGuidance("Construct PID");
-  fUsePIDCmd->SetParameterName("UsePID",false);
+  fUsePID1Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID1",this);
+  fUsePID1Cmd->SetGuidance("Construct PID-I");
+  fUsePID1Cmd->SetParameterName("UsePID1",false);
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
-  fUsePIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUsePID1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUsePID2Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID2",this);
+  fUsePID2Cmd->SetGuidance("Construct PID-II");
+  fUsePID2Cmd->SetParameterName("UsePID2",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fUsePID2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fRotPID2Cmd = new G4UIcmdWithAnInteger("/A2/det/RotPID2",this);
+  fRotPID2Cmd->SetGuidance("Rotate PID-II");
+  fRotPID2Cmd->SetParameterName("RotPID2",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fRotPID2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fUsePID3Cmd = new G4UIcmdWithAnInteger("/A2/det/usePID3",this);
+  fUsePID3Cmd->SetGuidance("Construct PID-III");
+  fUsePID3Cmd->SetParameterName("UsePID3",false);
+  //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
+  fUsePID3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fUseMWPCCmd = new G4UIcmdWithAnInteger("/A2/det/useMWPC",this);
   fUseMWPCCmd->SetGuidance("Construct MWPC");
@@ -122,6 +140,12 @@ A2DetectorMessenger::A2DetectorMessenger(
   fPIDZCmd->SetUnitCategory("Length");
   fPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fPIDZ2Cmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setPIDZ2",this);
+  fPIDZ2Cmd->SetGuidance("Set distance of outer PID from centre of ball");
+  fPIDZ2Cmd->SetParameterName("PIDZ2",false);
+  fPIDZ2Cmd->SetUnitCategory("Length");
+  fPIDZ2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   fMWPCZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setMWPCZ",this);
   fMWPCZCmd->SetGuidance("Set distance of MWPC from centre of ball");
   fMWPCZCmd->SetParameterName("MWPCZ",false);
@@ -162,14 +186,16 @@ A2DetectorMessenger::A2DetectorMessenger(
   //fUseCherenkovCmd->SetRange("UseCherenkov=0 don't build Cherenkov or UseCherenkov!=0 build Cherenkov");
   fUseCherenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-
 }
 
 A2DetectorMessenger::~A2DetectorMessenger()
 {
   delete fUseTAPSCmd;
   delete fUseCBCmd;
-  delete fUsePIDCmd;
+  delete fUsePID1Cmd;
+  delete fUsePID2Cmd;
+  delete fRotPID2Cmd;
+  delete fUsePID3Cmd;
   delete fUsePolCmd;
   delete fUsePolCapCmd;
   delete fPolZCmd;
@@ -184,6 +210,7 @@ A2DetectorMessenger::~A2DetectorMessenger()
   delete fTAPSNCmd;
   delete fTAPSPbCmd;
   delete fPIDZCmd;
+  delete fPIDZ2Cmd;
   delete fUseMWPCCmd;
   delete fTOFFileCmd;
   delete fUseTOFCmd;
@@ -203,8 +230,17 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fUseCBCmd )
     { fA2Detector->SetUseCB(fUseCBCmd->GetNewIntValue(newValue));}
 
-  if( command == fUsePIDCmd )
-    { fA2Detector->SetUsePID(fUsePIDCmd->GetNewIntValue(newValue));}
+  if( command == fUsePID1Cmd )
+    { fA2Detector->SetUsePID1(fUsePID1Cmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePID2Cmd )
+    { fA2Detector->SetUsePID2(fUsePID2Cmd->GetNewIntValue(newValue));}
+
+  if( command == fRotPID2Cmd )
+    { fA2Detector->SetRotPID2(fRotPID2Cmd->GetNewIntValue(newValue));}
+
+  if( command == fUsePID3Cmd )
+    { fA2Detector->SetUsePID3(fUsePID3Cmd->GetNewIntValue(newValue));}
 
   if( command == fUseMWPCCmd )
     { fA2Detector->SetUseMWPC(fUseMWPCCmd->GetNewIntValue(newValue));}
@@ -257,6 +293,9 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fPIDZCmd )
     { fA2Detector->SetPIDZ(fPIDZCmd->GetNewDoubleValue(newValue));}
+
+  if( command == fPIDZ2Cmd )
+    { fA2Detector->SetPIDZ2(fPIDZ2Cmd->GetNewDoubleValue(newValue));}
 
   if( command == fMWPCZCmd )
     { fA2Detector->SetMWPCZ(fMWPCZCmd->GetNewDoubleValue(newValue));}

@@ -29,8 +29,8 @@
 #/vis/open DAWNFILE
 #
 # Use this open statement instead for OpenGL in immediate mode.
-/vis/open OGLIX
-/vis/open RayTracer
+#/vis/open OGL
+#/vis/open RayTracer
 #
 # Use this open statement instead to get a HepRep version 1 file
 # suitable for viewing in WIRED.

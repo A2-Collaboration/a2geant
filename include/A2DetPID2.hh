@@ -1,6 +1,5 @@
-
-#ifndef A2DetPID_h
-#define A2DetPID_h 1
+#ifndef A2DetPID2_h
+#define A2DetPID2_h 1
 
 #include "A2Detector.hh"
 #include "A2SD.hh"
@@ -19,46 +18,37 @@
 #include "globals.hh"
 
 
-class A2DetPID : public A2Detector
+class A2DetPID2 : public A2Detector
 {
 public:
 
-  A2DetPID();
-  ~A2DetPID();
+  A2DetPID2();
+  ~A2DetPID2();
 
   G4VPhysicalVolume* Construct(G4LogicalVolume *){return NULL;}
-  G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0);
-  G4VPhysicalVolume* Construct3(G4LogicalVolume *MotherLogic, G4double Z0);
+  G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0, G4int RotPID);
 
   void MakeDetector1();
-  void MakeDetector2();
-  void MakeDetector3();
-  void MakeSingleDetector1();
-  void MakeSingleDetector2();
+  void MakeSingleDetector();
   void MakeLightGuide1();
-  void MakeLightGuide2();
   void MakePhotomultipliers();
-  void MakeSupports1(); //for PID1
-  void MakeSupports2(); //for PID2
-  void MakeSupports3(); //for PID3
+  void MakeSupports(); //for PID2
 
 private:
   G4int fNPids;  //Number of Pid scintillators
   G4double fZ0;
+  G4int fRotPID2;
 
   A2SD* fPIDSD;
 
-  G4Trap *fPID;  //PID scintillator shape
-  G4Trap *fPIDEnd; // PID end for larger case
-  G4LogicalVolume *fPIDLogic;
-  G4VPhysicalVolume** fPIDPhysi;
+  G4Trap *fPID2;  //PID scintillator shape
+  G4LogicalVolume *fPID2Logic;
+  G4VPhysicalVolume** fPID2Physi;
 
   G4Trap *fLGFO;  //part of light guide
   G4Trap *fLGFI;  //part of light guide
   G4Trd *fLGFM;  //part of light guide
   G4Tubs *fLGTU;  //part of light guide
-  G4Para *fLGB1; //Part of bent LG
   G4UnionSolid *fLG1;  //part of light guide
   G4UnionSolid *fLG2;  //part of light guide
   G4UnionSolid *fLG3;  //part of light guide
@@ -84,9 +74,7 @@ private:
   G4VPhysicalVolume **fMUMEPhysi;
   //geometric parameters
   G4double fzpos;
-  G4int fUseEnd;
   G4double fpid_z;
-  G4double fpidendL;
   G4double fpid_rin;
   G4double fpid_thick;
   G4double fpid_rout;
@@ -101,7 +89,7 @@ private:
   G4double fbase_z;
   G4double fmume_z;
   G4double fpmtr_z;
-  G4Region* fregionPID;
+  G4Region* fregionPID2;
 
 } ;
 
