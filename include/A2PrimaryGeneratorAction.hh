@@ -150,8 +150,8 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 	private:
 		void PhaseSpaceGenerator(G4Event* anEvent);
 		void OverlapGenerator(G4Event* anEvent);
-		G4ThreeVector fThreeVector;
-		G4float fTmin;       //Min phase spce kinetic energy
+
+        G4float fTmin;       //Min phase spce kinetic energy
 		G4float fTmax;       //Max phase space kinetic energy
 		G4float fThetamin;       //Min phase spce angle
 		G4float fThetamax;       //Max phase space angle

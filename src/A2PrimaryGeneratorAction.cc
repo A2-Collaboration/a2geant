@@ -42,8 +42,6 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 	fGeneratedFile=NULL;
 	fGenTree=NULL;
 
-	fThreeVector=G4ThreeVector(0,0,1);
-
 	//default phase space limits
     fTmin         = 0;
     fTmax         = 400*MeV;
@@ -193,13 +191,9 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fGenTree->GetEntry(fNevent);
 
     //Set vertex position
-    fThreeVector = GetRandomVertex();
+    const G4ThreeVector primaryVertex = GetRandomVertex()  * (1.0 / cm);
 
-    fGenPosition[0]=fThreeVector.x()/cm;
-    fGenPosition[1]=fThreeVector.y()/cm;
-    fGenPosition[2]=fThreeVector.z()/cm;
 
-    fParticleGun->SetParticlePosition(fThreeVector);
 
     //Loop over tracked particles, set particle gun and create vertex for each particle
 
@@ -230,6 +224,18 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                         ).unit());
                 fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
                 fParticleGun->GeneratePrimaryVertex(anEvent);
+
+                // vertex position in pluto is in mm, no conversion needed
+                const G4ThreeVector particleVertex = primaryVertex
+                                                       + G4ThreeVector(part->X(),
+                                                                       part->Y(),
+                                                                       part->Z());
+
+                fGenPosition[0]=particleVertex.x();
+                fGenPosition[1]=particleVertex.y();
+                fGenPosition[2]=particleVertex.z();
+                fParticleGun->SetParticlePosition(particleVertex);
+
 
                 final_particles++;
 
