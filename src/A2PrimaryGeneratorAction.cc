@@ -100,6 +100,7 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     pluto2G4[14] = g4part->FindParticle("proton");
     pluto2G4[15] = g4part->FindParticle("anti_proton");
     pluto2G4[16] = g4part->FindParticle("kaon0S");
+    pluto2G4[19] = g4part->FindParticle("sigma+");
     pluto2G4[25] = g4part->FindParticle("anti_neutron");
     pluto2G4[45] = g4part->FindParticle("deuteron");
 
