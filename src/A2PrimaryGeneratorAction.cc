@@ -193,6 +193,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     //Set vertex position
     const G4ThreeVector primaryVertex = GetRandomVertex()  * (1.0 / cm);
+    TLorentzVector beamVector(0,0,0,0);
 
 
 
@@ -200,10 +201,6 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     int final_particles = 0;
     bool beam_found = false;
-
-    for( int p=0; p< fGenParticles->GetEntries(); ++p) {
-
-    }
 
     fSimParticles.clear();
 
@@ -242,14 +239,20 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
                 fSimParticles.push_back(part);
 
-            } else if ( part->ID() == 14001 ) {  // beam particle, compound of beam photon and tagert proton
+            } else {  // beam particle, compound of beam photon and tagert proton
 
                 if( beam_found )
                     G4cerr << "Warning: Multiple Beam Particles in Event" << G4endl;
+                if(GetPlutoBeamID(part->ID() != 1))
+                    G4cerr << "Warning: Expecting photon beam for A2-simulation!" << G4endl;
 
-                const double Eg = part->E() - 0.938272; // subtract proton mass
+                try {
+                    const double Eg = part->E() -PlutoIDToGeant(GetPlutoTargetID(part->ID()))->GetPDGMass(); // subtract target mass
+                    beamVector = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
+                } catch (...) {
+                    G4cerr << "Warning: Can't find G4 particle ID for target-particle " << part->Name() << G4endl;
+                }
 
-                fBeamLorentzVec = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
                 beam_found = true;
             }
         }
@@ -259,9 +262,8 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     fNGenParticles = final_particles;
 
-    if( !beam_found ) {
-        fBeamLorentzVec = TLorentzVector(0,0,0,0);
-    }
+    fBeamLorentzVec = beamVector;
+
 
     fNevent++;
 
