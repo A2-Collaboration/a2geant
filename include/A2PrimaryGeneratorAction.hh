@@ -73,6 +73,11 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         std::map<G4int, G4ParticleDefinition*> pluto2G4;
         G4ParticleDefinition* PlutoIDToGeant( int pluto_id ) const;
 
+        // pluto generates pseudo particles for beam-target-compounds with
+        // id = target * 1000 + beam
+        G4int GetPlutoBeamID(const G4int pseudoBeamID) const {return pseudoBeamID % 1000;}
+        G4int GetPlutoTargetID(const G4int pseudoBeamID) const {return pseudoBeamID / 1000;}
+
 		void SetDetCon(A2DetectorConstruction* det){fDetCon=det;}
 		G4bool IsInTarget(G4ThreeVector vec){
 			G4Navigator* nav=G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
