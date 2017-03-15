@@ -113,3 +113,9 @@ add_executable(A2
   include/TIDhack.h)
 
 target_link_libraries(A2 ${Geant4_LIBRARIES} ${PLUTO_LIBRARY} ${ROOT_LIBRARIES})
+
+add_custom_target(link_runGeant ALL
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${CMAKE_SOURCE_DIR}/runGeant.sh"
+    "${EXECUTABLE_OUTPUT_PATH}/runGeant"
+    )

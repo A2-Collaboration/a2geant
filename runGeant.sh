@@ -9,6 +9,8 @@ INFILE=$(readlink -f "${1}")
 OUTFILE=$(readlink -f "${2}")
 PROG=$(readlink -f "${0}")
 BASE=$(dirname "${PROG}")
+BINDIR=$(dirname "${0}")
+
 # remove infile/outfile from argument list
 shift 2
 
@@ -45,4 +47,4 @@ if [[ $N_REGEXES > 0 ]]; then
 fi
 
 cd "${BASE}"
-./A2 --mac="${SIMU_FILE}" --if="${INFILE}" --of="${OUTFILE}" --det="${DETECTOR_FILE}" $*
+${BINDIR}/A2 --mac="${SIMU_FILE}" --if="${INFILE}" --of="${OUTFILE}" --det="${DETECTOR_FILE}" $*
