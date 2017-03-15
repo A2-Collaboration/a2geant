@@ -31,10 +31,6 @@ G4History.macro
 # ignore some generated files
 /A2
 /TOFpos.dat
-/pluto2mkin
-/a2pluto
-/split_pluto_events
-/random_pluto_gun
 
 # some typical names for output folders
 # you can also use symlinks to your "real" folders
