@@ -1,9 +1,0 @@
-PID2 does not currently work! Outside volume error when trying to actually run it! Fix this!
-
-PID1 works however! Need to have a look at this.
-
-Removed NestPID class, may need to rename some volumes in PID2 to allow it to correctly work in conjuction with PID3. 
-
-PID2 and PID3 seemed to have problems with overlapping volume names, this appears to be resolved now?
-
-Still get warning that volume LG is completely outside mother volume PIDD2.
