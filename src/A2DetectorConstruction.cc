@@ -181,6 +181,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
             G4cout << "PID Z displaced by " << fPIDZ/CLHEP::cm << "cm" << G4endl;
             G4cout << "PID2 constructed in PID-I orientation" << G4endl;
         }
+        else{G4cerr<<"Error please enter either 0 or 1 for ROTPID2"<< G4endl; exit(1);}
     }
     else if (fUsePID3 == 1){
         if(fUseMWPC != 0) {G4cerr<<"Error for 2 PID arrangement turn off MWPC"<< G4endl; exit(1);}
