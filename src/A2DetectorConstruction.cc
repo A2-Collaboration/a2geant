@@ -265,9 +265,9 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
     if(fUseTarget=="Cryo") {
         if (fUseCryoTgt == 1) fTarget->Construct1(fWorldLogic, fTargetZ);
         else if (fUseCryoTgt == 2) fTarget->Construct2(fWorldLogic, fTargetZ);
-        else fTarget->Construct(fWorldLogic,fTargetZ);
+        else fTarget->Construct2(fWorldLogic,fTargetZ);
     }
-    else fTarget->Construct(fWorldLogic, fTargetZ);
+    else fTarget->Construct2(fWorldLogic, fTargetZ);
     G4cout << "Use cryo target version " << fUseCryoTgt << G4endl;
     G4cout << "Target Z displaced by " << fTargetZ/CLHEP::cm << "cm" << G4endl;
   }

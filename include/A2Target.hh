@@ -13,13 +13,12 @@ class G4VPhysicalVolume;
 class A2Target
 {
 public:
-  
+
   A2Target();
   ~A2Target();
-  
+
   //virtual function to build the target needs to be implemented in derived class
   // 1 and 2 are for the two options for the cryo target
-  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic, G4double Z0)=0;//Build the target
   virtual G4VPhysicalVolume* Construct1(G4LogicalVolume *MotherLogic, G4double Z0)=0;//Build the target
   virtual G4VPhysicalVolume* Construct2(G4LogicalVolume *MotherLogic, G4double Z0)=0;//Build the target
 
@@ -27,7 +26,7 @@ public:
   G4VPhysicalVolume* GetPhysi(){return fMyPhysi;};
   G4LogicalVolume* GetLogic(){return fMyLogic;}
   G4LogicalVolume* GetMotherLogic(){return fMotherLogic;}
- 
+
   void SetIsInteractive(G4int is){fIsInteractive=is;}
   void SetMaterial(G4Material* mat){fMaterial=mat;}
 
