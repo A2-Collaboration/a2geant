@@ -10,6 +10,8 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ThreeVector.hh"
 
+// If no target is specified default is now to use CryoTarget2!
+
 A2DetectorMessenger::A2DetectorMessenger(
                                            A2DetectorConstruction* A2Det)
 :fA2Detector(A2Det)
