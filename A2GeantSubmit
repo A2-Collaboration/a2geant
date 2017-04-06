@@ -7,12 +7,13 @@ function die() {
 
 GEANT=$(readlink -f $(dirname "${0}"))/runA2Geant.sh
 QSUB="qsub -V -lwalltime=8:00:00 -lncpus=1"
+OUTDIR=a2geant_out
 
 test -x "${GEANT}" || die "A2 Geant not found/not executable: ${GEANT}"
 
-mkdir -p a2geant_out
+mkdir -p $OUTDIR
 
-outpath="$(pwd)/a2geant"
+outpath="$(pwd)/${OUTDIR}"
 
 while read file; do
     fullin=$(readlink -f "${file}")
