@@ -255,7 +255,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                     G4cerr << "Warning: Beam id is " << beamID << " Expecting photon beam for A2-simulation!" << G4endl;
 
                 try {
-                    const double Eg = part->E() -PlutoIDToGeant(targetID)->GetPDGMass(); // subtract target mass
+                    const double Eg = part->E() - PlutoIDToGeant(targetID)->GetPDGMass()/1000.0 ; // subtract target mass
                     beamVector = TLorentzVector( part->Vect().Unit()*Eg, Eg); // photon 4Vector
                 } catch (...) {
                     G4cerr << "Warning: Can't find G4 particle ID for target-particle " << part->Name() << G4endl;
