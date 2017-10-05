@@ -23,6 +23,7 @@
 //std
 #include <map>
 #include <list>
+#include <limits>
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -47,6 +48,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     private:
          Long64_t fMCEvtID;    // Monte Carlo Event ID
          Long64_t fMCRndID;    // Monte Carlo Random ID
+         const double NaN = std::numeric_limits<double>::quiet_NaN();
 
     public:
         void GeneratePrimaries(G4Event*);
@@ -162,7 +164,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         G4float fThetamax;       //Max phase space angle
         G4float fBeamXSigma;    //beam X width
         G4float fBeamYSigma;    //beam X width
-        G4float fTargetZ0;      //Target Z position
+        G4float fTargetZ0 = NaN; //Target Z position
         G4float fTargetThick;   //Target thickness
         G4float fTargetRadius;   //Target radius (in x-y plane)
         G4bool fdoPhaseSpace;

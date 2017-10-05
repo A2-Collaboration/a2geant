@@ -49,7 +49,9 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     fThetamax     = 180*deg;
     fBeamXSigma   = 0.5*cm;
     fBeamYSigma   = 0.5*cm;
-    fTargetZ0     =   0*cm;
+    // do not set the target center here, not used anyway
+    // use it instead to determine if a target center was specified via /A2/generator/SetTargetZ0
+    //fTargetZ0     =   0*cm;
     fTargetThick  =   5*cm;
     fTargetRadius =   2*cm;
 
@@ -142,11 +144,13 @@ A2PrimaryGeneratorAction::~A2PrimaryGeneratorAction()
 G4ThreeVector A2PrimaryGeneratorAction::GetRandomVertex() {
 
     double z;
+    // check if target center was changed, otherwise use target center
+    const double z0 = std::isfinite(fTargetZ0) ? fTargetZ0 : fDetCon->GetTarget()->GetCenter().z();
     if(fTargetThick == 0.0) {
-        z = 0.0;
+        z = z0;
     } else {
         const double l = fTargetThick >= 0.0 ? fTargetThick : fDetCon->GetTarget()->GetLength();
-        z = fDetCon->GetTarget()->GetCenter().z() + l/2 * (2*G4UniformRand()-1);
+        z = z0 + l/2 * (2*G4UniformRand()-1);
     }
 
     const double phi = 2 * M_PI * G4UniformRand();
