@@ -30,19 +30,19 @@
 A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 
 {
-	G4int n_particle = 1;
-	fParticleGun  = new G4ParticleGun(n_particle);
+    G4int n_particle = 1;
+    fParticleGun  = new G4ParticleGun(n_particle);
 
-	//create a messenger for this class
-	fGunMessenger = new A2PrimaryGeneratorMessenger(this);
-	//Get Particle table pointer
-	fParticleTable=G4ParticleTable::GetParticleTable();
+    //create a messenger for this class
+    fGunMessenger = new A2PrimaryGeneratorMessenger(this);
+    //Get Particle table pointer
+    fParticleTable=G4ParticleTable::GetParticleTable();
     fParticleDefinition=NULL;	//G4int setup=SetUpROOTInput("/scratch/crystalball/mc/kin_pi0p_100000.root");
-	//Set up ROOT input
-	fGeneratedFile=NULL;
-	fGenTree=NULL;
+    //Set up ROOT input
+    fGeneratedFile=NULL;
+    fGenTree=NULL;
 
-	//default phase space limits
+    //default phase space limits
     fTmin         = 0;
     fTmax         = 400*MeV;
     fThetamin     = 0;
@@ -53,21 +53,21 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     fTargetThick  =   5*cm;
     fTargetRadius =   2*cm;
 
-	//overlap
-	fSplitTheta=0;
+    //overlap
+    fSplitTheta=0;
 
-	//default mode is g4 command line input
+    //default mode is g4 command line input
     fMode=EPGA_ROOT;
 
-	fTargetWarning=0;
+    fTargetWarning=0;
 
-	fNevent=0;
+    fNevent=0;
     fNGenParticles=0;
 
     fGenParticles = NULL;
 
-	fDetCon=NULL;
-	fInFileName="";
+    fDetCon=NULL;
+    fInFileName="";
 
     fGen4Vectors        = new Float_t*[100];
     fGenLorentzVec      = new TLorentzVector*[100];
@@ -107,8 +107,8 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     G4cout << "Particle table for conversion Pluto <=> Geant4:" << G4endl;
     for (std::map<G4int,G4ParticleDefinition*>::iterator it = pluto2G4.begin();
          it != pluto2G4.end(); it++) {
-      G4cout << "Id " << it->first
-             << " = " << it->second->GetParticleName() << G4endl;
+        G4cout << "Id " << it->first
+               << " = " << it->second->GetParticleName() << G4endl;
     }
 
     fMCEvtID = 0;
@@ -192,7 +192,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fGenTree->GetEntry(fNevent);
 
     //Set vertex position
-    const G4ThreeVector primaryVertex = GetRandomVertex()  * (1.0 / cm);
+    const G4ThreeVector primaryVertex = GetRandomVertex() * (1.0 / cm);
 
     fGenPosition[0]=primaryVertex.x();
     fGenPosition[1]=primaryVertex.y();

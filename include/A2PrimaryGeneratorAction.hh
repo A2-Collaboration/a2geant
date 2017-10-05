@@ -54,7 +54,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         TClonesArray* GetTruePtr() { return fGenParticles; }
 
 		void SetUpROOTInput();
-		void SetInputFile(TString filename){fInFileName=filename;};
+		void SetInputFile(TString filename){fInFileName=filename;}
 		void SetNParticlesToBeTracked(Int_t n){fNToBeTracked=n;fTrackThis=new Int_t[n];}
 		void SetParticlesToBeTracked(Int_t ipart){if(fTrackThis) fTrackThis[fNToBeTcount++]=ipart;}
 		Int_t *GetParticlesToBeTracked(){return fTrackThis;}

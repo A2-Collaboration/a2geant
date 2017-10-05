@@ -53,7 +53,7 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
   fRadius=r_lD2A;
   G4double t_lD2B = r_lD2B - sqrt(r_lD2B*r_lD2B-r_lD2A*r_lD2A);
   G4double l_lD2A = l_cell - t_lD2C - t_lD2B;
- //c Parameters for the tmat supply tube
+  //c Parameters for the tmat supply tube
   G4double r_lD2D = r_lD2A;
   G4double t_lD2D = r_lD2A - r_CU64;
   G4double l_lD2D = l_CU64;
@@ -109,7 +109,7 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
 
   G4Sphere* KAPB=new G4Sphere("KAPB",r_lD2B,r_lD2B + t_KAPT,0*deg,360*deg,0,asin((r_lD2A+t_KAPT)/(r_lD2B+t_KAPT))*rad);
   G4LogicalVolume* KAPBLogic=new G4LogicalVolume(KAPB,fNistManager->FindOrBuildMaterial("G4_KAPTON"),"KAPB");
- new G4PVPlacement(0,G4ThreeVector(0,0, -l_trgt/2. + l_CU64 + l_lD2A + t_lD2B - r_lD2B),KAPBLogic,"KAPB",fMyLogic,false,6);
+  new G4PVPlacement(0,G4ThreeVector(0,0, -l_trgt/2. + l_CU64 + l_lD2A + t_lD2B - r_lD2B),KAPBLogic,"KAPB",fMyLogic,false,6);
 
 
   G4Sphere* KAPC=new G4Sphere("KAPC",r_lD2C,r_lD2C + t_KAPT,0*deg,360*deg,180*deg-asin((r_CU64-t_CU64)/r_lD2C)*rad,asin((r_CU64-t_CU64)/r_lD2C)*rad);

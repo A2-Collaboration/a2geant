@@ -73,7 +73,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
 public:
   
      
-     const G4VPhysicalVolume* GetWorld() {return fWorldPhysi;};           
+  const G4VPhysicalVolume* GetWorld() {return fWorldPhysi;}
                  
   private:
   G4int fIsInteractive;   // batch(0) or interactive(1) mode
