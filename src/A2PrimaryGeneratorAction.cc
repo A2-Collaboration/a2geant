@@ -196,11 +196,11 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fGenTree->GetEntry(fNevent);
 
     //Set vertex position
-    const G4ThreeVector primaryVertex = GetRandomVertex() * (1.0 / cm);
+    const G4ThreeVector primaryVertex = GetRandomVertex();
 
-    fGenPosition[0]=primaryVertex.x();
-    fGenPosition[1]=primaryVertex.y();
-    fGenPosition[2]=primaryVertex.z();
+    fGenPosition[0]=primaryVertex.x()/cm;
+    fGenPosition[1]=primaryVertex.y()/cm;
+    fGenPosition[2]=primaryVertex.z()/cm;
 
     TLorentzVector beamVector(0,0,0,0);
 
