@@ -287,9 +287,9 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     fMode=EPGA_ROOT;
 
     if (fInFileName == TString("")) {
-        G4cerr << "No input file given! "
-               << "Need to call /A2/generator/InputFile or use --if=filename option on command line." << G4endl;
-        exit(1);
+        G4cout << "No input file given, assume interactive mode." << G4endl;
+        G4cout << "Need to call /A2/generator/InputFile or use --if=filename option on command line for batch mode." << G4endl;
+        return;
     }
 
     fGeneratedFile = new TFile(fInFileName, "read");
@@ -297,7 +297,7 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
     if(!fGeneratedFile || !(fGeneratedFile->IsOpen())) {
         G4cerr << "Cannot open input file '" << fInFileName << "'" << G4endl;
         exit(1);
-	}
+    }
 
     // get data tree
     fGeneratedFile->GetObject("data", fGenTree);
