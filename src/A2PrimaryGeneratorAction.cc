@@ -292,15 +292,9 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
 		exit(1);
 	}
 
-    //Get tree
-    try {
-        fGeneratedFile->GetObject("data", fGenTree);
-    }
-    catch (...) {
-        G4cerr << "No TTree named 'data' found in " << fInFileName << G4endl;
-        exit(1);
-    }
-
+    // get data tree
+    fGeneratedFile->GetObject("data", fGenTree);
+    // tree found?
     if (!fGenTree) {
         G4cerr << "No TTree 'data' found in" << fInFileName << G4endl;
         exit(1);
