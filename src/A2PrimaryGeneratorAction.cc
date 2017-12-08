@@ -68,6 +68,8 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 
     fGenParticles = NULL;
 
+    fTrackThis = NULL;
+
     fDetCon=NULL;
     fInFileName="";
 

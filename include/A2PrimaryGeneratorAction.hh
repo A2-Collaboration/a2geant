@@ -126,7 +126,7 @@ class A2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
         Float_t *fGenMass;        //Masses of the generated particles
         Int_t *fGenPartType;        //Array of G3 particle types
-        Int_t *fTrackThis = NULL;  //Array carrying the index of particles to be tracked
+        Int_t *fTrackThis;         //Array carrying the index of particles to be tracked
         Int_t fNToBeTracked;    //Number of particles in input file to be tracked
         Int_t fNToBeTcount;     //counter for setting fTrackThis array
         Int_t fNevent;          //event number for the ROOT tree
