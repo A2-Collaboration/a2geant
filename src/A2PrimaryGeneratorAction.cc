@@ -123,20 +123,20 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 
 A2PrimaryGeneratorAction::~A2PrimaryGeneratorAction()
 {
-	if(fGeneratedFile){
+    if(fGeneratedFile){
         for(Int_t i=0;i<100;i++) delete fGen4Vectors[i];
         //for(Int_t i=0;i<100;i++) delete fParticleDefinition[i];
         for(Int_t i=0;i<100;i++) delete fGenLorentzVec[i];
-		delete fGen4Vectors;
-		delete fGenLorentzVec;
-		delete fGenPartType;
-		delete fTrackThis;
-		delete fGenMass;
-		fGeneratedFile->Close();
-		delete fGeneratedFile;
-	}
-	delete fParticleGun;
-	delete fGunMessenger;
+        delete fGen4Vectors;
+        delete fGenLorentzVec;
+        delete fGenPartType;
+        delete fTrackThis;
+        delete fGenMass;
+        fGeneratedFile->Close();
+        delete fGeneratedFile;
+    }
+    delete fParticleGun;
+    delete fGunMessenger;
 }
 
 /**
@@ -231,7 +231,7 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                 part->Px()*GeV,
                                 part->Py()*GeV,
                                 part->Pz()*GeV
-                        ).unit());
+                                ).unit());
                 fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
 
                 // vertex position in pluto is in mm, no conversion needed
