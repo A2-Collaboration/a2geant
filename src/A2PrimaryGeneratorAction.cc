@@ -301,6 +301,11 @@ void A2PrimaryGeneratorAction::SetUpROOTInput(){
         exit(1);
     }
 
+    if (!fGenTree) {
+        G4cerr << "No TTree 'data' found in" << fInFileName << G4endl;
+        exit(1);
+    }
+
     if( 0 != fGenTree->SetBranchAddress("Particles", &fGenParticles)) {
         G4cerr << "Can't set branch address for branch 'Particles' in TTree 'data' in file '" << fInFileName << "'" << G4endl;
         exit(1);
