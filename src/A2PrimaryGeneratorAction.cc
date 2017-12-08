@@ -284,12 +284,17 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void A2PrimaryGeneratorAction::SetUpROOTInput(){
     fMode=EPGA_ROOT;
 
+    if (fInFileName == TString("")) {
+        G4cerr << "No input file given! "
+               << "Need to call /A2/generator/InputFile or use --if=filename option on command line." << G4endl;
+        exit(1);
+    }
+
     fGeneratedFile = new TFile(fInFileName, "read");
 
     if(!fGeneratedFile || !(fGeneratedFile->IsOpen())) {
         G4cerr << "Cannot open input file '" << fInFileName << "'" << G4endl;
-        G4cerr << "Need to call /A2/generator/InputFile or use --if=filename option on command line." << G4endl;
-		exit(1);
+        exit(1);
 	}
 
     // get data tree
