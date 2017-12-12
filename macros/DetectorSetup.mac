@@ -31,6 +31,7 @@
 ###Cryo targets : G4_lH2, A2_lD2###
 /A2/det/targetMaterial G4_lH2
 /A2/det/setTargetLength 10 cm
+/A2/det/setTargetZ 0 cm
 
 ####Solid targets : G4_Li, G4_GRAPHITE, G4_Ca, G4_Pb###
 #/A2/det/useTarget Solid
