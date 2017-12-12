@@ -180,6 +180,8 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticField(fNameFileFieldMap);
       (static_cast<A2PolarizedTarget*>(fTarget))->SetMagneticCoils(fTypeMagneticCoils);
     }
+    if (fTargetZ0)
+        G4cout << "A2DetectorConstruction::Construct() Shift the target center by " << fTargetZ0 << " mm" << G4endl;
     fTarget->Construct(fWorldLogic, fTargetZ0);
   }
   //                                        
