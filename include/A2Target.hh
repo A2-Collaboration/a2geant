@@ -18,7 +18,7 @@ public:
   ~A2Target();
   
   //virtual function to build the target needs to be implemented in derived class
-  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic)=0;//Build the target
+  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic, G4double Z0 = 0)=0;//Build the target
 
   G4VPhysicalVolume* GetPhysi(){return fMyPhysi;}
   G4LogicalVolume* GetLogic(){return fMyLogic;}

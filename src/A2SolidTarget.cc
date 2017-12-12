@@ -16,12 +16,12 @@ A2SolidTarget::~A2SolidTarget()
  
 }
 
-G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic){
+G4VPhysicalVolume* A2SolidTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0){
   fMotherLogic=MotherLogic;
   //Parameters taken from ugeom_solid_target.F
   G4double zm = 20.*cm;   //      ! z for mother volume 
   G4double rm = 3.94*cm; //        ! radius of mother volume
-  G4double zpos = -(zm-14.5*cm); //        ! zpos of mother volume relative to centre of ball
+  G4double zpos = Z0 -(zm-14.5*cm); //        ! zpos of mother volume relative to centre of ball
 
   if(!fMaterial){G4cerr<<"A2SolidTarget::Construct() Solid target material not defined. Add in DetectorSetup.mac."<<G4endl;exit(1);}
   //c target lenght:

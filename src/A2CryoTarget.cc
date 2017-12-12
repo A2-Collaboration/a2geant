@@ -16,7 +16,7 @@ A2CryoTarget::~A2CryoTarget()
 }
 
 
-G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
+G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0){
   fMotherLogic=MotherLogic;
   //c Target volume parameters
   //All parameters copied directly from ugeom_target.F
@@ -74,7 +74,7 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic){
   }
   G4Tubs* MyShape=new G4Tubs("TRGT",0.,r_trgt+0.1*mm,l_trgt/2,0*deg,360*deg);
   fMyLogic=new G4LogicalVolume(MyShape,fNistManager->FindOrBuildMaterial("G4_AIR"),"TRGT");
-  fMyPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,-tm+0.25*cm),fMyLogic,"TRGT",fMotherLogic,false,1);
+  fMyPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,Z0 - tm+0.25*cm),fMyLogic,"TRGT",fMotherLogic,false,1);
   fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
   //////////////////////
   //CFK tube + window

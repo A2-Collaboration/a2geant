@@ -11,7 +11,7 @@ public:
   A2SolidTarget();
   ~A2SolidTarget();
 
-  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic);
+  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic, G4double Z0 = 0);
 
 };
 #endif

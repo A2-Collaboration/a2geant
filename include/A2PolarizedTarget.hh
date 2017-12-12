@@ -12,7 +12,7 @@ public:
   A2PolarizedTarget();
   ~A2PolarizedTarget();
 
-  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic);
+  virtual G4VPhysicalVolume* Construct(G4LogicalVolume *MotherLogic, G4double Z0 = 0);
   
   // Set magnetic field according to the field map
   virtual void SetMagneticField(G4String&);

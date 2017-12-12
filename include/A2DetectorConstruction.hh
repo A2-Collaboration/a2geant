@@ -52,6 +52,7 @@ class A2DetectorConstruction : public G4VUserDetectorConstruction
   void SetDetectorSetup(G4String ds){fDetectorSetup=ds;}
   G4Material* GetTargetMaterial(){return fTargetMaterial;}
   void SetTargetLength(G4double zz){fTargetLength=zz;}
+  void SetTargetZ0(G4double zz){fTargetZ0=zz;}
   void SetTargetMagneticCoils(G4String &type) { fTypeMagneticCoils = type; }
   void SetTargetMagneticFieldMap(G4String &name) { fNameFileFieldMap = name; }
   void SetHemiGap(G4ThreeVector zz){fHemiGap=zz;}
@@ -96,6 +97,7 @@ public:
   A2Target* fTarget;
   G4Material* fTargetMaterial;
   G4double fTargetLength;
+  G4double fTargetZ0;
   G4String fTypeMagneticCoils;
   G4String fNameFileFieldMap;
 

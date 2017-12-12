@@ -43,7 +43,7 @@ void A2PolarizedTarget::SetMagneticField(G4String &nameFileFieldMap)
   }
 }
 
-G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
+G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic, G4double Z0)
 {
 
 //   //Magnetic field moved from A2DetectorConstruction dglazier
@@ -74,7 +74,7 @@ G4VPhysicalVolume* A2PolarizedTarget::Construct(G4LogicalVolume *MotherLogic)
  //Mother volume, a cylinder with at least a 1-mm space between it and the target in all directions:
  G4Tubs* MyShape=new G4Tubs("TRGT",0.,r_TRGT + 1.0*mm, l_TRGT/2 +1.0*mm,0*deg,360*deg);
  fMyLogic=new G4LogicalVolume(MyShape,fNistManager->FindOrBuildMaterial("G4_AIR"),"TRGT");
- fMyPhysi=new G4PVPlacement(0,G4ThreeVector(0,0, - 20.0*mm/2 - 11.5*mm - 231.5*mm + l_TRGT/2.),fMyLogic,"TRGT",fMotherLogic,false,1);
+ fMyPhysi=new G4PVPlacement(0,G4ThreeVector(0,0, Z0 - 20.0*mm/2 - 11.5*mm - 231.5*mm + l_TRGT/2.),fMyLogic,"TRGT",fMotherLogic,false,1);
  fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
 
  //Colours with thier corresponding materials used in the visualization:
