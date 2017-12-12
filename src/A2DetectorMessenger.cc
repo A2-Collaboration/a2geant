@@ -63,6 +63,12 @@ A2DetectorMessenger::A2DetectorMessenger(
   fTargetLengthCmd->SetParameterName("TargetLength",false);
   fTargetLengthCmd->SetUnitCategory("Length");
   fTargetLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fTargetZ0Cmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetZ",this);
+  fTargetZ0Cmd->SetGuidance("Set distance of target center from center of ball");
+  fTargetZ0Cmd->SetParameterName("TargetZ0",false);
+  fTargetZ0Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetZ0Cmd->SetUnitCategory("Length");
   
   // Target magnetic coils type
   fTargetMagneticCoilsCmd = new G4UIcmdWithAString("/A2/det/targetMagneticCoils",this);
@@ -198,7 +204,10 @@ void A2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   
   if( command == fTargetLengthCmd )
     { fA2Detector->SetTargetLength(fTargetLengthCmd->GetNewDoubleValue(newValue));}
-    
+
+  if( command == fTargetZ0Cmd )
+    { fA2Detector->SetTargetZ0(fTargetZ0Cmd->GetNewDoubleValue(newValue));}
+
   // Target magnetic field map
   if( command == fTargetMagneticFieldCmd )
     { fA2Detector->SetTargetMagneticFieldMap(newValue); }
