@@ -73,8 +73,10 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic, G4doubl
     //fMaterial=fNistManager->FindOrBuildMaterial("LH2");
   }
   G4Tubs* MyShape=new G4Tubs("TRGT",0.,r_trgt+0.1*mm,l_trgt/2,0*deg,360*deg);
+  G4cout<<"Target center "<<(-l_trgt/2. + l_CU64 + l_lD2A + t_lD2B - r_lD2B)/cm <<" "<<l_CU64 + (l_lD2A - l_trgt)/2.-tm+0.25*cm<<G4endl;
+  fCenter.set(0,0,Z0 + l_CU64 + (l_lD2A - l_trgt)/2.-tm+0.25*cm);//position of cell in world volume
   fMyLogic=new G4LogicalVolume(MyShape,fNistManager->FindOrBuildMaterial("G4_AIR"),"TRGT");
-  fMyPhysi=new G4PVPlacement(0,G4ThreeVector(0,0,Z0 - tm+0.25*cm),fMyLogic,"TRGT",fMotherLogic,false,1);
+  fMyPhysi=new G4PVPlacement(0,fCenter,fMyLogic,"TRGT",fMotherLogic,false,1);
   fMyLogic->SetVisAttributes (G4VisAttributes::Invisible);
   //////////////////////
   //CFK tube + window
@@ -126,8 +128,6 @@ G4VPhysicalVolume* A2CryoTarget::Construct(G4LogicalVolume *MotherLogic, G4doubl
     G4Sphere* LD2B=new G4Sphere("LD2B",r_lD2B - t_lD2B,r_lD2B,0*deg,360*deg,0,asin(r_lD2A/r_lD2B)*rad);
     G4LogicalVolume* LD2BLogic=new G4LogicalVolume(LD2B,fMaterial,"LD2B");
     new G4PVPlacement(0,G4ThreeVector(0,0,-l_trgt/2. + l_CU64 + l_lD2A + t_lD2B - r_lD2B),LD2BLogic,"LD2B",fMyLogic,false,9);
-    G4cout<<"Target centre "<<(-l_trgt/2. + l_CU64 + l_lD2A + t_lD2B - r_lD2B)/cm <<" "<<l_CU64 + (l_lD2A - l_trgt)/2.-tm+0.25*cm<<G4endl;
-    fCenter.set(0,0,l_CU64 + (l_lD2A - l_trgt)/2.-tm+0.25*cm);//position of cell in world volume
     G4Sphere* LD2C=new G4Sphere("LD2C",r_lD2C - t_lD2C,r_lD2C,0*deg,360*deg,180.*deg-asin((r_CU64-t_CU64)/r_lD2C)*rad,asin((r_CU64-t_CU64)/r_lD2C)*rad);
     G4LogicalVolume* LD2CLogic=new G4LogicalVolume(LD2C,fMaterial,"LD2C");
     new G4PVPlacement(0,G4ThreeVector(0,0,-l_trgt/2. + l_CU64 - t_lD2C + r_lD2C),LD2CLogic,"LD2C",fMyLogic,false,10);
