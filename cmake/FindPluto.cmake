@@ -25,7 +25,7 @@ Set(PLUTO_FOUND FALSE)
 find_library(PLUTO_LIBRARY NAMES Pluto PATHS ${PLUTO_SEARCHPATH})
 get_filename_component(PLUTO_LIBRARY_PATH ${PLUTO_LIBRARY} PATH)
 
-find_path(PLUTO_INCLUDE_PATH NAMES PPlutoBulkDecay.h PATHS ${PLUTO_SEARCHPATH} PATH_SUFFIXES src)
+find_path(PLUTO_INCLUDE_PATH NAMES PPlutoBulkDecay.h PATHS ${PLUTO_SEARCHPATH} PATH_SUFFIXES src include)
 
 if(NOT PLUTO_LIBRARY)
 	Message(STATUS "Looking for pluto... Library not found!")
