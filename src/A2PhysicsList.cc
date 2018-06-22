@@ -102,7 +102,7 @@ A2PhysicsList::A2PhysicsList()
    fEmA2PhysicsList(0), fParticleList(0), fMessenger(0)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 0.7*mm;
+  defaultCutValue = 0.7*CLHEP::mm;
   fCutForGamma     = defaultCutValue;
   fCutForElectron  = defaultCutValue;
   fCutForPositron  = defaultCutValue;
