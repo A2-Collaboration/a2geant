@@ -51,7 +51,7 @@ G4bool A2VisSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
  
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
+  if ((edep/CLHEP::keV == 0.)) return false;
   
   // This TouchableHistory is used to obtain the physical volume
   // of the hit

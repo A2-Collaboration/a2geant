@@ -26,118 +26,118 @@ A2DetectorMessenger::A2DetectorMessenger(
   fUseTAPSCmd->SetGuidance("Construct TAPS");
   fUseTAPSCmd->SetParameterName("UseTAPS",false);
   //fUseTAPSCmd->SetRange("UseTAPS=0 don't build TAPS or UseTAPS!=0 build TAPS");
-  fUseTAPSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseTAPSCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
 
   fUseCBCmd = new G4UIcmdWithAnInteger("/A2/det/useCB",this);
   fUseCBCmd->SetGuidance("Construct CB");
   fUseCBCmd->SetParameterName("UseCB",false);
   //fUseCBCmd->SetRange("UseCB=0 don't build CB or UseCB!=0 build CB");
-  fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseCBCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
 
   fUsePIDCmd = new G4UIcmdWithAnInteger("/A2/det/usePID",this);
   fUsePIDCmd->SetGuidance("Construct PID");
   fUsePIDCmd->SetParameterName("UsePID",false);
   //fUsePIDCmd->SetRange("UsePID=0 don't build PID or UsePID!=0 build PID");
-  fUsePIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUsePIDCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fUseMWPCCmd = new G4UIcmdWithAnInteger("/A2/det/useMWPC",this);
   fUseMWPCCmd->SetGuidance("Construct MWPC");
   fUseMWPCCmd->SetParameterName("UseMWPC",false);
-  fUseMWPCCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseMWPCCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fUseTargetCmd=new G4UIcmdWithAString("/A2/det/useTarget",this);
   fUseTargetCmd->SetGuidance("Select the type of target");
   fUseTargetCmd->SetGuidance("Either Cryo or Solid");
   fUseTargetCmd->SetParameterName("UseTarget",false);
-  fUseTargetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseTargetCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTargetMatCmd=new G4UIcmdWithAString("/A2/det/targetMaterial",this);
   fTargetMatCmd->SetGuidance("Select the target material");
   fTargetMatCmd->SetParameterName("TargetMaterial",false);
-  fTargetMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetMatCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
   
   fTargetLengthCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetLength",this);
   fTargetLengthCmd->SetGuidance("Set target cell length");
   fTargetLengthCmd->SetParameterName("TargetLength",false);
   fTargetLengthCmd->SetUnitCategory("Length");
-  fTargetLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetLengthCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTargetZ0Cmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTargetZ",this);
   fTargetZ0Cmd->SetGuidance("Set distance of target center from center of ball");
   fTargetZ0Cmd->SetParameterName("TargetZ0",false);
-  fTargetZ0Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetZ0Cmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
   fTargetZ0Cmd->SetUnitCategory("Length");
   
   // Target magnetic coils type
   fTargetMagneticCoilsCmd = new G4UIcmdWithAString("/A2/det/targetMagneticCoils",this);
   fTargetMagneticCoilsCmd->SetGuidance("Select the target magnetic coils type");
   fTargetMagneticCoilsCmd->SetParameterName("TargetMagneticCoils",false);
-  fTargetMagneticCoilsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetMagneticCoilsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   // Target magnetic field map
   fTargetMagneticFieldCmd = new G4UIcmdWithAString("/A2/det/setTargetMagneticFieldMap",this);
   fTargetMagneticFieldCmd->SetGuidance("Set path/name of the target magnetic field map file");
   fTargetMagneticFieldCmd->SetParameterName("TargetMagneticField",false);
-  fTargetMagneticFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTargetMagneticFieldCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fHemiGapCmd = new G4UIcmdWith3VectorAndUnit("/A2/det/setHemiGap",this);
   fHemiGapCmd->SetGuidance("Set air gap between each hemisphere and equator");
   fHemiGapCmd->SetParameterName("HemiGapUp","HemiGapDown","HemiGapNA",false);
   fHemiGapCmd->SetUnitCategory("Length");
-  fHemiGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fHemiGapCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTAPSFileCmd = new G4UIcmdWithAString("/A2/det/setTAPSFile",this);
   fTAPSFileCmd->SetGuidance("Set the taps configuration file.");
   fTAPSFileCmd->SetParameterName("tapsfile",false);
-  fTAPSFileCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTAPSFileCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTAPSZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setTAPSZ",this);
   fTAPSZCmd->SetGuidance("Set distance of TAPS from centre of ball");
   fTAPSZCmd->SetParameterName("TAPSZ",false);
   fTAPSZCmd->SetUnitCategory("Length");
-  fTAPSZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTAPSZCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTAPSNCmd = new G4UIcmdWithAnInteger("/A2/det/setTAPSN",this);
   fTAPSNCmd->SetGuidance("Set number of active taps crystals");
   fTAPSNCmd->SetParameterName("NTAPS",false);
   fTAPSNCmd->SetRange("NTAPS>0 && NTAPS<=552");
-  fTAPSNCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTAPSNCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTAPSPbCmd = new G4UIcmdWithAnInteger("/A2/det/setTAPSPbWO4Rings",this);
   fTAPSPbCmd->SetGuidance("Set number of active BaF2 rings");
   fTAPSPbCmd->SetParameterName("NPbWO4",false);
   fTAPSPbCmd->SetRange("NPbWO4>=0 && NPbWO4<=15");
-  fTAPSPbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTAPSPbCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fPIDZCmd = new G4UIcmdWithADoubleAndUnit("/A2/det/setPIDZ",this);
   fPIDZCmd->SetGuidance("Set distance of PID from centre of ball");
   fPIDZCmd->SetParameterName("PIDZ",false);
   fPIDZCmd->SetUnitCategory("Length");
-  fPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fPIDZCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fUpdateCmd = new G4UIcmdWithoutParameter("/A2/det/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd->AvailableForStates(G4State_Init,G4State_Idle);
 
   fUseTOFCmd = new G4UIcmdWithAnInteger("/A2/det/useTOF",this);
   fUseTOFCmd->SetGuidance("Construct TOF");
   fUseTOFCmd->SetParameterName("UseTOF",false);
-  fUseTOFCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseTOFCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fTOFFileCmd = new G4UIcmdWithAString("/A2/det/setTOFFile",this);
   fTOFFileCmd->SetGuidance("Set the tof configuration file.");
   fTOFFileCmd->SetParameterName("toffile",false);
-  fTOFFileCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTOFFileCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   fUseCherenkovCmd = new G4UIcmdWithAnInteger("/A2/det/useCherenkov",this);
   fUseCherenkovCmd->SetGuidance("Construct Cherenkov");
   fUseCherenkovCmd->SetParameterName("UseCherenkov",false);
   //fUseCherenkovCmd->SetRange("UseCherenkov=0 don't build Cherenkov or UseCherenkov!=0 build Cherenkov");
-  fUseCherenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fUseCherenkovCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
  
 }

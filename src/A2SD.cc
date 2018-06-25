@@ -49,7 +49,7 @@ G4bool A2SD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
+  if ((edep/CLHEP::keV == 0.)) return false;
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
   G4TouchableHistory* theTouchable
@@ -65,8 +65,8 @@ G4bool A2SD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   if(mothervolume->GetName().contains("COVR"))id=mothervolume->GetCopyNo()+volume->GetCopyNo();
   else id = volume->GetCopyNo();
   //seperate ADC gates for TAPS
-  if((mothervolume->GetName().contains("COVR"))&&(aStep->GetPreStepPoint()->GetGlobalTime()>2000*ns))return false;
-  else if (aStep->GetPreStepPoint()->GetGlobalTime()>600*ns)return false; 
+  if((mothervolume->GetName().contains("COVR"))&&(aStep->GetPreStepPoint()->GetGlobalTime()>2000*CLHEP::ns))return false;
+  else if (aStep->GetPreStepPoint()->GetGlobalTime()>600*CLHEP::ns)return false;
 
   //if(volume->GetName().contains("Pb")) G4cout<<volume->GetName()<<" id "<<id <<" "<<mothervolume->GetCopyNo()<<" "<<volume->GetCopyNo()<<" edep "<<edep/MeV<<G4endl;
   if (fhitID[id]==-1){

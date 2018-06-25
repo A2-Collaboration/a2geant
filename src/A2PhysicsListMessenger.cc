@@ -207,7 +207,7 @@ void A2PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue
   if( command == fRegCutCmd )
     {
       G4double cut = fRegCutCmd->GetNewDoubleValue(newValue);
-      G4cout<<"Set cut of "<<cut/mm<<" for "<<fRegion<<G4endl;
+      G4cout<<"Set cut of "<<cut/CLHEP::mm<<" for "<<fRegion<<G4endl;
       pA2PhysicsList->SetCutForRegion(fRegion,cut);
      }
 

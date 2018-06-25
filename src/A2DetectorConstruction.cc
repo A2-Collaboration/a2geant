@@ -52,13 +52,13 @@ A2DetectorConstruction::A2DetectorConstruction(G4String detSet)
   fTOFparFile="TOF.par";
   //fHemiGap=0.4*cm;
   fTarget=NULL;
-  fTargetLength=4.8*cm;
+  fTargetLength=4.8*CLHEP::cm;
   fTargetZ0=0;
   fUseTarget=G4String("NO");
   //Default taps settings as for 2003
   fTAPSSetupFile="taps.dat";
   fTAPSN=510;
-  fTAPSZ=175*cm;
+  fTAPSZ=175*CLHEP::cm;
   fNPbWO4=0;
 
   //default settings for PID
@@ -107,7 +107,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   // World
   //
   fWorldSolid = new G4Box("World",				//its name
-			  20*m,20*m,20*m);	//its size
+              20*CLHEP::m,20*CLHEP::m,20*CLHEP::m);	//its size
                          
   fWorldLogic = new G4LogicalVolume(fWorldSolid,		//its solid
 				    G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR"),	//its material
@@ -124,7 +124,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
 
   //Make the crystal ball
   if(fUseCB){
-    G4cout<<"A2DetectorConstruction::Construct() Make the crystal ball with hemispheres "<<fHemiGap/cm<<" cm from the equator"<<G4endl;
+    G4cout<<"A2DetectorConstruction::Construct() Make the crystal ball with hemispheres "<<fHemiGap/CLHEP::cm<<" cm from the equator"<<G4endl;
     fCrystalBall=new A2DetCrystalBall();
     fCrystalBall->SetIsInteractive(fIsInteractive);
     fCrystalBall->SetGap(fHemiGap);
@@ -132,7 +132,7 @@ G4VPhysicalVolume* A2DetectorConstruction::Construct()
   }
   if(fUseTAPS){
     G4cout<<"A2DetectorConstruction::Construct() Turn on the taps"<<G4endl;
-    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/cm<<" cm from the target"<<G4endl; 
+    G4cout<<"TAPS setup "<<fTAPSSetupFile<<" with "<<fTAPSN<<" crystals, "<<fTAPSZ/CLHEP::cm<<" cm from the target"<<G4endl;
     fTAPS=new A2DetTAPS(fTAPSSetupFile,fTAPSN,fNPbWO4,fTAPSZ);
     //fTAPS=new A2DetTAPS();
     fTAPS->SetIsInteractive(fIsInteractive);
@@ -220,7 +220,7 @@ void A2DetectorConstruction::DefineMaterials()
   G4NistManager* NistManager=G4NistManager::Instance();
 
   //Rohacell. From cbsim.  The formula is (C4 H7 N 0)n. Density is 0.057 g/cm3.  (V.K)
- G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*g/cm3, ncomponents=4);  
+ G4Material *Roha=new G4Material("A2_ROHACELL",density=0.057*CLHEP::g/CLHEP::cm3, ncomponents=4);
  Roha->AddElement(NistManager->FindOrBuildElement(6),4);
  Roha->AddElement(NistManager->FindOrBuildElement(1),7);
  Roha->AddElement(NistManager->FindOrBuildElement(7),1);
@@ -228,14 +228,14 @@ void A2DetectorConstruction::DefineMaterials()
  //NistManager->RegisterMaterial(Roha);
 
  //Wire Chamber Material. 74.5% Ar, 25% ethane, 0.5% freon. Density is 0.046g/cm3.
- G4Material *WCmat=new G4Material("A2_WCMAT", density=0.046*g/cm3, ncomponents=3,kStateGas);
+ G4Material *WCmat=new G4Material("A2_WCMAT", density=0.046*CLHEP::g/CLHEP::cm3, ncomponents=3,kStateGas);
  WCmat->AddElement(NistManager->FindOrBuildElement(18),fractionmass=0.745);
  WCmat->AddMaterial(NistManager->FindOrBuildMaterial("G4_ETHANE"), fractionmass=0.25);
  WCmat->AddMaterial(NistManager->FindOrBuildMaterial("G4_FREON-12"), fractionmass=0.005);
  //NistManager->RegisterMaterial(WCmat);
 
  //Cardboard.From cbsim. MWPC electronics
- G4Material *cboard=new G4Material("A2_CBOARD",density=0.69*g/cm3,ncomponents=3);
+ G4Material *cboard=new G4Material("A2_CBOARD",density=0.69*CLHEP::g/CLHEP::cm3,ncomponents=3);
  cboard->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.285714286);
  cboard->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.476190476);
  cboard->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.238095238);
@@ -243,7 +243,7 @@ void A2DetectorConstruction::DefineMaterials()
 
 
  //Fibre GLass. From cbsim.
- G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*g/cm3, ncomponents=8);
+ G4Material *fglass=new G4Material("A2_FGLASS",density=2.0*CLHEP::g/CLHEP::cm3, ncomponents=8);
  fglass->AddElement(NistManager->FindOrBuildElement(8),fractionmass=0.557);
  fglass->AddElement(NistManager->FindOrBuildElement(14),fractionmass=0.347);
  fglass->AddElement(NistManager->FindOrBuildElement(20),fractionmass=0.3580000E-02);
@@ -255,19 +255,19 @@ void A2DetectorConstruction::DefineMaterials()
  //NistManager->RegisterMaterial(fglass);
 
  //Plastic. From cbsim 
- G4Material *plastic=new G4Material("A2_PLASTIC",density=1.19*g/cm3, ncomponents=2);
+ G4Material *plastic=new G4Material("A2_PLASTIC",density=1.19*CLHEP::g/CLHEP::cm3, ncomponents=2);
  plastic->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);
  plastic->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
  //NistManager->RegisterMaterial(plastic);
 
  //Base material. From cbsim
- G4Material *basemat=new G4Material("A2_BASEMAT",density=2.26*g/cm3, ncomponents=2);
+ G4Material *basemat=new G4Material("A2_BASEMAT",density=2.26*CLHEP::g/CLHEP::cm3, ncomponents=2);
  basemat->AddElement(NistManager->FindOrBuildElement(6),fractionmass=0.8562844);
  basemat->AddElement(NistManager->FindOrBuildElement(1),fractionmass=0.1437155);
  //NistManager->RegisterMaterial(basemat);
 
  //mumetal for pmt shielding. From cbsim.
- G4Material* mumetal=new G4Material("A2_MUMETAL",density=8.7*g/cm3,ncomponents=5);
+ G4Material* mumetal=new G4Material("A2_MUMETAL",density=8.7*CLHEP::g/CLHEP::cm3,ncomponents=5);
  mumetal->AddElement(NistManager->FindOrBuildElement(28),fractionmass=0.8);
  mumetal->AddElement(NistManager->FindOrBuildElement(42),fractionmass=0.5000000E-01);
  mumetal->AddElement(NistManager->FindOrBuildElement(14),fractionmass=0.5000000E-02);
@@ -276,15 +276,15 @@ void A2DetectorConstruction::DefineMaterials()
  //NistManager->RegisterMaterial(mumetal);
 
  //brass for pid support
- G4Material* brass=new G4Material("A2_BRASS",density=8.5*g/cm3,ncomponents=2);
+ G4Material* brass=new G4Material("A2_BRASS",density=8.5*CLHEP::g/CLHEP::cm3,ncomponents=2);
  brass->AddElement(NistManager->FindOrBuildElement(29),fractionmass=0.62);
  brass->AddElement(NistManager->FindOrBuildElement(30),fractionmass=0.38);
  //NistManager->RegisterMaterial(brass);
 
  //Liquid deuterium. From cbsim.
- // NistManager->RegisterMaterial(new G4Material("A2_LD2", z=1., a= 2.014*g/mole, density= 0.162*g/cm3));
- new G4Material("A2_lD2", z=1., a= 2.014*g/mole, density= 0.162*g/cm3);
- new G4Material("A2_lHe3", z=2., a= 3.0160*g/mole, density= 0.059*g/cm3);
+ // NistManager->RegisterMaterial(new G4Material("A2_LD2", z=1., a= 2.014*CLHEP::g/CLHEP::mole, density= 0.162*CLHEP::g/CLHEP::cm3));
+ new G4Material("A2_lD2", z=1., a= 2.014*CLHEP::g/CLHEP::mole, density= 0.162*CLHEP::g/CLHEP::cm3);
+ new G4Material("A2_lHe3", z=2., a= 3.0160*CLHEP::g/CLHEP::mole, density= 0.059*CLHEP::g/CLHEP::cm3);
 
 
 //////////
@@ -298,53 +298,53 @@ void A2DetectorConstruction::DefineMaterials()
   G4double abundance;
 
 //6% helium 3, 94% helium 4 mixture:
- G4Isotope* A2_He3=new G4Isotope("A2_He3", iz=2, n=3, a=3.0160293*g/mole);
- G4Isotope* A2_He4=new G4Isotope("A2_He4", iz=2, n=4, a=4.002602*g/mole);
+ G4Isotope* A2_He3=new G4Isotope("A2_He3", iz=2, n=3, a=3.0160293*CLHEP::g/CLHEP::mole);
+ G4Isotope* A2_He4=new G4Isotope("A2_He4", iz=2, n=4, a=4.002602*CLHEP::g/CLHEP::mole);
  G4Element* A2_Hemix=new G4Element("Helium mixture", symbol="A2_Hemix", ncomponents=2);
- A2_Hemix->AddIsotope(A2_He3, abundance=6*perCent);
- A2_Hemix->AddIsotope(A2_He4, abundance=94*perCent);
+ A2_Hemix->AddIsotope(A2_He3, abundance=6*CLHEP::perCent);
+ A2_Hemix->AddIsotope(A2_He4, abundance=94*CLHEP::perCent);
 
 //Now make Hemix a material so that density can be defined:
-  G4Material* A2_HeMix=new G4Material("A2_HeMix", density=0.14*g/cm3, ncomponents=1);
+  G4Material* A2_HeMix=new G4Material("A2_HeMix", density=0.14*CLHEP::g/CLHEP::cm3, ncomponents=1);
   A2_HeMix->AddElement(A2_Hemix, natoms=1);
 
 //Butanol (C4H9OH):
-  G4Material* A2_Butanol=new G4Material("A2_Butanol", density=0.8*g/cm3, ncomponents=3);
+  G4Material* A2_Butanol=new G4Material("A2_Butanol", density=0.8*CLHEP::g/CLHEP::cm3, ncomponents=3);
   A2_Butanol->AddElement(NistManager->FindOrBuildElement(6),4);
   A2_Butanol->AddElement(NistManager->FindOrBuildElement(1),10);
   A2_Butanol->AddElement(NistManager->FindOrBuildElement(8),1);
 
 //60% butanol, 40% helium polarized target material:
-  G4Material* A2_HeButanol=new G4Material("A2_HeButanol", density=0.6*g/cm3, ncomponents=2);
+  G4Material* A2_HeButanol=new G4Material("A2_HeButanol", density=0.6*CLHEP::g/CLHEP::cm3, ncomponents=2);
   A2_HeButanol->AddMaterial(A2_HeMix, fractionmass=0.094);
   A2_HeButanol->AddMaterial(A2_Butanol, fractionmass=0.906);
   
 //Stainless steel (18% Cr, 10% Ni, 72% Fe):
-  G4Material* A2_SS=new G4Material("A2_SS", density=8000.*kg/m3, ncomponents=3);
+  G4Material* A2_SS=new G4Material("A2_SS", density=8000.*CLHEP::kg/CLHEP::m3, ncomponents=3);
   A2_SS->AddElement(NistManager->FindOrBuildElement(24), fractionmass=0.18);
   A2_SS->AddElement(NistManager->FindOrBuildElement(28), fractionmass=0.10);
   A2_SS->AddElement(NistManager->FindOrBuildElement(25), fractionmass=0.72);
 
 //NbTi ***don't know density at cold temperature***:
-  G4Material* A2_NbTi=new G4Material("A2_NbTi", density=6.45*g/cm3, ncomponents=2);
+  G4Material* A2_NbTi=new G4Material("A2_NbTi", density=6.45*CLHEP::g/CLHEP::cm3, ncomponents=2);
   A2_NbTi->AddElement(NistManager->FindOrBuildElement(22), 0.47);
   A2_NbTi->AddElement(NistManager->FindOrBuildElement(41), 0.53);
 
 //Epoxy resin (C21H25Cl05) ***not certain if correct chemical formula or density for colder temperature***:
-  G4Material* A2_Resin=new G4Material("A2_Resin", density=1.15*g/cm3, ncomponents=4);
+  G4Material* A2_Resin=new G4Material("A2_Resin", density=1.15*CLHEP::g/CLHEP::cm3, ncomponents=4);
   A2_Resin->AddElement(NistManager->FindOrBuildElement(6), 21);
   A2_Resin->AddElement(NistManager->FindOrBuildElement(1), 25);
   A2_Resin->AddElement(NistManager->FindOrBuildElement(17), 1);
   A2_Resin->AddElement(NistManager->FindOrBuildElement(8), 5);
 
 //Amine Hardener (C8H18N2) ***not certain if correct chemical formula or density for colder temperature***:
-  G4Material* A2_13BAC=new G4Material("A2_13BAC", density=0.94*g/cm3, ncomponents=3);
+  G4Material* A2_13BAC=new G4Material("A2_13BAC", density=0.94*CLHEP::g/CLHEP::cm3, ncomponents=3);
   A2_13BAC->AddElement(NistManager->FindOrBuildElement(6), 8);
   A2_13BAC->AddElement(NistManager->FindOrBuildElement(1), 18);
   A2_13BAC->AddElement(NistManager->FindOrBuildElement(7), 2);
 
 //Epoxy adhesive with mix ratio 100:25 parts by weight resin/hardener ***don't know density at cold temperature***:
-  G4Material* A2_Epoxy=new G4Material("A2_Epoxy", density=1.2*g/cm3, ncomponents=2);
+  G4Material* A2_Epoxy=new G4Material("A2_Epoxy", density=1.2*CLHEP::g/CLHEP::cm3, ncomponents=2);
   A2_Epoxy->AddMaterial(A2_Resin, fractionmass=0.8);
   A2_Epoxy->AddMaterial(A2_13BAC, fractionmass=0.2);
 

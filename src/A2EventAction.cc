@@ -96,7 +96,7 @@ void A2EventAction::EndOfEventAction(const G4Event* evt)
 	for(G4int i=0;i<hc_nhits;i++){
 	  A2VisHit* hit=static_cast<A2VisHit*>(hc->GetHit(i));
 	  // G4cout<<"Got hit "<<hit<<G4endl;
-	  hit->Draw(1*MeV,fHitDrawOpt);
+      hit->Draw(1*CLHEP::MeV,fHitDrawOpt);
 	  
 	}
 	

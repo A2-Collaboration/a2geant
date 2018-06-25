@@ -37,7 +37,7 @@ void A2SteppingAction::UserSteppingAction(const G4Step* aStep)
   
 //   G4double stepl = 0.;
 //stop tracking after the trigger time
-  if(aStep->GetPreStepPoint()->GetGlobalTime()>2*ms)track->SetTrackStatus(fStopAndKill);
+  if(aStep->GetPreStepPoint()->GetGlobalTime()>2*CLHEP::ms)track->SetTrackStatus(fStopAndKill);
 //   if(track->GetDefinition()->GetParticleName()==G4String("pi0"))
 //     {G4cout<<"Got a pi0 "<<aStep->GetPreStepPoint()->GetGlobalTime()/ns<<" "<<track->GetKineticEnergy()/MeV<<" "<< fpSteppingManager->GetfCurrentVolume()->GetName()<<G4endl;track->SetTrackStatus(fStopAndKill);}
 //  if(track->GetDefinition()->GetParticleName()==G4String("pi+"))
@@ -71,7 +71,7 @@ void A2SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   //bug in phot process, can't get rid of gamma with energy 1.2E-5MeV
   //goes into infinite loop!
-  if(track->GetDefinition()->GetParticleName()==G4Gamma::Gamma()->GetParticleName()&&track->GetKineticEnergy()/MeV<1E-4&&fpSteppingManager->GetfCurrentProcess()->GetProcessName()==G4String("phot"))track->SetTrackStatus(fStopAndKill);
+  if(track->GetDefinition()->GetParticleName()==G4Gamma::Gamma()->GetParticleName()&&track->GetKineticEnergy()/CLHEP::MeV<1E-4&&fpSteppingManager->GetfCurrentProcess()->GetProcessName()==G4String("phot"))track->SetTrackStatus(fStopAndKill);
 }
 
 

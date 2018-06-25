@@ -141,8 +141,8 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 			fnhits=hc_nhits;
 			for(Int_t i=0;i<fnhits;i++){
 				A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-				fecryst[i]=hit->GetEdep()/GeV;
-				ftcryst[i]=hit->GetTime()/ns;
+                fecryst[i]=hit->GetEdep()/CLHEP::GeV;
+                ftcryst[i]=hit->GetTime()/CLHEP::ns;
 				ficryst[i]=hit->GetID();
 				fetot+=fecryst[i];
 			}
@@ -151,9 +151,9 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 			fntaps=hc_nhits;
 			for(Int_t i=0;i<fntaps;i++){
 				A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-				fectapsl[i]=hit->GetEdep()/GeV;
+                fectapsl[i]=hit->GetEdep()/CLHEP::GeV;
 				fictaps[i]=hit->GetID();
-				ftctaps[i]=hit->GetTime()/ns;
+                ftctaps[i]=hit->GetTime()/CLHEP::ns;
 				//fetot+=fectapsl[i];//***TEMP!!!!
 			}
 		}
@@ -161,7 +161,7 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 			fnvtaps=hc_nhits;
 			for(Int_t i=0;i<fnvtaps;i++){
 				A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-				fevtaps[i]=hit->GetEdep()/GeV;
+                fevtaps[i]=hit->GetEdep()/CLHEP::GeV;
 				fivtaps[i]=hit->GetID();
 			}
 		}
@@ -169,8 +169,8 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 			fvhits=hc_nhits;
 			for(Int_t i=0;i<fvhits;i++){
 				A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-				feveto[i]=hit->GetEdep()/GeV;
-				ftveto[i]=hit->GetTime()/ns;
+                feveto[i]=hit->GetEdep()/CLHEP::GeV;
+                ftveto[i]=hit->GetTime()/CLHEP::ns;
 				fiveto[i]=hit->GetID();
 			}
 		}
@@ -182,7 +182,7 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 				fmposx[fnmwpc+i] = (Float_t)hit->GetPos().getX();
 				fmposy[fnmwpc+i] = (Float_t)hit->GetPos().getY();
 				fmposz[fnmwpc+i] = (Float_t)hit->GetPos().getZ();
-				femwpc[fnmwpc+i] = (Float_t)hit->GetEdep()/GeV;
+                femwpc[fnmwpc+i] = (Float_t)hit->GetEdep()/CLHEP::GeV;
 				//	G4cout<<fnmwpc+i<<" "<<fimwpc[fnmwpc+i]<<" "<<fmpos[fnmwpc+i][0]<<" "<<fmpos[fnmwpc+i][1]<<" "<<fmpos[fnmwpc+i][2]<<G4endl;
 			}
 			fnmwpc+=hc_nhits;
@@ -191,11 +191,11 @@ void A2CBOutput::WriteHit(G4HCofThisEvent* HitsColl){
 			fntof=hc_nhits;
 			for(Int_t i=0;i<fntof;i++){
 				A2Hit* hit=static_cast<A2Hit*>(hc->GetHit(i));
-				ftofe[i]=hit->GetEdep()/GeV;
-				ftoft[i]=hit->GetTime()/ns;
-				ftofx[i]=hit->GetPos().x()/cm;
-				ftofy[i]=hit->GetPos().y()/cm;
-				ftofz[i]=hit->GetPos().z()/cm;
+                ftofe[i]=hit->GetEdep()/CLHEP::GeV;
+                ftoft[i]=hit->GetTime()/CLHEP::ns;
+                ftofx[i]=hit->GetPos().x()/CLHEP::cm;
+                ftofy[i]=hit->GetPos().y()/CLHEP::cm;
+                ftofz[i]=hit->GetPos().z()/CLHEP::cm;
 				ftofi[i]=hit->GetID();
 			}
 		}

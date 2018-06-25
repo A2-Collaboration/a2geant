@@ -44,16 +44,16 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
 
     //default phase space limits
     fTmin         = 0;
-    fTmax         = 400*MeV;
+    fTmax         = 400*CLHEP::MeV;
     fThetamin     = 0;
-    fThetamax     = 180*deg;
-    fBeamXSigma   = 0.5*cm;
-    fBeamYSigma   = 0.5*cm;
+    fThetamax     = 180*CLHEP::deg;
+    fBeamXSigma   = 0.5*CLHEP::cm;
+    fBeamYSigma   = 0.5*CLHEP::cm;
     // do not set the target center here, not used anyway
     // use it instead to determine if a target center was specified via /A2/generator/SetTargetZ0
-    //fTargetZ0     =   0*cm;
-    fTargetThick  =   5*cm;
-    fTargetRadius =   2*cm;
+    //fTargetZ0     =   0*CLHEP::cm;
+    fTargetThick  =   5*CLHEP::cm;
+    fTargetRadius =   2*CLHEP::cm;
 
     //overlap
     fSplitTheta=0;
@@ -206,9 +206,9 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //Set vertex position
     const G4ThreeVector primaryVertex = GetRandomVertex();
 
-    fGenPosition[0]=primaryVertex.x()/cm;
-    fGenPosition[1]=primaryVertex.y()/cm;
-    fGenPosition[2]=primaryVertex.z()/cm;
+    fGenPosition[0]=primaryVertex.x()/CLHEP::cm;
+    fGenPosition[1]=primaryVertex.y()/CLHEP::cm;
+    fGenPosition[2]=primaryVertex.z()/CLHEP::cm;
 
     TLorentzVector beamVector(0,0,0,0);
 
@@ -234,11 +234,11 @@ void A2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
                 fParticleGun->SetParticleMomentumDirection(
                             G4ThreeVector(
-                                part->Px()*GeV,
-                                part->Py()*GeV,
-                                part->Pz()*GeV
+                                part->Px()*CLHEP::GeV,
+                                part->Py()*CLHEP::GeV,
+                                part->Pz()*CLHEP::GeV
                                 ).unit());
-                fParticleGun->SetParticleEnergy( part->E()*GeV - part->M()*GeV);
+                fParticleGun->SetParticleEnergy( part->E()*CLHEP::GeV - part->M()*CLHEP::GeV);
 
                 // vertex position in pluto is in mm, no conversion needed
                 const G4ThreeVector particleVertex = primaryVertex

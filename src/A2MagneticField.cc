@@ -60,9 +60,9 @@ G4bool A2MagneticField::ReadFieldMap(const G4String &nameFileMap)
   for(G4int i=0; i<3; ++i)
   {
     fin >> fPointMin[i] >> fPointMax[i] >> fPointStep[i];
-    fPointStep[i] *= cm;
-    fPointMin[i]   = fPointMin[i]*cm - fPointStep[i]/2.;
-    fPointMax[i]   = fPointMax[i]*cm + fPointStep[i]/2.;
+    fPointStep[i] *= CLHEP::cm;
+    fPointMin[i]   = fPointMin[i]*CLHEP::cm - fPointStep[i]/2.;
+    fPointMax[i]   = fPointMax[i]*CLHEP::cm + fPointStep[i]/2.;
     fPointsN[i]    = ceil((fPointMax[i] - fPointMin[i])/fPointStep[i]);
   }
   
@@ -83,14 +83,14 @@ G4bool A2MagneticField::ReadFieldMap(const G4String &nameFileMap)
   while(fin >> p[0] >> p[1] >> p[2] >> b[0] >> b[1] >> b[2])
   {
     // Calculate x,y,z indexes of the point
-    iPoint[0] = GetPointIndex(p[0]*cm,fPointMin[0],fPointStep[0]); // index x
-    iPoint[1] = GetPointIndex(p[1]*cm,fPointMin[1],fPointStep[1]); // index y
-    iPoint[2] = GetPointIndex(p[2]*cm,fPointMin[2],fPointStep[2]); // index z
+    iPoint[0] = GetPointIndex(p[0]*CLHEP::cm,fPointMin[0],fPointStep[0]); // index x
+    iPoint[1] = GetPointIndex(p[1]*CLHEP::cm,fPointMin[1],fPointStep[1]); // index y
+    iPoint[2] = GetPointIndex(p[2]*CLHEP::cm,fPointMin[2],fPointStep[2]); // index z
     
     // Fill the fFiledMap array
-    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][0] = b[0]*gauss; // Bx
-    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][1] = b[1]*gauss; // By
-    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][2] = b[2]*gauss; // Bz
+    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][0] = b[0]*CLHEP::gauss; // Bx
+    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][1] = b[1]*CLHEP::gauss; // By
+    fFieldMap[iPoint[0]][iPoint[1]][iPoint[2]][2] = b[2]*CLHEP::gauss; // Bz
   }
   
   // Close the field map file
