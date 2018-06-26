@@ -104,9 +104,15 @@ A2PrimaryGeneratorAction::A2PrimaryGeneratorAction()
     pluto2G4[14] = g4part->FindParticle("proton");
     pluto2G4[15] = g4part->FindParticle("anti_proton");
     pluto2G4[16] = g4part->FindParticle("kaon0S");
+    pluto2G4[17] = g4part->FindParticle("eta");
+    pluto2G4[18] = g4part->FindParticle("lambda");
     pluto2G4[19] = g4part->FindParticle("sigma+");
+    pluto2G4[20] = g4part->FindParticle("sigma0");
+    pluto2G4[21] = g4part->FindParticle("sigma-");
+    pluto2G4[24] = g4part->FindParticle("omega");
     pluto2G4[25] = g4part->FindParticle("anti_neutron");
     pluto2G4[45] = g4part->FindParticle("deuteron");
+    pluto2G4[49] = g4part->FindParticle("He3");
 
     G4cout << "Particle table for conversion Pluto <=> Geant4:" << G4endl;
     for (std::map<G4int,G4ParticleDefinition*>::iterator it = pluto2G4.begin();
